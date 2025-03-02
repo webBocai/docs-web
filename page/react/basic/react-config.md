@@ -1,7 +1,3 @@
-
-
-
-
 ### 一、配置 eslint 和prettier
 
 #### 1.下载eslint
@@ -14,13 +10,13 @@
 
 #####     npm
 
-```bash
+```bash [npm]
 npm install eslint @typescript-eslint/parser  @typescript-eslint/eslint-plugin --save-dev
 ```
 
 #####   yarn 
 
-```bash
+```bash [yarn]
  yarn add -D eslint @typescript-eslint/parser  @typescript-eslint/eslint-plugin 
 ```
 
@@ -30,7 +26,7 @@ npm install eslint @typescript-eslint/parser  @typescript-eslint/eslint-plugin -
 
 -  初始化eslint根据交换生成一个eslint的配置文件
 
-```bash
+```bash [npm]
 npx eslint  --init 
 ```
 
@@ -73,13 +69,13 @@ npx eslint  --init
 
 ##### 1. npm
 
-```bash
+```bash [npm]
 npm install prettier eslint-config-prettier eslint-plugin-prettier --save-dev
 ```
 
 ##### 2. yarn 
 
-```bash
+```bash [yarn]
 yarn add -D prettier eslint-config-prettier eslint-plugin-prettier 
 ```
 
@@ -89,7 +85,7 @@ yarn add -D prettier eslint-config-prettier eslint-plugin-prettier
 
   - 在文件夹下创建`settings.json`文件
 
-    ```js
+    ```js [settings.json]
     {
         "editor.codeActionsOnSave": {
             "source.fixAll.eslint": "explicit" //保存就进行格式化
@@ -99,7 +95,7 @@ yarn add -D prettier eslint-config-prettier eslint-plugin-prettier
 
 - 在根目录下创建`.prettierrc.mjs`文件
 
-  ```js
+  ```js [.prettierrc.mjs]
   export default {
     // 箭头函数只有一个参数的时候可以忽略括号
     arrowParens: "avoid",
@@ -142,13 +138,13 @@ yarn add -D prettier eslint-config-prettier eslint-plugin-prettier
 
 #####  npm
 
-```bash
+```bash [npm]
 npm install --save-dev husky
 ```
 
 ##### yarn
 
-```
+```bash [yarn]
 yarn add --dev husky
 ```
 
@@ -156,7 +152,7 @@ yarn add --dev husky
 
 - 会新增一个`.husk`->`pre-commit`
 
-```bash
+```bash [npm]
 npx husky init
 ```
 
@@ -164,7 +160,7 @@ npx husky init
 
   - 在执行git commit 这个命令**之前执行的自定义命令**
 
-  ```bash
+  ```bash [npm]
   yarn lint
   yarn format
   npm lint 
@@ -194,35 +190,35 @@ npx husky init
 
 #####   npm
 
-```bash
+```bash [npm]
 npm install --save-dev @commitlint/{cli,config-conventional}
 ```
 
 ##### yarn
 
-```bash
+```bash [yarn]
 yarn add --dev @commitlint/{cli,config-conventional}
 ```
 
 #### 3.配置commitlint
 
-  #####    1.创建文件方式
+#####    1.创建文件方式
 
 - 在根目录创建`commitlint.config.js`
 
-  ```js
+  ```js [commitlint.config.js]
   export default { extends: ["@commitlint/config-conventional"] };
   ```
 
 #####    2.命令方式
 
-```bash
+```bash [npm]
 echo "export default { extends: ['@commitlint/config-conventional'] };" > commitlint.config.js
 ```
 
 ### 四. 修复eslint packge.json问题
 
-```
+```bash [yarn]
 yarn add  -D eslint-config-react-app
 ```
 

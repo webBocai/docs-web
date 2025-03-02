@@ -54,12 +54,12 @@ export default defineConfig({
           {
             text: 'React开发环境搭建',
             items: [
-              { text: 'create-react-app', link: '/page/react/basic/create-react-app' },
-              { text: 'vite', link: '/page/react/basic/vite' },
-              { text: '配置React环境', link: '/page/react/basic/react-config.md' },
+              { text: '用create-react-app搭建', link: '/page/react/basic/create-react-app' },
+              { text: '用vite搭建React', link: '/page/react/basic/vite' },
+              { text: '配置React开发环境', link: '/page/react/basic/react-config.md' },
             ],
           },
-          { text: 'tsx语法入门', link: '/basic/tsx' },
+          { text: 'tsx语法入门', link: '/page/react/basic/tsx.md' },
         ],
       },
     ],
