@@ -1,11 +1,21 @@
 import { defineConfig } from 'vitepress';
-
+import { groupIconMdPlugin, groupIconVitePlugin } from 'vitepress-plugin-group-icons';
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   base: '/docs-web/',
   title: 'My Awesome Project',
   description: 'A VitePress Site',
+  markdown: {
+    config(md) {
+      md.use(groupIconMdPlugin);
+    },
+  },
+  vite: {
+    plugins: [groupIconVitePlugin()],
+  },
   themeConfig: {
+    outlineTitle: '文章目录',
+    outline: [2, 6],
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
@@ -20,8 +30,8 @@ export default defineConfig({
       {
         text: 'React',
         items: [
-          { text: 'React', link: '/react' },
-          { text: 'React-router-dom', link: '/react-router-dom' },
+          { text: 'React', link: '/page/react/index' },
+          { text: 'React-router', link: '/react-router-dom' },
           { text: 'next', link: '/next' },
         ],
       },
@@ -36,17 +46,23 @@ export default defineConfig({
         ],
       },
     ],
-
     sidebar: [
       {
-        text: 'Examples',
+        text: '入门',
         items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' },
+          { text: 'React基本介绍', link: '/page/react/basic/introduce' },
+          {
+            text: 'React开发环境搭建',
+            items: [
+              { text: 'create-react-app', link: '/page/react/basic/create-react-app' },
+              { text: 'vite', link: '/page/react/basic/vite' },
+              { text: '配置React环境', link: '/page/react/basic/react-config.md' },
+            ],
+          },
+          { text: 'tsx语法入门', link: '/basic/tsx' },
         ],
       },
     ],
-
     socialLinks: [{ icon: 'github', link: 'https://github.com/1494518217' }],
   },
 });
