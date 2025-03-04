@@ -11,15 +11,15 @@
 
 答：jsx是js的语法扩展，允许在js中编写html代码。
 
-例如：`const fn = () => <div>小满是谁？没听说过</div>`
+例如：`const fn = () => <div>张三是谁？没听说过</div>`
 
 ## 语法编写
 
 - 使用tsx绑定变量`{value}`
 
->绑定class需要用className
-
-```tsx
+> 绑定class需要用className
+::: code-group
+```tsx [index.tsx]
 function App() {
   const num: number = 333
   const fn = () => 'test'
@@ -32,7 +32,9 @@ function App() {
     </>
   )
 }
-//绑定class(className) id 属性等等 都是一样的
+```
+``` bash [className.tsx]
+// 绑定class(className) id 属性等等 都是一样的
 function App() {
   const value:string = 'A'
   return (
@@ -41,8 +43,8 @@ function App() {
     </>
   )
 }
-//绑定多个class(className)
-function App() {
+// 绑定多个class(className)
+function index() {
   const a:string = 'A'
   return (
     <>
@@ -50,6 +52,8 @@ function App() {
     </>
   )
 }
+```
+```tsx [style.tsx]
 //绑定样式style
 function App() {
   const styles = { color: 'red' }
@@ -60,20 +64,23 @@ function App() {
   )
 }
 ```
-
+::: 
 - 使用tsx绑定事件`on[Click]{fn}`小驼峰 其他事件也是一样的
 
 ::: code-group
-<<< ../code/tsx/onClick.tsx
+<<<  ./code/tsx/onClick.tsx
 ::: 
 
 - tsx如何使用泛型
 
+::: tip
 正常写泛型语法会跟tsx语法冲突，他会把泛型理解成是一个元素，解决方案后面加一个,即可
+:::
 
-```tsx
+
+```tsx [App.tsx]
 function App() {
-  const value: string = '小满'
+  const value: string = '张三'
   const clickTap = <T,>(params: T) => console.log(params)
   return (
     <>
@@ -85,10 +92,14 @@ function App() {
 
 - tsx如何渲染html代码片段(dangerouslySetInnerHTML)
 
-dangerouslySetInnerHTML 的值是一个对象，该对象包含一个名为 __html 的属性，且值为你想要插入的 HTML 字符串
-```tsx
+
+::: tip
+`dangerouslySetInnerHTML` 的值是一个对象，该对象包含一个名为 __html 的属性，且值为你想要插入的 HTML 字符串
+:::
+
+```tsx  [App.tsx]
 function App() {
-  const value: string = '<section style="color:red">小满</section>'
+  const value: string = '<section style="color:red">张三</section>'
   return (
     <>
         <div dangerouslySetInnerHTML={{ __html: value }}></div>
@@ -101,9 +112,9 @@ function App() {
 
 使用map遍历返回html标签即可
 
-```tsx
+```tsx [App.tsx]
 function App() {
-  const arr: string[] = ["小满","中满","大满"]
+  const arr: string[] = ["张三","李四","王五"]
   return (
     <>
         {
@@ -120,7 +131,7 @@ function App() {
 
 使用三元表达式就可以了
 
-```tsx
+```tsx [App.tsx]
 function App() {
   const flag:boolean = true
   return (
@@ -134,24 +145,26 @@ function App() {
 ```
 
 - tsx注意事项
-
-**{}插值语句内不允许编写`switch` `if` `变量声明` 或者直接放入`对象本体`**
-
+::: tip
+{}插值语句内不允许编写`switch` `if` `变量声明` 或者直接放入`对象本体`
+:::
 下面展示错误用法正确用法对比
-
-```tsx
+::: code-group
+```tsx [对象错误写法.tsx]
 //错误用法
 function App() {
-  const obj = { name: '小满' }
+  const obj = { name: '张三' }
   return (
     <>
       {obj}
     </>
   )
 }
+```
+```tsx [对象正确写法.tsx]
 //正确用法
 function App() {
-  const obj = { name: '小满' }
+  const obj = { name: '张三' }
   return (
     <>
       {obj.name}
@@ -161,7 +174,7 @@ function App() {
 }
 ```
 
-```tsx
+```tsx [判断错误写法.tsx]
 //错误用法
 function App() {
   const flag:boolean = true
@@ -177,6 +190,8 @@ function App() {
     </>
   )
 }
+```
+```tsx [判断正确写法.tsx]
 //正确用法
 function App() {
   const flag:boolean = true
@@ -189,3 +204,4 @@ function App() {
   )
 }
 ```
+:::

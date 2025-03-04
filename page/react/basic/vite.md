@@ -1,4 +1,4 @@
-# React开发环境搭建
+# vite安装React项目
 选择一个你喜欢的目录，然后运行以下命令：
 
 ::: code-group
