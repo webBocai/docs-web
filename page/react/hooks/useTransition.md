@@ -4,7 +4,7 @@
 
 ### 用法
 
-```tsx [App.tsx]
+```tsx [App.react]
 const [isPending, startTransition] = useTransition();
 ```
 
@@ -110,7 +110,7 @@ app.listen(8030, () => {
       },
     };
 ```
-```tsx [TransitionDemo1.tsx]
+```tsx [TransitionDemo1.react]
 import React, { useState, useTransition } from "react";
 import type { ChangeEvent, FC } from "react";
 

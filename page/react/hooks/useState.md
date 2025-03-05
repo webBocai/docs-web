@@ -13,7 +13,7 @@
 
 - `useState` 接收一个参数，即状态的初始值，然后返回一个数组，其中包含两个元素：**当前的状态值**和一个**更新该状态的函数**
 
-```tsx [index.tsx]
+```tsx [index.react]
 const [state, setState] = useState(initialState)
 ```
 
@@ -22,7 +22,7 @@ const [state, setState] = useState(initialState)
 
 ######      1.基本数据类型
 
-```tsx [index.tsx]
+```tsx [index.react]
 import React, { useState } from "react";
 import type { FC } from "react";
 
@@ -50,7 +50,7 @@ export default StateDemo1;
 
   - **修改值的时候不能直接使用当前状态值直接修改**
 
-    ```tsx [index.tsx]
+    ```tsx [index.react]
      const [count, setCount] = useState(0);
      count=count+1 // 这样是错误的，这样无法触发组件的重新渲染
      setCount(count+1) // 这样是正确的
@@ -79,7 +79,7 @@ export default StateDemo1;
 
 创建一个新数组，包含了原始数组的所有元素，然后在末尾添加新元素，如果想在头部添加新元素，返过来即可。
 
-```tsx [add.tsx]
+```tsx [add.react]
 import { useState } from "react"
 function App() {
   let [arr, setArr] = useState([1, 2, 3])
@@ -101,7 +101,7 @@ export default App
 
 - 使用filter过滤掉不需要的元素即可。
 
-```tsx [remove.tsx]
+```tsx [remove.react]
 import { useState } from "react"
 function App() {
   let [arr, setArr] = useState([1, 2, 3])
@@ -122,7 +122,7 @@ export default App
 
 - 使用map筛选出需要替换的元素，然后替换为新的元素，其他元素保持不变。
 
-```tsx [update.tsx]
+```tsx [update.react]
 import { useState } from "react"
 function App() {
   let [arr, setArr] = useState([1, 2, 3])
@@ -147,7 +147,7 @@ export default App
 
 - [slice文档]( https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/slice)
 
-  ```tsx [slice.tsx]
+  ```tsx [slice.react]
   import { useState } from "react"
   function App() {
     let [arr, setArr] = useState([1, 2, 3])
@@ -174,7 +174,7 @@ export default App
 
 - 也可以先深拷贝一个一个数组出来在使用`splice`进行插入
 
-  ```tsx [deep.tsx]
+  ```tsx [deep.react]
   import { useState } from "react"
   function App() {
     let [arr, setArr] = useState([1, 2, 3])
@@ -197,7 +197,7 @@ export default App
 
 - 案例，创建一个新数组，然后通过sort排序。
 
-```tsx [sort.tsx]
+```tsx [sort.react]
 import { useState } from "react"
 function App() {
   let [arr, setArr] = useState([1, 2, 3])
@@ -221,7 +221,7 @@ export default App
 
 `useState`**可以接受一个函数，可以在函数里面编写逻辑**，初始化值，注意这个只会执行一次，更新的时候就不会执行了。
 
-```tsx [index.tsx]
+```tsx [index.react]
 import { useState } from "react"
 function App() {
   let [obj, setObject] = useState(() => {
@@ -266,7 +266,7 @@ export default App
 
   - 当我们多次以相同的操作更新状态时，React 会进行比较，如果值相同，则会屏蔽后续的更新行为。自带`防抖`的功能，防止频繁的更新。
 
-    ```tsx  [index.tsx]
+    ```tsx  [index.react]
     import { useState } from "react"
     function App() {
       let [index, setIndex] = useState(0)
@@ -291,7 +291,7 @@ export default App
 
     为了解决这个问题，你可以向`setIndex` 传递一个更新函数，而不是一个状态。
 
-    ```tsx [index.tsx]
+    ```tsx [index.react]
     import { useState } from "react"
     function App() {
       let [index, setIndex] = useState(0)
@@ -348,7 +348,7 @@ export default App
 
   - 使用`immer`排序旋转 
 
-  ```tsx [index.tsx]
+  ```tsx [index.react]
   import { useState } from "react"
   import {produce} from 'immer'
   function App() {

@@ -7,7 +7,7 @@
 
 ### 2).用法
 
-```tsx [App.tsx]
+```tsx [App.react]
 const [state, dispatch] = useReducer(reducer, initialArg, init?)
 ```
 
@@ -29,7 +29,7 @@ const [state, dispatch] = useReducer(reducer, initialArg, init?)
     - `reducer `只有被`dispatch`的时候才会被调用 刚进入页面的时候是不会执行的
     - `oldState `任然是只读的
 
-    ```tsx [App.tsx]
+    ```tsx [App.react]
     import { useReducer } from 'react';
     function reducer(oldState, action) {
       // ...
@@ -46,7 +46,7 @@ const [state, dispatch] = useReducer(reducer, initialArg, init?)
 
 - 首先创建了一个 `initialColor`对象 作为`initialArg`的初始值
 
-  ```tsx [App.tsx]
+  ```tsx [App.react]
    const initialColor = { color: "red" };
   ```
 
@@ -56,7 +56,7 @@ const [state, dispatch] = useReducer(reducer, initialArg, init?)
   - 它接收当前状态 (state) 和一个动作对象 (action)，根据 action.type 来决定如何更新 state。
   - 如果 action.type 不匹配任何已定义的情况，则抛出一个错误。
 
-  ```tsx [App.tsx]
+  ```tsx [App.react]
     const changeColor = (state: typeof initialState, action: { type: string }) => {
       switch (action.type) {
         case "yellow":
@@ -73,14 +73,14 @@ const [state, dispatch] = useReducer(reducer, initialArg, init?)
 
 - 最后使用了`init`可选函数返回值作为新的初始值
 
-  ```tsx [App.tsx]
+  ```tsx [App.react]
   const initBule = (() => ({ color: "blue" })
   const [item, dispatch] = useReducer(changeColor, initialColor,initBule );
   ```
 
 - 最终实现的代码
 
-```tsx [App.tsx]
+```tsx [App.react]
 import React, { useReducer } from "react";
 import type { FC } from "react";
 
@@ -120,7 +120,7 @@ export default ReducerDemo1;
 
   - 如果 action.type 是 'increment'，则 count 增加 1；如果是 'decrement'，则count减少1。
 ::: code-group
-```tsx [App.tsx]
+```tsx [App.react]
 import reducer from './reducer'
 const App = () =>  {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -135,7 +135,7 @@ const App = () =>  {
 }
 export default App;
 ```
-```tsx [reducer.tsx]
+```tsx [reducer.react]
 function reducer(state, action) {
   switch (action.type) {
     case 'increment':
@@ -175,7 +175,7 @@ export default reducer
 ::: code-group
 
 
-  ```tsx [App.tsx]
+  ```tsx [App.react]
   import React, { useReducer } from "react";
   import changeShopping from "./reducer";
   import initValue, { List } from "./initValue";

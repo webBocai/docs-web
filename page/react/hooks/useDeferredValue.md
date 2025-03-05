@@ -11,7 +11,7 @@
 
 ###### **用法**
 
-```ts [App.tsx]
+```ts [App.react]
 const deferredValue = useDeferredValue(value)
 ```
 
@@ -76,7 +76,7 @@ app.listen(8030, () => {
 
 ```
 - 修改`DeferredValueDemo1`页面
-```tsx [DeferredValueDemo1.tsx]
+```tsx [DeferredValueDemo1.react]
 import React, { useDeferredValue, useEffect, useState, useTransition } from "react";
 import type { ChangeEvent, FC } from "react";
 

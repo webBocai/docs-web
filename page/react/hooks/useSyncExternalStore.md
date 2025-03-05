@@ -11,7 +11,7 @@
 
 ### 用法
 
-```tsx [App.tsx]
+```tsx [App.react]
 const res = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot?)
 ```
 
@@ -19,7 +19,7 @@ const res = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot?)
 - getSnapshot：函数，返回的值作为当前状态。
 - getServerSnapshot?：在服务器端渲染时用来获取数据源的快照。
 
-```tsx [App.tsx]
+```tsx [App.react]
 const subscribe = (callback: () => void) => {
     // 订阅
     callback() 
@@ -59,7 +59,7 @@ const res = useSyncExternalStore(subscribe, getSnapshot)
 
     ::: code-group
 
-     ```tsx [App.tsx]
+     ```tsx [App.react]
     import React from "react";
     import type { FC } from "react";
     import useStore from "./useStore";

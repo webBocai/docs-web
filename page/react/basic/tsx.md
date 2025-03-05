@@ -19,7 +19,7 @@
 
 > 绑定class需要用className
 ::: code-group
-```tsx [index.tsx]
+```tsx [index.react]
 function App() {
   const num: number = 333
   const fn = () => 'test'
@@ -33,7 +33,7 @@ function App() {
   )
 }
 ```
-``` bash [className.tsx]
+``` bash [className.react]
 // 绑定class(className) id 属性等等 都是一样的
 function App() {
   const value:string = 'A'
@@ -53,7 +53,7 @@ function index() {
   )
 }
 ```
-```tsx [style.tsx]
+```tsx [style.react]
 //绑定样式style
 function App() {
   const styles = { color: 'red' }
@@ -78,7 +78,7 @@ function App() {
 :::
 
 
-```tsx [App.tsx]
+```tsx [App.react]
 function App() {
   const value: string = '张三'
   const clickTap = <T,>(params: T) => console.log(params)
@@ -97,7 +97,7 @@ function App() {
 `dangerouslySetInnerHTML` 的值是一个对象，该对象包含一个名为 __html 的属性，且值为你想要插入的 HTML 字符串
 :::
 
-```tsx  [App.tsx]
+```tsx  [App.react]
 function App() {
   const value: string = '<section style="color:red">张三</section>'
   return (
@@ -112,7 +112,7 @@ function App() {
 
 使用map遍历返回html标签即可
 
-```tsx [App.tsx]
+```tsx [App.react]
 function App() {
   const arr: string[] = ["张三","李四","王五"]
   return (
@@ -131,7 +131,7 @@ function App() {
 
 使用三元表达式就可以了
 
-```tsx [App.tsx]
+```tsx [App.react]
 function App() {
   const flag:boolean = true
   return (
@@ -150,7 +150,7 @@ function App() {
 :::
 下面展示错误用法正确用法对比
 ::: code-group
-```tsx [对象错误写法.tsx]
+```tsx [对象错误写法.react]
 //错误用法
 function App() {
   const obj = { name: '张三' }
@@ -161,7 +161,7 @@ function App() {
   )
 }
 ```
-```tsx [对象正确写法.tsx]
+```tsx [对象正确写法.react]
 //正确用法
 function App() {
   const obj = { name: '张三' }
@@ -174,7 +174,7 @@ function App() {
 }
 ```
 
-```tsx [判断错误写法.tsx]
+```tsx [判断错误写法.react]
 //错误用法
 function App() {
   const flag:boolean = true
@@ -191,7 +191,7 @@ function App() {
   )
 }
 ```
-```tsx [判断正确写法.tsx]
+```tsx [判断正确写法.react]
 //正确用法
 function App() {
   const flag:boolean = true
