@@ -9,7 +9,7 @@
 - 输入决定输出：相同的输入永远会得到相同的输出。这意味着函数的行为是可预测的。
 - 无副作用：纯函数`不会修改外部状态`，也不会依赖外部可变状态。因此，纯函数内部的操作不会影响外部的变量、文件、数据库等。
 
-```js
+```ts [index.ts]
 const add = (x: number, y: number) => x + y
 add(1,2) //3
 ```
@@ -27,7 +27,7 @@ add(1,2) //3
 
 #### 例子1(副作用函数)
 
-```js
+```js [index.js]
 let globalVariable = 0;
 
 function calculateDouble(number){  
@@ -47,7 +47,7 @@ function calculateDouble(number){
 
 #### 例子2(副作用函数)
 
-```js
+```js [index.js]
 //------------副作用函数--------------
 let obj = {name:'张三'}
 const changeObj = (obj) => {
@@ -74,7 +74,7 @@ console.log(obj,'after',newobj) //obj 张三 newobj 李四
 
 ### useEffect用法
 
-```tsx
+```tsx [react]
 useEffect(setup, dependencies?)
 ```
 
@@ -84,21 +84,21 @@ useEffect(setup, dependencies?)
 - **dependencies(可选)**：setup中使用到的响应式值列表(props、state等)。必须以数组形式编写如[dep1, dep2]。不传则每次重渲染都执行Effect。
 
 #### 返回值
-
+::: tip
 useEffect 返回 `undefined`
-
-```ts
+:::
+```ts  [index.ts]
 let a = useEffect(() => {})
 console.log('a', a) //undefined
 ```
 
-#### 基本使用
+### 基本使用
 
 - 副作用函数能做的事情`useEffect`都能做，例如操作`DOM`、网络请求、计时器等等。
 
 #### 操作DOM
 
-```tsx
+```tsx [index.react]
 import { useEffect } from 'react'
 
 function App() {
@@ -114,32 +114,32 @@ function App() {
 
 #### 网络请求
 
-```tsx
+```ts [index.ts]
 useEffect(() => {
   fetch('http://localhost:5174/?name=zs')
 }, [])
 ```
 
-#### 执行时机
+### 执行时机
 
-##### 组件挂载时执行
+#### 组件挂载时执行
 
 - 根据我们下面的例子可以观察到，组件在挂载的时候就执行了`useEffect`的副作用函数。
 
   类似于`componentDidMount`
 
-```tsx
+```ts [index.ts]
 useEffect(() => {
   console.log('组件挂载时执行')
 },[])//只会执行一次
 ```
 
-##### 组件更新时执行
+#### 组件更新时执行
 
-- 无依赖项更新
+- **无依赖项更新**
   - 根据我们下面的例子可以观察到，当有响应式值发生改变时，`useEffect`的副作用函数就会执行。类似于`componentDidUpdate` + `componentDidMount`
 
-```tsx
+```tsx [index.react]
 import { useEffect, useState } from "react"
 
 const App = () => {
@@ -164,10 +164,10 @@ const App = () => {
 export default App
 ```
 
-- 有依赖项更新
+- **有依赖项更新**
   - 根据我们下面的例子可以观察到，当依赖项数组中的`count`值发生改变时，`useEffect`的副作用函数就会执行。而当`name`值改变时,由于它不在依赖项数组中,所以不会触发副作用函数的执行。
 
-```tsx
+```tsx [index.react]
 import { useEffect, useState } from "react"
 
 const App = () => {
@@ -192,14 +192,14 @@ const App = () => {
 export default App
 ```
 
-##### 组件卸载时执行
+#### 组件卸载时执行
 
 - `useEffect`的副作用函数可以返回一个清理函数，
 - 当组件卸载时，`useEffect`的副作用函数就会执行清理函数。
 - 确切说清理函数就是副作用函数运行之前，会清楚上一次的副作用函数。
   - 根据我们下面的例子可以观察到，当组件卸载时，`useEffect`的副作用函数就会执行。类似于`componentWillUnmount`
 
-```tsx
+```tsx [index.react]
 import { useEffect, useState } from "react"
 // 子组件
 const Child = (props: { name: string }) => {
@@ -236,11 +236,11 @@ const App = () => {
 export default App
 ```
 
-#### 真实案例
+### 真实案例
 
 - 下面是一个真实的用户信息获取案例，通过`id`获取用户信息，并且当`id`发生改变时，会获取新的用户信息。
 
-```tsx
+```tsx [index.react]
 import React, { useState, useEffect } from 'react';
 interface UserData {
    name: string;
@@ -303,6 +303,9 @@ function App() {
 
 export default App;
 ```
+<div style="min-height:300px">
+   <img src="https://message163.github.io/react-docs/assets/user.6Rkr3scy.png" style="zoom: 45%; float: left;" />
+</div>
 
-<img src="https://message163.github.io/react-docs/assets/user.6Rkr3scy.png" style="zoom: 45%; float: left;" />
+
 

@@ -4,7 +4,7 @@
 
 ### 用法
 
-```tsx
+```ts [index.ts]
 useLayoutEffect(() => {
   // 副作用代码
   return () => {
@@ -19,9 +19,9 @@ useLayoutEffect(() => {
 - dependencies(可选)：setup中使用到的响应式值列表(props、state等)。必须以数组形式编写如[dep1, dep2]。不传则每次重渲染都执行Effect。
 
 ### 返回值
-
+::: tip
 useLayoutEffect 返回 `undefined`
-
+:::
 ### 区别(useLayoutEffect/useEffect)
 
 | 区别     | useLayoutEffect                      | useEffect                            |
@@ -34,19 +34,19 @@ useLayoutEffect 返回 `undefined`
 
 在下面的动画示例代码中:
 
-1. useEffect 实现的动画效果:
+1. `useEffect` 实现的动画效果:
    - 初始渲染时 opacity: 0
    - 浏览器完成绘制
    - useEffect 异步执行,设置 opacity: 1
    - 用户可以看到完整的淡入动画过渡效果
-2. useLayoutEffect 实现的动画效果:
+2. `useLayoutEffect` 实现的动画效果:
    - 初始渲染时 opacity: 0
    - DOM 更新后立即同步执行 useLayoutEffect
    - 设置 opacity: 1
    - 浏览器绘制时已经是最终状态
    - 用户看不到过渡动画效果
 
-```css
+```css [index.css]
 #app1 {
     width: 200px;
     height: 200px;
@@ -63,9 +63,9 @@ useLayoutEffect 返回 `undefined`
 }
 ```
 
-```tsx
+```tsx [index.react]
 import React, { useLayoutEffect, useEffect, useRef } from 'react';
-
+import './index.css'
 function App() {
 
 
@@ -97,15 +97,15 @@ export default App;
 
 ### 应用场景
 
-- 需要同步读取或更改DOM：例如，你需要读取元素的大小或位置并在渲染前进行调整。
-- 防止闪烁：在某些情况下，异步的useEffect可能会导致可见的布局跳动或闪烁。例如，动画的启动或某些可见的快速DOM更改。
-- 模拟生命周期方法：如果你正在将旧的类组件迁移到功能组件，并需要模拟 componentDidMount、componentDidUpdate和componentWillUnmount的同步行为
+- **需要同步读取或更改DOM**：例如，你需要读取元素的大小或位置并在渲染前进行调整。
+- **防止闪烁**：在某些情况下，异步的useEffect可能会导致可见的布局跳动或闪烁。例如，动画的启动或某些可见的快速DOM更改。
+- 模拟生命周期方法：如果你正在将旧的类组件迁移到功能组件，并需要模拟 `componentDidMount`、`componentDidUpdate`和`componentWillUnmount`的同步行为
 
 ### 案例
 
 - 可以记录滚动条位置，等用户返回这个页面时，滚动到之前记录的位置。增强用户体验。
 
-```tsx
+```tsx [index.react]
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import type { FC } from "react";
 
