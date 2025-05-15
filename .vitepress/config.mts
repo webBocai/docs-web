@@ -128,7 +128,7 @@ export default defineConfig({
         ],
       },
     ],
-    socialLinks: [{ icon: 'github', link: 'https://github.com/1494518217' }],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/webBocai' }],
     // 设置搜索框的样式
     search: {
       provider: 'local',
