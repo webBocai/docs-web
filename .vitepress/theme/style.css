@@ -137,3 +137,7 @@
   --docsearch-primary-color: var(--vp-c-brand-1) !important;
 }
 
+
+.main img {
+  cursor: zoom-in; /* 移动到图片上，可放大 */
+}
