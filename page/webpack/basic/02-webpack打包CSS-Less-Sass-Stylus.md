@@ -1,9 +1,10 @@
-### 1.Webpack打包css文件
-
+### 一、Webpack打包css文件
+#### 0.前情提要
+- [在上一章](./01-webpack基本介绍) 我们的学习了`webpack`基本概要,这一章我们来学习`webpack`是如何出来`css`的
 ####    1.打包失败的问题
 - 首先在css文件中创建`index.css`
 
-```css
+```css [index.css]
   .content {
       color: red;
       font-size: 40px;
@@ -11,78 +12,85 @@
 ```
 - 然后我们创建在`components`文件夹下创建`cps.js`
 
-```js
+```js [cps.js]
   import '../css/index.css';
   const divEle = document.createElement('div');
   divEle.textContent = 'Hello World';
   divEle.classList.add('content');
   document.body.appendChild(divEle);
 ```
-
-- 最后我们执行 `npm run build` 会报错：
-  - 解析失败, 你需要合适**loader来处理这个文件类型**
-
+::: danger 最后我们执行 `npm run build` 会报错
+  - 报错信息: `You may need an appropriate loader to handle thiss file type, currently no loaders`
+  - 解释：解析失败, 你需要合适**loader来处理这个文件类型**
+:::
 ![](https://picx.zhimg.com/80/v2-f581ad19cdf0d5a075a1bd1d9e275a01_1420w.png)
 
 #### 2.使用loader来处理
+- 为什么报这个错误？如何解决呢？
+::: info 如何解决错误信息
+-  上面的错误信息告诉我们需要一个`loader`来加载这个`css文件`，但是`loader`是什么呢？<p></p>
+   :label: `loader` 可以用于对模块的源代码进行转换<p></p>
+   :label:  我们可以将`css文件`也看成是一个模块,我们是通过`import`来**加载模块**将他**放入`webpack`依赖图中** <p></p>
+   :label: 在加载这个模块时,`webpack`其实并**不知道如何对其进行加载**,我们必须使用`对应的loader`来处理相应的静态资源；
+:::
+- 使用相应的loader，在这个应用场景我们就需要`css-loader`
+::: tip css-loader是什么?
+   - 对于加载css文件来说，我们需要一个可以读取css文件的loader；
+   - 这个loader最常用的是`css-loader` <p></p>
+      :bookmark: 安装loader `npm install css-loader -D`
+:::
 
--  上面的错误信息告诉我们需要一个`loader`来加载这个`css文件`，但是`loader`是什么呢？
-  - `loader` 可以用于对模块的源代码进行转换；
-  - 我们可以将css文件也看成是一个模块，我们是通过`import`来**加载模块**将他**放入webpack依赖图中**
-  - 在加载这个模块时，`webpack`其实并**不知道如何对其进行加载**，我们必须使用对应的loader来完成这个功能；
--  那么我们需要一个什么样的loader呢？
-  - 对于加载css文件来说，我们需要一个可以读取css文件的loader；
-  - 这个loader最常用的是`css-loader`
-    - 安装loader `npm install css-loader -D`
 
 #### 3.css-loader的使用方案
 
 - 如何使用这个`loader`来**加载css文件**呢？有三种方式：
-
-  - 内联方式：内联方式使用较少，因为不方便管理；
+  - **内联方式**：内联方式使用较少，因为不方便管理；
 
     - 在引入的样式前加上使用的`loader`，并且使用`!`分割
 
-    ```js
-    import 'css-loader!../css/index.css';
+    ```js [cps.js]
+    // import '../css/index.css'; // [!code --]
+    import 'css-loader!../css/index.css'; // [!code ++]  [!code focus]
+    const divEle = document.createElement('div');
+    divEle.textContent = 'Hello World';
+    divEle.classList.add('content');
+    document.body.appendChild(divEle);
     ```
 
-  - CLI方式（webpack5中不再使用）
+  - CLI方式（**webpack5中不再使用**）
 
-    - 在webpack5的文档中已经没有了`--module-bind`
-    - 实际应用中也比较少使用，因为不方便管理；
+    1. 在webpack5的文档中已经没有了`--module-bind`
+    2. 实际应用中也比较少使用，因为不方便管理；
 
-  - **配置方式(最常用)**
+  - **配置文件方式(最常用)** 后续讲解这个
 
 #### 4.loader配置方式
-
-- 配置方式表示的意思是在我们的配置文件中**写明配置信息**：
-
-  - `module.rules`中允许**我们配置多个loader**（因为我们也会继续使用其他的loader，来完成其他文件的加载）；
-  - 这种方式可以更好的表示loader的配置，也方便后期的维护，同时也让你对各个Loader有一个全局的概览；
-
+::: info :link: 为什么用配置文件方式?
+配置文件方式表示的意思是在我们的配置文件中**写明配置信息**：<p></p>
+     :label: `module.rules`中允许**我们配置多个loader**  因为我们也会继续使用其他的`loader`，**来完成其他文件的加载** <br/>
+     :label: 这种方式可以更好的表示loader的配置，也方便后期的维护，同时也让你对各个`Loader`有一个全局的概览；
+:::
+#### 5.rules 配置属性
 - `module.rules`的配置如下：
-
-  - `rules`属性对应的值是一个数组：`[Rule]`
-
-  -  数组中存放的是一个个的`Rule`，`Rule是一个对象`，对象中可以设置多个属性：
-
-    - **test属性**：用于对`resource`(资源)进行匹配的，通常会设置成正则表达式；
-    - **use属性**：对应的值时一个数组：`[UseEntry]`
+  -   `rules`属性对应的值是一个数组：`[Rule]`数组中存放的是一个个的`Rule`，`Rule`是一个对象，对象中可以**设置多个属性**：
+      - **test属性**：用于对`resource`(资源)进行匹配的，通常会设置成正则表达式；
+      - **use属性**：对应的值时一个数组：`[UseEntry]`
+        ::: warning :link: UseEntry是什么
+         - `UseEntry`是一个对象，可以通过对象的属性来设置一些其他属性<p></p>
+         :bookmark:`loader`：必须有一个loader属性，**对应的值是一个字符串；** <p></p>
+         :bookmark: `options`：可选的属性，**值是一个字符串或者对象**，值会被传入到loader中；<p></p>
+         :bookmark: `query`：**目前已经使用options来替代** <p></p>
+        :::
     
-      -  UseEntry是一个对象，可以通过对象的属性来设置一些其他属性
-    
-        -  `loader`：必须有一个loader属性，**对应的值是一个字符串；**
-        -  `options`：可选的属性，**值是一个字符串或者对象**，值会被传入到loader中；
-        - `query`：**目前已经使用options来替代**
-    - **loader属性**： 是`use`:` [ { loader } ] `的简写。
+
+    - **loader属性**：是`use`:` [ { loader } ] `的简写。
     - **include** 指定**需要处理的目录**
-    - **exclude ** 排除**不需要处理的目录或文件**
+    - **exclude** 排除 **不需要处理的目录或文件**
     - [更多配置查看webpack官网](https://webpack.js.org/configuration/module/#modulerules)
 
 - 在配置文件中，添加`css-loader`进行解析css
 
-  ```js
+  ```js{9-14} [webpack.config.js] 
   module.exports = {
    // ... 省略其他配置
     module: {
@@ -92,7 +100,10 @@
          // loader: 'css-loader', // 写法一 适合只有一个loader的时候用
          // use:['css-loader'] // 写法二 适合没有 options属性或query属性的配置使用，没有单独配置文件使用的方式
           use: [
-            { loader: 'css-loader' },
+            { 
+              loader: 'css-loader', 
+              options:{} // 传入参数
+            },
           ], // 写法三 最全配置的写
         },
       ],
@@ -102,36 +113,32 @@
   ```
 
 
--  此时我们运行`npm run build`,  虽然类名添加上去了**css效果并没有生效**
+-  此时我们运行`npm run build`,  虽然没有报错也把类名添加上去了，但是**css效果并没有生效**
+  <img src="https://pica.zhimg.com/80/v2-7456c4ab0c10ee58689568f8f5bdd09d_1420w.png" style="margin-top:20px;" />
 
-  <img src="https://pica.zhimg.com/80/v2-7456c4ab0c10ee58689568f8f5bdd09d_720w.png" style="zoom: 80%;" />
+####   6.认识style-loader
 
-####   5.认识style-loader
+- 现在我们已经可以通过`css-loader`**来加载css文件了** <p></p>
+   :pushpin: 但是你会发现这个css在我们的代码中**并没有生效（页面没有效果）**
 
-- 现在我们已经可以通过`css-loader`**来加载css文件了**
-  - 但是你会发现这个css在我们的代码中**并没有生效（页面没有效果）**
-
-- 这是为什么呢?
-
-  - 因为`css-loader`只是负责`.css文件进行解析`，**并不会将解析之后的css插入到页面中；**
-  - 如果我们希望再完成插入style的操作，那么我们**还需要另外一个loader**，就是`style-loader`；
+- 这是为什么呢?<p></p>
+   :pushpin: 因为`css-loader`只是负责`.css文件进行解析`，**并不会将解析之后的css插入到页面中；**<br/>
+   如果我们希望再完成插入style的操作,那么我们**还需要另外一个loader**，就是`style-loader`；
 
 - 安装`style-loader`
 
-  ```powershell
+  ```sh [npm]
   npm install  style-loader -D 
   ```
 
-#### 6.配置style-loader
+#### 7.配置style-loader
 
--  在配置文件中,添加`style-loader`；
-
-  -  注意事项：`webpack`**在执行loader的时候，是通过从后往前执行的**
-
-  -   所以我们的`style-loader`是要在`css-loader`前面的，这样就是等`css-loader` 解析完成后css文件
+-  在配置文件中,添加`style-loader`；<p></p>
+     :pushpin: 注意事项：`webpack`**在执行loader的时候，是通过从后往前执行的**<p></p>
+    :pushpin:  所以我们的`style-loader`是要在`css-loader`前面的，这样就是等`css-loader` 解析完成后`css文件`
     交给`style-loader`去插入到页面中，生成对应的css样式
-  
-  ````js
+
+  ````js [webpack.config.js]
   module.exports = {
    // ... 省略其他配置
     module: {
@@ -139,25 +146,22 @@
         {
           test: /\.css$/,
           use: [
-            'style-loader', // 再执行 style-loader 添加style在页面中
-            'css-loader'， // 注意先执行css-loader 解析css文件
+            'style-loader', // 再执行 style-loader 添加style在页面中 // [!code focus]
+            'css-loader'， // 注意先执行css-loader 解析css文件  // [!code focus]
           ]
         },
       ],
     }
   }
   ````
-  
-  
-  
--  重新执行编译`npm run build`，可以发现打包后的**css已经生效了**
 
-  - 当前目前我们的css是通过页内样式的方式添加进来的；
-  - 后续我们也会讲如何将**css抽取到单独的文件中**，并且进行压缩等操作；
+-  重新执行编译`npm run build`，可以发现打包后的**css已经生效了** <p></p>
+   :pushpin:  当前目前我们的css是通过页内样式的方式添加进来的； <p></p>
+   :pushpin:  后续我们也会讲如何将**css抽取到单独的文件中**，并且进行压缩等操作；
 
-<img src="https://picx.zhimg.com/80/v2-35415a76025e48e7bf5fb24dfdf9dd8a_720w.png" style="zoom:100%; float:left" />
+<img src="https://picx.zhimg.com/80/v2-35415a76025e48e7bf5fb24dfdf9dd8a_1420w.png" style="margin-top:20px" />
 
-### 2.Webpack打包预处理器
+### 二、Webpack打包预处理器
 
 ####  1.介绍预处理器
 
@@ -306,7 +310,7 @@ document.body.appendChild(StylusTitle);
 
 
 
-### 3.Webpack后处理器
+### 三、Webpack后处理器
 
 ####   1.认识PostCSS工具
 

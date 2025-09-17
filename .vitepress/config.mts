@@ -1,9 +1,14 @@
 import { defineConfig } from 'vitepress';
 import { groupIconMdPlugin, groupIconVitePlugin } from 'vitepress-plugin-group-icons';
 import sidebar from '../page/sidebar';
-
+import { defineTeekConfig } from 'vitepress-theme-teek/config';
+const teekConfig = defineTeekConfig({
+  teekTheme: true,
+  vpHome: false,
+});
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  extends: teekConfig,
   base: '/docs-web/',
   head: [['link', { rel: 'icon', href: '/docs-web/logo.svg' }]],
   title: '菠菜博客',
@@ -20,6 +25,11 @@ export default defineConfig({
       infoLabel: '信息',
       detailsLabel: '详细信息',
     },
+    image: {
+      // 默认禁用；设置为 true 可为所有图片启用懒加载。
+      lazyLoading: true,
+    },
+    lineNumbers: true,
   },
   vite: {
     plugins: [groupIconVitePlugin()],

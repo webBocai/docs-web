@@ -2,8 +2,11 @@
 import { h } from 'vue';
 import type { Theme } from 'vitepress';
 import DefaultTheme from 'vitepress/theme';
+import Teek from 'vitepress-theme-teek';
+import 'vitepress-theme-teek/index.css';
 import './style.css';
 import 'virtual:group-icons.css';
+import 'vitepress-theme-teek/theme-chalk/tk-doc-h1-gradient.css';
 
 import 'viewerjs/dist/viewer.min.css'; // 预览器样式
 import imageViewer from 'vitepress-plugin-image-viewer';
@@ -11,19 +14,19 @@ import vImageViewer from 'vitepress-plugin-image-viewer/lib/vImageViewer.vue'; /
 import { useRoute } from 'vitepress';
 
 export default {
-  extends: DefaultTheme,
-  Layout: () => {
-    return h(DefaultTheme.Layout, null, {
-      // https://vitepress.dev/guide/extending-default-theme#layout-slots
-    });
-  },
+  extends: Teek,
+  // Layout: () => {
+  //   return h(DefaultTheme.Layout, null, {
+  //     // https://vitepress.dev/guide/extending-default-theme#layout-slots
+  //   });
+  // },
   enhanceApp({ app, router, siteData }) {
     // ...
   },
   setup() {
     // 获取当前路由信息
-    const route = useRoute();
-    // 使用图片预览器，并传入当前路由
-    imageViewer(route);
+    // const route = useRoute();
+    // // 使用图片预览器，并传入当前路由
+    // imageViewer(route);
   },
 } satisfies Theme;
