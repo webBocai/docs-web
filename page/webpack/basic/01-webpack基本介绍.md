@@ -1,27 +1,30 @@
-### 1.Webpack到底是什么呢？
+### 一、Webpack基础介绍
+ #### 1.Webpack是什么?
+ 
+- **官方的解释**: `webpack` is a `static `  `module `  `bundler ` for `modern ` **JavaScript applications**
+- **中文解释**：`webpack` 是一个**静态模块打包的工具**，用于**现代JavaScript 应用程序**
 
-- 官方的解释: webpack is a `static `  `module `  `bundler ` for `modern ` **JavaScript applications**
 
-  - 中文解释：webpack 是一个**静态模块打包的工具**，用于现代JavaScript 应用程序
-
+::: tip Webpack是什么呢
 - 我们来对上面的解释进行拆解:
+  - **打包 builder：** `webpack`是一个打包工具，能将我们的写的代码，**进行打包压缩**
+  - **静态的 static：** 我们最终打包的代码是一个**静态资源**，然后**部署到静态服务器中**
+  - **模块 module：** `webpack` 支持各种**模块化开发**，如: `ES Module  Common  AMD CMD`
+  - **现代的 modern：** `webpack` 之前，前端开发有着各种兼容性问题，并且开发效率非常低 
+:::
+  
 
-  - **打包bundler：** webpack是一个打包工具，能将我们的写的代码，进行打包压缩
-  - **静态的static：**我们最终打包的代码是一个**静态资源**，然后**部署到静态服务器中**
-  - **模块module：** webpack 支持各种**模块化开发**，如: `ES Module  Common  AMD CMD`
-  - **现代的modern：** webpack之前，前端开发有着各种兼容性问题，并且开发效率非常低 
+
+
+- webpack 将**各种模块依赖**用webpack 构建**打包成静态资源**  [webpack官网文档](https://webpack.js.org/)
 
 - webpack官方图片
 
-  - webpack 将**各种模块依赖**用webpack 构建**打包成静态资源**
-
     <img src="https://picx.zhimg.com/80/v2-6f84a2e1f7e8d66c8ae68f89448d196f_720w.png" style="zoom:80%;" />
 
-  
 
-[webpack官网文档](https://webpack.js.org/)
 
-### 2.Webpack能做什么？
+#### 2.Webpack能做什么？
 
 - 在webpack5.x之前 **初始的** `功能只能处理`  **JavaScript** 文件，但是在webpack在5.x之后**能处理图片和字体静态资源**
 
@@ -49,13 +52,13 @@
 - 还有很多高级功能等。。。 
 
 
-### 3.Webpack的使用前提
+#### Webpack的使用前提
 
 - 需要熟悉` HTML CSS  JavaScript `
 - 需要了解 `node` 基础知识
   -  `npm` `npx` ` require` 全局变量 `path` 等
-
-### 4.Webpack的安装
+### 二、Webpack的基本使用
+#### 1.Webpack的安装
 
 - 执行安装
 ::: code-group
@@ -94,7 +97,7 @@
     -  命令操作(如 `webpack entry.js bundle.js`) 和 配置文件(如 `webpack.config.js`) 最终都会使用 Webpack 的 API 启动打包流程
 
 
-### 5.Webpack执行过程
+#### 2.Webpack执行过程
 > [!IMPORTANT] Webpack 执行过程
 > - 当我执行 webpack 这个命令的时候,webpack是如何执行到`webpack-cli`的呢？
 >   1.  执行webpack命令，**会执行node_modules下的.bin目录下的webpack**
@@ -102,7 +105,7 @@
 >   3.  而webpack-cli中代码执行时，才是真正利用 **webpack进行编译和打包的过程**；
 >   4.  **所以在安装webpack时，我们需要同时安装webpack-cli**
 
-### 6.Webpack的默认打包
+#### 3.Webpack的默认打包
 
 - 当我们安装`webpack`成功之后，可以执行 `npx  webpack` 命令进行执行打包
 > [!WARNING] 为什么用npx 进行执行命令？
@@ -150,7 +153,7 @@
   
   ```
 
-### 7.Webpack的配置文件
+#### 4.Webpack的配置文件
 
 - 我们发现如果在命令行去使用命令，感觉非常鸡肋，有什么方法吗？当然有的
 
@@ -158,7 +161,7 @@
 
   1. 在`package.json`里面 `webpack`命令可以省略 `npx`
 
-  ```json
+  ```json [package.json]
   {
     "name": "01",
     "version": "1.0.0",
@@ -178,7 +181,7 @@
 
  2. 然后我们在根目录中创建 `webpack.config.js` 
 
-  ```js
+  ```js [webpack.config.js]
   const path = require('path');
   module.exports = {
     entry: './src/main.js',  // 入口文件 默认是 ./src/index.js
@@ -191,7 +194,7 @@
 
 - 最后我们执行 `npm run build` 就可以进行最基础的打包
 
-### 8.Webpack的指定配置文件
+#### 5.Webpack的指定配置文件
 
 - 如果我们的配置文件并不是`webpack.config.js`的名字，而是其他的名字呢？
 
@@ -205,7 +208,7 @@
 
   - 但是每次这样执行命令会非常繁琐，所以我们可以在`package.json`中增加一个新的脚本
 
-    ```json
+    ```json [package.json]
      "scripts": {
        // "build": "webpack" // [!code --]
          "build":"webpack --config vite.config.js" // [!code ++]
@@ -213,7 +216,7 @@
     ```
 
     <img src="https://pica.zhimg.com/80/v2-6a5b472364b3f998e5a1cbf71d3271fb_720w.png" style="zoom:67%; " />
-### 9.Webpack依赖图
+#### 6.Webpack依赖图
 ::: tip `webpack` 到底是如何对我们的项目进行打包的呢？
   1. `webpack`在处理**应用程序**时，它会根据命令或者**配置文件里面的`entry`找到入口文件**；
   2.  **从入口开始**，会**生成一个依赖关系图**，这个**依赖关系图**会包含应用程序中**所需的所有模块** 
