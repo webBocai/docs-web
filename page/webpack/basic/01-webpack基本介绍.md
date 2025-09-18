@@ -1,4 +1,9 @@
-### 一、Webpack基础介绍
+
+
+# Webpack基础介绍
+
+### 一、介绍
+
  #### 1.Webpack是什么?
  
 - **官方的解释**: `webpack` is a `static `  `module `  `bundler ` for `modern ` **JavaScript applications**
@@ -226,12 +231,15 @@
 :::
 
 
-- [ ] 吃饭
-- [ ] 睡觉
-- [x] 打豆豆
+
 
 
 <img src="https://picx.zhimg.com/80/v2-6f84a2e1f7e8d66c8ae68f89448d196f_720w.png" style="zoom:80%;" />
 
 
+> **文档风 & 博客风**
 
+<!-- ::: list-success xxxx
+这是一个信息提示框。
+- 它支持**多行**内容和 *Markdown* 语法。
+::: -->

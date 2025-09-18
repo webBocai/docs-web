@@ -4,22 +4,20 @@ import type { Theme } from 'vitepress';
 import DefaultTheme from 'vitepress/theme';
 import Teek from 'vitepress-theme-teek';
 import 'vitepress-theme-teek/index.css';
-import './style.css';
 import 'virtual:group-icons.css';
-import 'vitepress-theme-teek/theme-chalk/tk-doc-h1-gradient.css';
-
-import 'viewerjs/dist/viewer.min.css'; // 预览器样式
+import '../../config/assets/index.scss';
 import imageViewer from 'vitepress-plugin-image-viewer';
 import vImageViewer from 'vitepress-plugin-image-viewer/lib/vImageViewer.vue'; // 可选组件
 import { useRoute } from 'vitepress';
 
 export default {
   extends: Teek,
-  // Layout: () => {
-  //   return h(DefaultTheme.Layout, null, {
-  //     // https://vitepress.dev/guide/extending-default-theme#layout-slots
-  //   });
-  // },
+  Layout: () => {
+    return h(Teek.Layout, null, {
+      // https://vitepress.dev/guide/extending-default-theme#layout-slots
+    });
+  },
+  // Layout,
   enhanceApp({ app, router, siteData }) {
     // ...
   },

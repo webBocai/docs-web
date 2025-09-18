@@ -1,0 +1,27 @@
+@import  './css/style.css';
+@import 'vitepress-theme-teek/theme-chalk/tk-doc-h1-gradient.css';
+@import 'vitepress-theme-teek/theme-chalk/tk-aside.css';
+// @import 'vitepress-theme-teek/theme-chalk/tk-scrollbar.css';
+@import 'vitepress-theme-teek/theme-chalk/tk-mark.css';
+@import 'vitepress-theme-teek/theme-chalk/tk-index-rainbow.css';
+// @import "vitepress-theme-teek/theme-chalk/tk-banner-desc-gradient.css";
+@import 'viewerjs/dist/viewer.min.css'; // 预览器样式
+@import url('./scss/list-block.scss');
+
+
+blockquote{
+    border-radius: 10px;
+    padding: 10px 16px;
+    background-color: var(--vp-c-gray-soft);
+    opacity: .9;
+    margin: 30px 0 !important;
+    border-left: 2px solid var(--vp-c-divider);
+    padding-left: 16px;
+    transition: border-color .5s;
+    color: var(--vp-c-text-2);
+    p{
+     margin: 0;
+    font-size: 16px;
+    transition: color .5s;
+    }
+}
