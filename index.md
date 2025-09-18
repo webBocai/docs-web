@@ -34,8 +34,8 @@ tk:
     bgStyle: "fullImg"
     pureBgColor: "#28282d"
     imgSrc:
-      - /config/img/bg.jpeg
-      - /config/img/bg2.jpeg
+      - /img/bg.jpeg
+      - /img/bg2.jpeg
     imgInterval: 15000
     imgShuffle: false
     mask: true
@@ -67,7 +67,8 @@ tk:
     listStyleTitleTagPosition: right
     cardStyleTitleTagPosition: left
     defaultCoverImg:
-      - /config/img/bg3.webp
+      - /img/bg3.webp
+
    
 ---
 
