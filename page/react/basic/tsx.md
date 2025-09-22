@@ -1,3 +1,14 @@
+---
+date: 2025-09-17 10:09:25
+title: tsx 语法入门
+permalink: /pages/b438d4
+categories:
+    - React 
+titleTag: 原创
+tags:
+ - React基础
+coverImg: /img/react_ts.jpeg
+---
 # tsx语法入门
 
 ## FAQ

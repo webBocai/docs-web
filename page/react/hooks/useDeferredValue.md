@@ -1,3 +1,13 @@
+---
+date: 2025-05-15 09:43:30
+title: useDeferredValue <TkTitleTag type="vp-important" text="Hooks" position="right" />
+permalink: /pages/238f57
+categories:
+  - React
+coverImg: /img/react_hooks.png
+tags:
+  - React Hooks
+---
 #  useDeferredValue
 
 **useDeferredValue** 用于延迟某些状态的更新，直到主渲染任务完成。这对于高频更新的内容（如**输入框、滚动**等）非常有用，可以让 UI 更加流畅，避免由于频繁更新而导致的性能问题。

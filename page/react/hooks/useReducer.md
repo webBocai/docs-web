@@ -1,3 +1,13 @@
+---
+date: 2025-05-15 09:43:30
+title: useReducer <TkTitleTag type="vp-important" text="Hooks" position="right" />
+permalink: /pages/3a55db
+categories:
+  - React
+coverImg: /img/react_hooks.png
+tags:
+  - React Hooks
+---
 # useReducer
 
 ### 1).介绍

@@ -1,3 +1,13 @@
+---
+date: 2025-05-15 09:43:30
+title: webpack构建React<TkTitleTag type="ep-primary" text="构建" position="right" />
+permalink: /pages/944c8a
+categories:
+   - React
+coverImg: /img/react_ts.jpeg
+tags:
+ - React构建
+---
 # webpack 创建React项目
 
 ###  1.使用[create-react-app](https://cra.nodejs.cn/) 创建项目

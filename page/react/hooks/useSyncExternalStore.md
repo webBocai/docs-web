@@ -1,3 +1,13 @@
+---
+date: 2025-05-15 09:43:30
+title: useSyncExternalStore <TkTitleTag type="vp-important" text="Hooks" position="right" />
+permalink: /pages/30b35d
+categories:
+  - React
+coverImg: /img/react_hooks.png
+tags:
+  - React Hooks
+---
 # useSyncExternalStore
 
 `useSyncExternalStore `是 React 18 引入的一个 Hook，用于从外部存储（例如状态管理库、浏览器 API 等）获取状态并在组件中同步显示。这对于需要跟踪外部状态的应用非常有用。

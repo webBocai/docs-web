@@ -1,3 +1,13 @@
+---
+date: 2025-05-15 09:43:30
+title: useEffect <TkTitleTag type="vp-important" text="Hooks" position="right" />
+permalink: /pages/a90701
+categories:
+  - React
+coverImg: /img/react_hooks.png
+tags:
+  - React Hooks
+---
 # useEffect
 
 `useEffect` 是 React 中用于处理`副作用`的钩子。并且`useEffect` 还在这里充当生命周期函数，在之前你可能会在类组件中使用 `componentDidMount`、`componentDidUpdate` 和 `componentWillUnmount` 来处理这些生命周期事件。

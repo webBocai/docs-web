@@ -1,3 +1,14 @@
+---
+date: 2025-05-15 09:43:30
+title: useCallback 的使用<TkTitleTag type="vp-important" text="Hooks" position="right" />
+permalink: /pages/0c908d
+categories:
+  - React
+ 
+coverImg: /img/react_hooks.png
+tags:
+  - React Hooks
+---
 # useCallback
 ::: danger useCallback
 `useCallback` 用于优化性能，返回一个记忆化的回调函数，可以减少不必要的重新渲染，也就是说它是用于缓存组件内的函数，避免函数的重复创建。

@@ -1,3 +1,13 @@
+---
+date: 2025-05-15 09:43:30
+title: useRef <TkTitleTag type="vp-important" text="Hooks" position="right" />
+permalink: /pages/51e0aa
+categories:
+  - React
+coverImg: /img/react_hooks.png
+tags:
+  - React Hooks
+---
 # useRef
 
 - 当你在React中需要处理DOM元素或需要在组件渲染之间保持持久性数据时，便可以使用

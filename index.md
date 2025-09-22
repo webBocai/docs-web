@@ -60,7 +60,7 @@ tk:
     moreLabel: "阅读全文 >"
     coverImgMode: full
     emptyLabel: 暂无文章
-    showCapture: true
+    showCapture: false
     splitSeparator: false
     transition: true
     transitionName: tk-slide-fade
@@ -68,7 +68,7 @@ tk:
     cardStyleTitleTagPosition: left
     defaultCoverImg:
       - /img/bg3.webp
-
-   
+ 
+    
 ---
 

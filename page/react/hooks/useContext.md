@@ -1,3 +1,13 @@
+---
+date: 2025-05-15 09:43:30
+title: useContext <TkTitleTag type="vp-important" text="Hooks" position="right" />
+permalink: /pages/4341ce
+categories:
+  - React
+coverImg: /img/react_hooks.png
+tags:
+  - React Hooks
+---
 # useContext
 
 `useContext` 提供了一个无需为每层组件手动添加 props，就能在组件树间进行数据传递的方法。设计的目的就是解决组件树间数据传递的问题。

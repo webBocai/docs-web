@@ -1,3 +1,13 @@
+---
+date: 2025-05-15 09:43:30
+title: useLayoutEffect <TkTitleTag type="vp-important" text="Hooks" position="right" />
+permalink: /pages/57d9e1
+categories:
+  - React
+coverImg: /img/react_hooks.png
+tags:
+  - React Hooks
+---
 # useLayoutEffect
 
 `useLayoutEffect` 是 React 中的一个 Hook，用于在浏览器重新绘制屏幕之前触发。与 useEffect 类似。

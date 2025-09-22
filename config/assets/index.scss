@@ -4,9 +4,16 @@
 // @import 'vitepress-theme-teek/theme-chalk/tk-scrollbar.css';
 @import 'vitepress-theme-teek/theme-chalk/tk-mark.css';
 @import 'vitepress-theme-teek/theme-chalk/tk-index-rainbow.css';
+
+// @import "vitepress-theme-teek/theme-chalk/tk-banner-desc-gradient.css";
+// @import "vitepress-theme-teek/theme-chalk/tk-banner-full-img-scale.css";
+@import "vitepress-theme-teek/theme-chalk/tk-fade-up-animation.css";
+// @import "vitepress-theme-teek/theme-chalk/tk-home-card-hover.css";
 // @import "vitepress-theme-teek/theme-chalk/tk-banner-desc-gradient.css";
 @import 'viewerjs/dist/viewer.min.css'; // 预览器样式
 @import url('./scss/list-block.scss');
+
+
 
 
 blockquote{
@@ -24,4 +31,12 @@ blockquote{
     font-size: 16px;
     transition: color .5s;
     }
+}
+.tk-my__avatar {
+    &.circle-rotate{
+        margin-top: 200px;
+    }
+}
+:root{
+    --tk-home-max-width:1300px !important;
 }

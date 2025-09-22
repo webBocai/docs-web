@@ -1,3 +1,13 @@
+---
+date: 2025-05-15 09:43:30
+title: React项目配置 <TkTitleTag type="ep-primary" text="配置" position="right" />
+permalink: /pages/24445d
+categories:
+  - React
+coverImg: /img/react_ts.jpeg
+tags:
+ - React配置
+---
 # React开发环境搭建
 
 ### 一、配置 eslint 和prettier

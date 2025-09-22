@@ -1,3 +1,13 @@
+---
+date: 2025-05-15 09:43:30
+title: useMemo <TkTitleTag type="vp-important" text="Hooks" position="right" />
+permalink: /pages/7bc566
+categories:
+  - React
+coverImg: /img/react_hooks.png
+tags:
+  - React Hooks
+---
 # useMemo
 
 1. `useMemo` **是React提供的一个性能优化 Hook**，它的主要功能是避免在每次渲染时执行复杂的计算和对象重建。

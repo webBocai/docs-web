@@ -1,3 +1,13 @@
+---
+date: 2025-05-15 09:43:30
+title: vite构建React <TkTitleTag type="ep-primary" text="构建" position="right" />
+permalink: /pages/91c696
+categories:
+  - React
+coverImg: /img/react_ts.jpeg
+tags:
+ - React构建
+---
 # vite安装React项目
 选择一个你喜欢的目录，然后运行以下命令：
 

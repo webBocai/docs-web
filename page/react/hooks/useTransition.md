@@ -1,3 +1,14 @@
+---
+date: 2025-05-15 09:43:30
+title: useTransition <TkTitleTag type="vp-important" text="Hooks" position="right" />
+permalink: /pages/e2391b
+titleTag: koos
+categories:
+  - React
+coverImg: /img/react_hooks.png
+tags:
+  - React Hooks
+---
 # useTransition
 
 `useTransition` 是 React 18 中引入的一个 Hook，**他不是做动画的hook，而是用于管理 UI 中的过渡状态**，特别是在处理长时间运行的状态更新时。它允许你将某些更新标记为“过渡”状态，这样 React 可以优先处理更重要的更新，比如用户输入，同时延迟处理过渡更新。

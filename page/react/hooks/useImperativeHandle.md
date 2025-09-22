@@ -1,3 +1,13 @@
+---
+date: 2025-05-15 09:43:30
+title: useImperativeHandle <TkTitleTag type="vp-important" text="Hooks" position="right" />
+permalink: /pages/1a44d5
+categories:
+  - React
+coverImg: /img/react_hooks.png
+tags:
+  - React Hooks
+---
 # useImperativeHandle
 
 可以在子组件内部暴露给父组件`句柄`，那么说人话就是，父组件可以调用子组件的方法，或者访问子组件的属性。 如果你学过Vue，就类似于Vue的`defineExpose`。
