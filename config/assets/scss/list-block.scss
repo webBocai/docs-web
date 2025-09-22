@@ -29,7 +29,7 @@
   
   /* 通用变量 */
   --list-block-radius: 8px;
-  --list-block-padding: 10px 20px;
+  --list-block-padding: 10px 10px;
   --list-block-margin: 20px 0;
 }
 
@@ -80,7 +80,7 @@
 
   li {
     position: relative;
-    padding-left: 20px;
+    padding-left: 10px;
     margin-bottom: 4px;
 
   }
@@ -103,7 +103,7 @@
 .list-block-title {
   font-weight: 600;
   margin: 0 0 8px 0 !important;
-  text-transform: capitalize;
+  // text-transform: capitalize;
   font-size: 16px;
   display: flex;
   align-items: center;
@@ -143,6 +143,11 @@
   border-color: var(--list-block-default-border);
   color: var(--list-block-default-text);
   background-color: var(--list-block-default-bg);
+}
+.list-block-tip {
+    border-color: var(--vp-custom-block-tip-border);
+    color: var(--vp-custom-block-tip-text);
+    background-color: var(--vp-custom-block-tip-bg);
 }
 
 /* 响应式调整 */

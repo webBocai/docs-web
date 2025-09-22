@@ -12,6 +12,7 @@
 // @import "vitepress-theme-teek/theme-chalk/tk-banner-desc-gradient.css";
 @import 'viewerjs/dist/viewer.min.css'; // 预览器样式
 @import url('./scss/list-block.scss');
+@import url('./scss/item-block.scss');
 
 
 
@@ -39,4 +40,10 @@ blockquote{
 }
 :root{
     --tk-home-max-width:1300px !important;
+    ul{
+        list-style: none;
+        li{
+            list-style: none ;
+        }
+    }
 }

@@ -2,7 +2,8 @@ import { defineConfig } from 'vitepress';
 import { groupIconMdPlugin, groupIconVitePlugin } from 'vitepress-plugin-group-icons';
 import sidebar from '../page/sidebar';
 import { defineTeekConfig } from 'vitepress-theme-teek/config';
-import { ListLabel } from '../config/ts';
+
+import { ItemList, ListLabel } from '../config/ts';
 const teekConfig = defineTeekConfig({
   teekTheme: true,
   loading: '菠菜文档加载中...',
@@ -19,8 +20,11 @@ const teekConfig = defineTeekConfig({
     copiedDone: (TkMessage) => TkMessage.success('复制成功！'), // 复制代码完成后的回调
   },
   markdown: {
+    lineNumbers: true,
     config(md) {
       ListLabel(md);
+      ItemList(md);
+
       md.use(groupIconMdPlugin);
     },
 
@@ -35,7 +39,6 @@ const teekConfig = defineTeekConfig({
       // 默认禁用；设置为 true 可为所有图片启用懒加载。
       lazyLoading: true,
     },
-    lineNumbers: true,
   },
   // 博主信息，显示在首页左边第一个卡片。
   blogger: {
@@ -103,6 +106,9 @@ export default defineConfig({
 
   vite: {
     plugins: [groupIconVitePlugin()],
+  },
+  markdown: {
+    lineNumbers: true,
   },
   themeConfig: {
     lastUpdated: {
