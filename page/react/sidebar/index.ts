@@ -7,7 +7,7 @@ const reactSideBar = {
         {
           text: 'React开发环境搭建',
           items: [
-            { text: '用create-react-app搭建', link: '/page/react/basic/create-react-app' },
+            { text: 'create-react-app搭建', link: '/page/react/basic/create-react-app' },
             { text: '用vite搭建React', link: '/page/react/basic/vite' },
             { text: '配置React开发环境', link: '/page/react/basic/react-config.md' },
           ],

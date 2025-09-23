@@ -1,4 +1,4 @@
-@import  './css/style.css';
+@import './css/style.css';
 @import 'vitepress-theme-teek/theme-chalk/tk-doc-h1-gradient.css';
 @import 'vitepress-theme-teek/theme-chalk/tk-aside.css';
 // @import 'vitepress-theme-teek/theme-chalk/tk-scrollbar.css';
@@ -8,16 +8,21 @@
 // @import "vitepress-theme-teek/theme-chalk/tk-banner-desc-gradient.css";
 // @import "vitepress-theme-teek/theme-chalk/tk-banner-full-img-scale.css";
 @import "vitepress-theme-teek/theme-chalk/tk-fade-up-animation.css";
+
 // @import "vitepress-theme-teek/theme-chalk/tk-home-card-hover.css";
 // @import "vitepress-theme-teek/theme-chalk/tk-banner-desc-gradient.css";
 @import 'viewerjs/dist/viewer.min.css'; // 预览器样式
+@import url('./scss/sidebar.scss');
+@import url('./scss/sidebarIcon.scss');
 @import url('./scss/list-block.scss');
 @import url('./scss/item-block.scss');
+@import url('./scss/var.scss');
 
 
 
 
-blockquote{
+
+blockquote {
     border-radius: 10px;
     padding: 10px 16px;
     background-color: var(--vp-c-gray-soft);
@@ -27,23 +32,28 @@ blockquote{
     padding-left: 16px;
     transition: border-color .5s;
     color: var(--vp-c-text-2);
-    p{
-     margin: 0;
-    font-size: 16px;
-    transition: color .5s;
+
+    p {
+        margin: 0;
+        font-size: 16px;
+        transition: color .5s;
     }
 }
+
 .tk-my__avatar {
-    &.circle-rotate{
+    &.circle-rotate {
         margin-top: 200px;
     }
 }
-:root{
-    --tk-home-max-width:1300px !important;
-    ul{
+
+:root {
+    --tk-home-max-width: 1300px !important;
+
+    ul {
         list-style: none;
-        li{
-            list-style: none ;
+
+        li {
+            list-style: none;
         }
     }
 }
