@@ -1,11 +1,18 @@
 const webpackSideBar = {
   '/page/webpack/': [
     {
-      text: '入门',
+      text: 'webpack入门',
       items: [
-        { text: 'webpack基本介绍', link: '/page/webpack/basic/01-webpack基本介绍' },
-        { text: '处理css静态资源', link: '/page/webpack/basic/02-webpack打包CSS-Less-Sass-Stylus.md' },
-        { text: '打包图片与js文件', link: '/page/webpack/basic/03-webpack打包图片-JS-Vue-React-TS.md' },
+        { text: '01-基本介绍', link: '/page/webpack/basic/01-webpack基本介绍' },
+        { text: '02-处理CSS', link: '/page/webpack/basic/02-webpack打包CSS-Less-Sass-Stylus.md' },
+        { text: '03-处理图片', link: '/page/webpack/basic/03-webpack打包图片.md' },
+      ],
+    },
+    {
+      text: 'babel的基础使用',
+      items: [
+        { text: '04-处理JS', link: '/page/webpack/basic/04-babel处理js.md' },
+        { text: '05-处理React', link: '/page/webpack/basic/05-babel处理react.md' },
       ],
     },
   ],

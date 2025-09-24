@@ -1,6 +1,6 @@
 ---
 date: 2025-09-01 15:53:48
-title: 02-打包CSS <TkTitleTag type="vp-primary" text="优质" position="right" />
+title: 02-webpack处理CSS <TkTitleTag type="vp-primary" text="优质" position="right" />
 permalink: /pages/25cf12
 categories:
   - Webpack
