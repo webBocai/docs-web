@@ -73,14 +73,19 @@ tags:
 
 - 这是因为我们**没有安装`bable`的插件和预设** 
 
-  - :round_pushpin: `babel` 对 `.js` 文件
-    - 1.**ES6+ 语法（如箭头函数、`class`、`const` 等）** ❌ 不会转换，因为缺少 `@babel/preset-env` 或相关插件。Babel 默认无任何转换行为。
-    - 2.**JSX 语法（如 `<div></div>`）** ❌不会转换，因为需要 `@babel/preset-react` 插件。
-  - :round_pushpin: `babel` 对 `.ts` / `.tsx` 文件
-    - ❌ **直接报错**，因为 Babel 默认只处理 `.js` 文件，且需要 `@babel/preset-typescript` 来解析 `TypeScript `语法。
-  - :round_pushpin: **根本原因**
-    - 1.`Babel` 的行为完全由 **插件和预设** 决定。**没有安装任何插件/预设时**：
-    - 2.**仅复制文件**,不做任何语法转换, **不支持 `TypeScript`** 或 `JSX `解析
+  - :one:  `babel` 对 `.js` 文件
+
+    -   **ES6+ 语法（如箭头函数、`class`、`const` 等）**  **不会转换**，因为缺少 `@babel/preset-env` 或相关插件。Babel 默认无任何转换行为。
+
+    -   **JSX 语法（如 `<div></div>`）** **不会转换**，因为需要 `@babel/preset-react` 插件。
+  - :two: `babel` 对 `.ts` / `.tsx` 文件
+
+    -  **直接报错**，因为 Babel 默认只处理 `.js` 文件，且需要 `@babel/preset-typescript` 来解析 `TypeScript `语法。
+  - :three: **根本原因**
+
+    -  Babel` 的行为完全由 **插件和预设** 决定。**没有安装任何插件/预设时**：
+    
+    -  **仅复制文件**,不做任何语法转换, **不支持 `TypeScript`** 或 `JSX `解析
 
 #### 5.插件的使用
 

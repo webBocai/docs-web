@@ -104,7 +104,7 @@ module.exports = {
        ::: details 查看代码例子
        - :gear: 在 `babel` 配置文件中
           ```js [babel.config.js]
-                {
+            module.exports =   {
                  "presets": [
                    [
                      "@babel/preset-react",
@@ -129,7 +129,7 @@ module.exports = {
       ::: details 查看代码例子
        - :gear: 在 `babel` 配置文件中
          ```js [babel.config.js]
-            {
+            module.exports =  {
              "presets": [
                [
                  "@babel/preset-react",
@@ -286,7 +286,7 @@ module.exports = {
 
  ```js{14-21} [babel.config.js]
  // 在 Babel 配置或 Webpack 的 babel-loader 中
- {
+ module.exports = {
    presets: [
      [
        '@babel/preset-env',
@@ -309,41 +309,41 @@ module.exports = {
  }
  ```
 
-<!-- #### 4.处理TS或TSx
+### 二、处理TS或TSx
 
-##### 创建文件
+ #### 创建文件
+ 
+   在 `src` 目录下创建一个 `index.tsx` 文件 路径`page/react/App/index.tsx`
 
-- 在`src`目录下创建一个`index.tsx`文件 路径`page/react/App/index.tsx`
-
-```tsx
-import React from 'react';
-interface Person {
-  name: string;
-  age: number;
-  gender: string;
-}
-const PersonComponent = () => {
-  const p1: Person = {
-    name: 'zhangsan',
-    age: 18,
-    gender: 'male',
+  ```tsx [index.react]
+  import React from 'react';
+  interface Person {
+    name: string;
+    age: number;
+    gender: string;
+  }
+  const PersonComponent = () => {
+    const p1: Person = {
+      name: 'zhangsan',
+      age: 18,
+      gender: 'male',
+    };
+    return (
+      <div>
+        <h1>{p1.name}</h1>
+        <h1>{p1.age}</h1>
+        <h1>{p1.gender}</h1>
+      </div>
+    );
   };
-  return (
-    <div>
-      <h1>{p1.name}</h1>
-      <h1>{p1.age}</h1>
-      <h1>{p1.gender}</h1>
-    </div>
-  );
-};
+  
+  export default PersonComponent;
+  
+  ```
 
-export default PersonComponent;
+ 在 `App.jsx` 进行引入
 
-```
-
-- 在`App.jsx` 进行引入
-
-```jsx
+```jsx [App.react]
 import React from 'react'
 import  PersonComponent from  './index.tsx'
 export const ReactApp = () => {
@@ -358,1043 +358,369 @@ export const ReactApp = () => {
 }
 
 ```
+#### 安装ts预设
 
-##### 安装ts预设并配置
+安装 `preset-typescript`
+ ```sh
+ npm i @babel/preset-typescript -D
+ ```
 
-- 安装
+#### 预设参数
 
-```powershell
-npm i @babel/preset-typescript -D
-```
+- :one: `allExtensions` **默认值:** `false`
 
-- 配置在`babel.config.js` 进行配置
+  - **作用**：所有处理的文件都视为 `TypeScript` (**如果 `isTSX` 也为 `true`，则视为 `TSX`**)。如果你在 `.js` 文件中也使用了 `TypeScript` 语法。这个选项会非常有用
+  - **场景**：在 `.js` 文件中使用` ts` 语法。
+    ::: details 查看更多
+     - 代码示例: `mixed.js` 的文件:
+      ```js
+       let name: string = "world";
+       console.log(`Hello, ${name}`);
+      ```
+     - `Babel` 配置:
+      ```js [babel.config.js]
+         module.exports = {
+           "presets": [
+             [
+               "@babel/preset-typescript",
+               { "allExtensions": true }
+             ]
+           ]
+         }
+      ```
+     - 结果: 正常情况下，`Babel` 不会对 `.js` 文件应用 `TypeScript` 预设。启用 `allExtensions: true `后，它会正确地剥离： `string` 这个类型注解。
+    :::
 
-```js
-module.exports = {
-  presets: [
-    [
-      '@babel/preset-env',
-      {
-        targets: 'defaults', // 兼容主流浏览器最新两个版本
-        useBuiltIns: 'usage', // 在入口文件全局引入 Polyfill
-        corejs: 3,
-      },
-    ],
-    '@babel/preset-react',
-    '@babel/preset-typescript',
-  ],
-};
-
-```
-
-- `npm run build`然后进行打包查看效果
-
-![](https://pic1.zhimg.com/80/v2-3c0dd15179b9671eaabe1cf56a58f489_720w.png)
-
-##### 预设参数
-
--  `allExtensions`
-
-  - **作用**：将 **所有文件**（如 `.js`、`.jsx`）当作 TypeScript 处理（默认只处理 `.ts`、`.tsx`）。
-  - **场景**：混合 `TypeScript `和 `JavaScript` 的项目（慎用）。
-
-  ```js
-  presets: [
-    ['@babel/preset-typescript', { allExtensions: true }]
-  ]
-  ```
-
--  `isTSX`
-
-  - **作用**：强制将文件当作 **TSX**（TypeScript + JSX）处理（即使扩展名不是 `.tsx`）。
+- :two:`isTSX` **默认值：`false`**
+  - **默认情况下**，`Babel` 会根据文件扩展名（`.tsx`）来判断。当你的 `.ts` 文件中包含了 `JSX` 语法时，这个选项会非常有用。
+  - **作用**：强制将文件当作 **TSX**（`TypeScript + JSX`）处理（即使扩展名不是 `.tsx`），
   - **场景**：在 `.ts` 文件中使用` JSX` 语法。
+     ::: details 查看更多
+       - 代码示例: `component.ts` 的文件:
+          ```ts [component.ts]
+            export const MyComponent = () => <div>你好</div>;
+          ```
+       - `Babel` 配置:
 
-  ```js
-  presets: [
-    ['@babel/preset-typescript', { isTSX: true }]
-  ]
-  ```
+          ```js [babel.config.js]
+          module.exports = {
+            "presets": [
+              [
+                "@babel/preset-typescript",
+                { "allExtensions": true }
+              ],
+               "@babel/preset-react"  // 你仍然需要这个预设来转换 JSX
+            ]
+          }
+          ```
+       - 结果: 如果不设置 `isTSX: true`，`Babel `会因为在 `.ts `文件中遇到 `<` 符号而**抛出语法错误**。启用此选项后，它就能正确解析 `JSX`
+      :::
 
--  `jsxPragma`
+- :three:`jsxPragma`  **默认值：`React.createElement"`**
 
   - **作用**：指定 JSX 转换后的函数名（默认是 `React.createElement`）。
   - **场景**：配合非 React 的` JSX `运行时（如 Vue 3 的 `h` 函数）。
-
-  ```js
-  presets: [
-    ['@babel/preset-typescript', { 
-      jsxPragma: 'h' // 转换 JSX 为 h('div')
-    }]
-  ]
-  ```
-
--  `allowNamespaces`
-
-  - **作用**：是否保留 TypeScript 的 **命名空间**（`namespace`）语法（默认：`false`，转换为普通对象）。
-  - **场景**：需要保留命名空间结构。
-
-  ```js
-  presets: [
-    ['@babel/preset-typescript', { allowNamespaces: true }]
-  ]
-  ```
-
--  `allowDeclareFields`
-
-  - **作用**：是否允许 `TypeScript` 的 **类属性声明**（`declare class Foo { bar: string }`）（默认：`false`）。
-  - **场景**：需要保留类属性的类型声明。
-
-  ```js
-  presets: [
-    ['@babel/preset-typescript', { allowDeclareFields: true }]
-  ]
-  ```
-
-- `onlyRemoveTypeImports`
-
-  - **作用**：仅删除 **类型导入**（如 `import type { Foo } from '...'`），保留普通导入（默认：`true`）。
-  - **场景**：避免误删普通导入。
-
-  ```js
-  presets: [
-    ['@babel/preset-typescript', { onlyRemoveTypeImports: false }]
-  ]
-  ```
-
-- `optimizeConstEnums`
-
-  - **作用**：优化 **常量枚举**（`const enum`），直接替换为值（默认：`false`）。
-  - **场景**：减少代码体积，但可能影响调试。
-
-  ```js
-  presets: [
-    ['@babel/preset-typescript', { optimizeConstEnums: true }]
-  ]
-  ```
-
-- `rewriteImportExtensions`
-
-  - **作用**：将 TypeScript 的 `.ts`、`.tsx` 导入扩展名改为 `.js`（默认：`false`）。
-  - **场景**：用于 `Node.js ESM `或浏览器直接加载 ES 模块。
-
-
--  **完整配置示例**
-
-  ```js
-  // babel.config.js
-  module.exports = {
-    presets: [
-      [
-        '@babel/preset-typescript',
-        {
-          allExtensions: false,   // 默认只处理 .ts/.tsx
-          isTSX: false,          // 默认不强制 TSX 模式
-          jsxPragma: 'React.createElement', // 默认 React
-          allowNamespaces: false,
-          allowDeclareFields: false,
-          onlyRemoveTypeImports: true, // 默认删除类型导入
-          optimizeConstEnums: false,
-          rewriteImportExtensions: false,
-        },
-      ],
-    ],
-  };
-  ```
-
-  ### **注意事项**
-  
-  1. **类型擦除**：Babel 只删除 TypeScript 类型，**不进行类型检查**（需用 `tsc` 单独检查）。
-  2. 兼容性
-     - 部分高级` TypeScript` 语法（如装饰器 `@Decorator`）需额外插件（如 `@babel/plugin-proposal-decorators`）。
-
-#### 7.处理`Vue`
-
-##### 安装`vue`
-
-- 在`webpack `环境下使用`vue` 需要安装`vue-loader`
-
-```powershell
-npm i vue
-npm i vue-loader-D
-```
-
-##### 初始化`vue`文件
-
-- 在`src`目录下创建 `page/vue/App.vue`
-
-```vue
-<template>
-  <h1>{{ title }}</h1>
-  <div>{{ context }}</div>
-</template>
-<script>
-export default {
-  data() {
-    return {
-      title: 'vue',
-      context: 'vue',
-    };
-  },
-};
-</script>
-<style lang="less" scoped>
-h1 {
-  color: #09f185;
-  font-size: 40px;
-}
-div {
-  color: #f10962;
-  font-size: 20px;
-}
-</style>
-
-```
-
-- 然后在配置文件中添加`vue-loader` 配置
-
-```js
-//
-module: {
-  rules: [
-    // 省略其他配置
-      {
-        test: /.vue$/,
-        use: [
-          {
-            loader: 'vue-loader',
-          },
-        ],
-      },
-    }
- ]
-```
-
-- 打包会报错，这是因为我们必须添加`@vue/compiler-sfc`来对`template`进行解析
-
-```js
-const { VueLoaderPlugin } = require('vue-loader/dist/index');
-module.exports = {
- // ...其余配置
-module: {
-  rules: [
-    // 省略其他配置
-      {
-        test: /.vue$/,
-        use: [
-          {
-            loader: 'vue-loader',
-          },
-        ],
-      },
-    }
-  ]
-}
- plugins: [new VueLoaderPlugin()],
-}
-```
-
-- 在`src/index.js`文件中添加以下代码
-  -  此时搭建出`Vue`和`React`  混合框架的雏形
-
-```js
-// import './components/cps.js';
-import { createApp } from 'vue'; // vue
-import App from 'page/vue/App'; // vue
-import React from 'react'; // react
-import ReactDOM from 'react-dom/client'; // react
-import { ReactApp } from 'page/react/App'; // react
-// vue
-const app = createApp(App);
-app.mount('#app');
-// react
-ReactDOM.createRoot(document.getElementById('root')).render(<ReactApp />);
-
-```
-
-- 执行`npm run build`  查看效果
-
-<img src="https://pic1.zhimg.com/80/v2-26e718c21b18992ccc1b1912b70b3630_1020w.png" style="float:left;" />
-
-#### 8.`React`与`Vue`框架混合使用
-
-- 有些项目会用到两个框架，我们就用`webpack `简单搭建一下 **框架的混用**
-- 现在我们有几个问题
-  -  在`vue`中使用`tsx`语法 如何使用呢？
-  -  在`vue`中使用了`tsx`, 如何避免与`react`的`tsx`语法冲突呢？
-  -  如果我是`vue` 父组件，我想引入`React` 子组件
-  - 如果我是`React` 父组件，我想引入`vue` 子组件
-
-##### 1.`vue`中使用`tSX`语法
-
-- 首先我们需要安装一个`babel`插件帮我去处理 `vue` 中的`tsx`语法
-
-  - 安装 [` babel-plugin-jsx`](https://github.com/vuejs/babel-plugin-jsx/blob/main/packages/babel-plugin-jsx/README-zh_CN.md)详细可以查看文档
-
-  ```js
-  npm install @vue/babel-plugin-jsx -D
-  ```
-
-  - 如果你的框架中没有`react` 可以直接在 `babel.config.js` 中这样写
-
-  ``` js
-  const path = require('path');
-  module.exports = {
-    presets: [
-      [
-        '@babel/preset-env',
-        {
-          targets: 'defaults', // 兼容主流浏览器最新两个版本
-          useBuiltIns: 'usage', // 在入口文件全局引入 Polyfill
-          corejs: 3,
-        },
-      ],
-      [
-        '@babel/preset-typescript',
-        {
-          allExtensions: true, // 允许所有文件扩展名使用 TS
-          isTSX: true, // 启用 TSX 支持
-        },
-      ],
-    ],
-    plugins: [
+    ::: details 查看更多
+     - 代码示例: `component.tsx` 的文件:
+      ```js [component.react]
+       const element = <div />;
+      ```
+     - `Babel` 配置:
+      ```js [babel.config.js]
+      module.exports = {
+        "presets": [
           [
-            '@vue/babel-plugin-jsx',
-            {
-              optimize: true,
-              transformOn: true, // 必须启用事件语法转换
-            },
-          ],
-     ]
-  };
-  
-  ```
-
-######    插件参数
-
-
--  `transformOn`
-
-  - **类型**: `"boolean"`
-
-  - **默认值**: `"false"`
-
-  - **作用**：`on: { click: xx }` 转换为 `onClick: xxx`
-
-    - 未启用 `transformOn` (默认)
-
-    ```js
-    // 输入（JSX）
-    <button on={{ click: handleClick }}>Click</button>
-    
-    // 输出（编译后）
-    h('button', { on: { click: handleClick } }, 'Click')
-    ```
-
-    - 启用 `transformOn: true`
-
-    ```         js
-    // 输入（JSX）
-    <button onClick={handleClick}>Click</button>
-    
-    // 输出（编译后）
-    h('button', { onClick: handleClick }, 'Click')      
-    ```
-
-- `optimize`
-
-  - **类型**：`boolean`
-  - **默认值**：`false`
-  - **作用**：启用静态内容优化（类似Vue模板的静态节点提升），减少渲染开销。
-
-- `isCustomElement`
-
-  - **类型**：`(tag: string) => boolean`
-
-  - **默认值**：`undefined`
-
-  - **作用**：自定义元素检测函数，用于**标记非`Vue`组件的原生自定义元素**（如Web Components）。
-
-    - 配置方式（Babel 或 Vue CLI）
-
-    ```js
-    // babel.config.js
-    module.exports = {
-      plugins: [
-        ["@vue/babel-plugin-jsx", {
-          isCustomElement: (tag) => {
-            // 匹配以 "ion-" 开头的标签（如 Ionic 框架组件）
-            return tag.startsWith('ion-') 
-            // 或明确指定标签名
-            || ['my-web-component', 'vue-google-map'].includes(tag);
-          }
-        }]
-      ]
-    };
-    ```
-
-    - JSX使用
-
-    ```html
-    // 输入（JSX）
-    <div>
-      <ion-button onClick={handleClick}>Click</ion-button>
-      <my-web-component title="Hello" />
-    </div>
-    
-    // 输出（编译后）
-    // 这些标签会被直接渲染为原生自定义元素，而非 Vue 组件
-    ```
-
--  `mergeProps`
-
-  - 类型：`boolean`
-
-  - 默认值：`true`
-
-  - 作用：自动合并分散的props（如`class`、`style`、`on*`事件）。
-
-    - **未启用 `mergeProps`（或设为 `false`）**
-
-    ```js
-    // JSX 输入
-    <div
-      class="header"
-      style={{ color: 'red' }}
-      onClick={handleClick}
-      onCustomEvent={handleCustom}
-    />
-    
-    // 编译输出（Vue 3）
-    h('div', {
-      class: "header",
-      style: { color: 'red' },
-      onClick: handleClick,
-      onCustomEvent: handleCustom
-    })
-    ```
-
-    ​     **问题**：如果父组件传递了额外的 `class` 或 `style`，需要手动合并（如 `class: [props.class, 'header']`）。
-
-    - **启用 `mergeProps: true`**
-
-    ```js
-    // JSX 输入
-    <div
-      class="header"
-      style={{ color: 'red' }}
-      onClick={handleClick}
-      onCustomEvent={handleCustom}
-    />
-    
-    // 编译输出（Vue 3）
-    h('div', _mergeProps({
-      class: "header",
-      style: { color: 'red' },
-      onClick: handleClick,
-      onCustomEvent: handleCustom
-    }, otherProps))
-    ```
-
-      **优势**：自动合并外部传入的 `class`、`style` 和事件（如父组件传递的 `className` 或 `onClick`），无需手动处理。
-
-- `enableObjectSlots`
-
-  - 类型：`boolean`
-
-  - 默认值：`true` (`Vue3`中默认`false`)
-
-  - 作用：启用对象形式的插槽语法（`Vue2`兼容模式需要手动开启）。
-  
-    - **启用 `enableObjectSlots: true`**
-  
-    ```jsx
-    // 父组件 JSX
-    <Child
-      v-slots={{
-        // 默认插槽
-        default: () => <div>默认内容</div>,
-        // 具名插槽
-        footer: (props) => <span>{props.text}</span>
-      }}
-    />
-    
-    // 编译输出（Vue 3）
-    h(Child, null, {
-      default: () => h("div", null, "默认内容"),
-      footer: (props) => h("span", null, props.text)
-    })
-    ```
-  
-    - **禁用 `enableObjectSlots: false`**
-  
-    ```jsx
-    // 父组件 JSX（Vue 3 原生写法）
-    <Child>
-      {{
-        default: () => <div>默认内容</div>,
-        footer: (props) => <span>{props.text}</span>
-      }}
-    </Child>
-    
-    // 编译输出
-    h(Child, null, {
-      default: () => h("div", null, "默认内容"),
-      footer: (props) => h("span", null, props.text)
-    })
-    ```
-  
-- **`pragma`**
-  
-  - 类型：`string`
-  - 默认值：`createVNode` (`Vue3`) / `vueJsxCompat` (`Vue2`)
-  - 作用：自定义`JSX`编译后的函数名（高级用法）。
-        - **默认行为（Vue 3）**
-  
-    ```js
-    // JSX 输入
-    <div>Hello</div>
-    
-    // 编译输出
-    import { createVNode as _createVNode } from 'vue'
-    _createVNode('div', null, 'Hello')
-    ```
-  
-    - **自定义 `pragma`**
-  
-    ```js
-    // Babel 配置
-    {
-      plugins: [
-        ["@vue/babel-plugin-jsx", {
-          pragma: 'myCustomCreateElement' // 自定义函数名
-        }]
-      ]
-    }
-    -------------
-    // JSX 输入
-    <div>Hello</div>
-    
-    // 编译输出
-    import { myCustomCreateElement as _createVNode } from './custom-renderer'
-    _createVNode('div', null, 'Hello')
-    ```
-
-###### 扩展名为`.vue` 
-
-- 当我们配置好 `babe-plugin-jsx`这个插件就可以在在`src/page/vue` 目录下创建 一个 `myComponet.vue`
-
-```vue
-<script lang="tsx">
-import { defineComponent, ref } from 'vue';
-
-export default defineComponent({
-  setup() {
-    const count = ref(0);
-
-    const increment = () => {
-      count.value++;
-    };
-
-    return () => (
-      <div>
-        <p>Count: {count.value}</p>
-        <button onClick={increment}>Increment</button>
-      </div>
-    );
-  },
-});
-</script>
-```
-
-- 使用`setup` 语法糖
-
-```vue
-<template>
-  <jsx />
-</template>
-<script lang="tsx" setup>
-import { ref } from 'vue';
-
-const count = ref(0);
-const props = defineProps({ num: Number });
-console.log('props', props);
-
-const increment = () => {
-  count.value++;
-};
-
-const jsx = () => (
-  <div>
-    <p>Count: {count.value}</p>
-    <button onClick={increment}>Increment</button>
-  </div>
-);
-</script>
-```
-
-- 将此组件放进 `App.vue`
-
-```vue
-<template>
-  <h1>{{ title }}</h1>
-  <div>{{ context }}</div>
-  <MyComponet />
-</template>
-<script>
-import MyComponet from './myComponet.vue';
-export default {
-  components: { Hello },
-  data() {
-    return {
-      title: 'vue',
-      context: 'vue',
-    };
-  },
-};
-</script>
-
-```
-
-######     扩展名为`.tsx` 
-
-- 在`src/page/vue` 目录创建`tsx/index.tsx`
-
-```tsx
-import { defineComponent, onMounted, ref, useTemplateRef, watch } from 'vue';
-import ReactIndex from '../../react/test.tsx';
-import { createRoot } from 'react-dom/client';
-import React from 'react';
-export default defineComponent({
-  name: 'VueHello',
-  setup() {
-    const count = ref(10001);
-    const increment = () => count.value++;
-    return () => (
-      <div className="vue-component">
-        <h1>Vue TSX Component</h1>
-        <h2 onClick={increment}>Count: {count.value}</h2>
-      </div>
-    );
-  },
-});
-
-```
-
-##### 2. 避免`react`的`tsx`语法冲突
-
-######    冲突原因
-
-- 目前如果我们这样写 `babel.config.js`配置
-
-```js
-module.exports = {
-  presets: [
-    [
-      '@babel/preset-env',
-      {
-        targets: 'defaults', // 兼容主流浏览器最新两个版本
-        useBuiltIns: 'usage', // 在入口文件全局引入 Polyfill
-        corejs: 3,
-      },
-    ],
-    [
-      '@babel/preset-typescript',
-      {
-        allExtensions: true, // 允许所有文件扩展名使用 TS
-        isTSX: true, // 启用 TSX 支持
-      },
-    ],
-    ['@babel/preset-react', { runtime: 'automatic' }],
-  ],
-  plugins: [
-    [
-      '@vue/babel-plugin-jsx',
-      {
-        optimize: true,
-        transformOn: true, // 必须启用事件语法转换
-      },
-    ],
-  ],
-```
-
-我们执行`npm run build` 然后运行`index.html` 出现了问题
-
-<img src="https://pic1.zhimg.com/80/v2-ed846914194e4fbab4c7f7a37fc8eba2_1020w.png" style="zoom:80%; float:left;" />
-
-- **错误原因**
-
-  - 问题出在` Vue` 和 `React` 的 `JSX` 转换逻辑冲突。
-  - **混合使用 Vue 和 React 的 JSX 转换逻辑**
-    - `@vue/babel-plugin-jsx` 会将` JSX` 转换为 `Vue` 的 `h()` 函数（Vue 的虚拟 DOM 节点）。
-    - `@babel/preset-react` 会将` JSX` 转换为 `React.createElement()`。
-  - **未隔离 Vue/React 的编译环境**
-    - 所有文件（包括 React 组件）都应用了 `Vue` 的 `JSX`转换插件。
-
-
-###### 解决方案一(`vtsx`)
-
-  - 为`vue的JSX`文件创建一个另一个扩展名如：`.vtsx`
-
-    - 将`vue`中的`tsx`扩展名修改成 `.vtsx`
-
-    - 在`webpack`配置文件中
-    
-    ```js
-    // webpack.config.js
-    module.exports = {
-     // 其余配置
-      module: {
-        rules: [
-          // 其余配置
-           {
-            test: /\.(vue)$/, // 处理 .vue 和
-            loader: 'vue-loader',
-          },
-           {
-            test: /\.(vtsx)$/,
-            exclude: /node_modules/,
-            use: {
-              loader: 'babel-loader',
-              options: {
-                plugins: ['@vue/babel-plugin-jsx'],
-              },
-            },
-          },
-           {
-            test: /\.(js|jsx|ts|tsx)$/,
-            exclude: /node_modules/,
-            use: {
-              loader: 'babel-loader',
-              options: {
-                presets: [
-                  [
-                    '@babel/preset-react',
-                    { runtime: 'automatic' },
-                  ],
-                ],
-              },
-            },
-          }
+            "@babel/preset-typescript",
+            { "jsxPragma": "h" }
+          ]
         ]
       }
-    };
-    ```
-
-    - `babel.config.js`配置项
-    
+      ```
+    - 转换后的输出:
     ```js
-    module.exports = {
-      presets: [
-        [
-          '@babel/preset-env',
-          {
-            targets: 'defaults', // 兼容主流浏览器最新两个版本
-            useBuiltIns: 'usage', // 在入口文件全局引入 Polyfill
-            corejs: 3,
-          },
-        ],
-        [
-          '@babel/preset-typescript',
-          {
-            allExtensions: true, // 允许所有文件扩展名使用 TS
-            isTSX: true, // 启用 TSX 支持
-          },
-        ],
-      ]
-    }
+    // 默认输出
+    const element = React.createElement("div", null);
+    // 使用 jsxPragma: "h" 后的输出
+    const element = h("div", null);
     ```
+    :::
+
+
+- :four: `allowNamespaces`  **默认：`true`** 转换为普通对象
+
+  - **作用**：是否保留 `TypeScript` 的 **命名空间**（`namespace`）语法
+  - **场景**：需要**保留命名空间结构**。
+     ::: details 查看更多
+      - 代码示例: `module.ts` 的文件:
+      ```ts [module.ts]
+       namespace MyNamespace {
+           export const value = 42;
+         }
+      ```
+      - `Babel 配置`: **这个选项默认开启，所以不需要额外配置**。如果你把它设为 `false`，上面的代码会**导致解析错误**。
+     ```js [babel.config.js]
+     module.exports =  {
+        presets: [
+         // 默认值 allowNamespaces 可以不写
+         ['@babel/preset-typescript', { allowNamespaces: true  }] 
+       ]
+     }
     
-    执行`npm run build` 查看效果就没问题了
+      ```
+     :::
 
-<img src="https://picx.zhimg.com/80/v2-7a550890372bdda8c3dd5a8382a749ce_1020w.png" style="zoom:67%; float:left;" />
 
-- 但是此时还有问题，我们虽然解决了` vue`使用`tsx`的问题，但是我在`.vue`文件中直接写`tsx` 语法就有问题
-  - 这是我们只处理了`.vtsx` 并没有处理 `.vue`里面的`tsx` 语法
 
-<img src="https://pica.zhimg.com/80/v2-9ee28c562a54d37de0d5cd55f8472815_720w.png" style="zoom:67%;float:left;" />
+- :five: `allowDeclareFields` **默认：`false`** 
 
-- 现在我们直接把 `babel-loader`需要处理直接放到配置文件里面，更精细的去处理这些扩展文件
-  - 在`babel-loader`配置选项中有`overrides`属性 是一个用于**针对特定文件或条件应用不同 Babel 配置的选项**。它允许你根据**文件路径、环境变量、文件扩展名**等条件，**为不同的文件覆盖或扩展配置**。
-- 在`babel.config.js` 进行配置
+  - **作用**：是否允许在类的字段上使用 `declare `关键字 
+     ::: details 解释
+       (例如`declare name: string;`),这些字段在**运行时没有任何效果**，它们只是用来告知 `TypeScript `那些在其他地方被初始化的属性的存在，**启用后，Babel 会在转换时简单地移除它们**
+     :::
+  - **场景**：需要**保留类属性**的类型声明。
+    ::: details 查看更多
+      - 代码示例: `class.ts` 的文件:
+      ```ts [class.ts]
+        class MyClass {
+          declare myProp: string; // 描述一个在运行时会存在的属性
+        }
+      ```
+      - `Babel 配置`: **这个选项默认开启，所以不需要额外配置**。如果你把它设为 `false`，上面的代码会**导致解析错误**。
+     ```js [babel.config.js]
+      module.exports = {
+         presets: [
+           // 默认值 allowNamespaces 可以不写
+           ['@babel/preset-typescript', { "allowDeclareFields": true  }] 
+         ]
+      }
+      ```
+     - 结果: **如果不启用此选项**，`Babel` 会抛出错误。启用后，`declare myProp: string`; 这会**在转换过程中被完全移除**。
+     :::
 
-```js
-const path = require('path');
+- :six:`onlyRemoveTypeImports`  **默认：`false`** 
+
+  - **作用**：启用后，Babel将 **仅仅移除**  `import type `语句
+      ::: details 解释
+      对于那些可能只用于类型的常规 `import` 语句（例如 `import { MyInterface } from './types'`），**它不会移除**。这是一个针对超大型代码库的性能优化选项，但准确性可能会降低。通常建议保持其默认值 `false`，让 `Babel` **自行判断哪些导入需要移除**。
+     :::
+  - **场景**：**避免误删普通导入**。
+     ::: details 查看更多
+      - 代码示例: `index.ts` 的文件:
+      ```ts [index.ts]
+       import type { TypeA } from './types'; // 会被移除
+       import { TypeB } from './types';     // 开启此选项后，可能不会被移除
+       let x: TypeA;
+       let y: TypeB;
+      ```
+      - `Babel 配置`: 设置`onlyRemoveTypeImports` 为 `true` , 会被移除`import type`，**普通导入则不会移除**
+     ```js [babel.config.js]
+      module.exports = {
+        presets: [
+          // 默认值 onlyRemoveTypeImports 可以不写
+          ['@babel/preset-typescript', { onlyRemoveTypeImports: true  }] 
+        ]
+      }
+      ```
+     :::
+
+- :seven: `optimizeConstEnums`  **默认：`false`** 
+
+  - **作用**：制是否内联 `const enum` 的值。
+    ::: details 解释
+      当设为 `true` 时，所有使用 `const enum` 的地方都会被替换为其实际值，并且 `enum` 对象本身会被完全移除。这可以生成更小、更快的代码
+     :::
+  - **场景**：**减少代码体积，但可能影响调试**。
+     ::: details 查看更多
+      - 代码示例: `index.ts` 的文件:
+       ```ts [index.ts]
+        const enum Direction {
+          Up,
+          Down,
+        }
+        let myDirection = Direction.Up;
+       ```
+      - `Babel 配置`:  当设为 `true` 时，所有使用 `const enum` 的地方都会被替换为其实际值，并且 `enum` 对象本身会被完全移除。这可以生成更小、更快的代码
+      ```ts [babel.config.js]
+       module.exports = {
+          presets: [
+           ['@babel/preset-typescript', { optimizeConstEnums: true }]
+         ]
+       }
+       ```
+     :::
+
+ 
+
+- :eight: `rewriteImportExtensions` **默认：`false`** 
+
+  - **作用**：**重写导入路径的扩展名**。这在将 `TypeScript` 编译为原生 `ESM`  时非常有用，因为 **浏览器 和 Node.js** 的 `ESM` 要求**导入路径** 必须包含 **文件扩展名**
+  - **场景**：**构建原生 ES 模块 (ESM) 应用**
+    ::: details 查看更多
+      - 代码示例: `main.ts` 的文件:
+       ```ts [index.ts]
+        import { helper } from './helper';
+        helper();
+       ```
+      - Babel 配置: 
+      ```ts [babel.config.js]
+       module.exports = {
+          presets: [
+            { "rewriteImportExtensions": true }
+         ]
+       }
+       ```
+      - 转换后的输出:
+       ```js
+        // 注意导入路径的变化
+       import { helper } from './helper.js';
+       helper();
+       ```
+      - 总结一下 
+        -  **用打包工具** （`Webpack`, `Vite` 等）？ → **不需要配置**，默认 `false `就行。
+        -  **不用打包工具** 想直接在**浏览器**或 `Node.js` (`ESM`) 里跑？ → 需要设置为 true。
+     :::
+  
+
+- :nine: `jsxPragmaFrag`    **默认值**: `React.Fragment`
+  - **作用**:  与  `jsxPragma` 类似，但它专门用于 JSX 片段 (`<>...</>`)。
+  - **场景：** 使用**非 React 的 JSX 库**
+    ::: details 查看更多
+     - 代码示例: `component.tsx` 的文件:
+     ```tsx [component.react]
+     const fragment = <></>;
+     ```
+     - Babel 配置 **为了使用一个自定义的 `Fragment` 组件** :
+     ```js [babel.config.js]
+        module.exports = {
+          "presets": [
+            [
+              "@babel/preset-typescript",
+              { "jsxPragmaFrag": "Fragment" }
+            ]
+          ]
+        }
+     ```
+     - 转换后的输出:
+     ```js
+     // 默认输出
+     const fragment = React.createElement(React.Fragment, null);
+     // 使用 jsxPragmaFrag: "Fragment" 后的输出
+     const fragment = React.createElement(Fragment, null);
+     ```
+    :::
+- :one::zero: `disallowAmbiguousJSXLike`    **默认值**: `false`
+
+  - **作用**: 是否禁止可能产生歧义的 `JSX` 语法。具体来说，是否**禁止那些看起来像**  `TypeScript` **类型断言** (`<Type>value`) 的` JSX `语法，这有**助于避免解析错误**。
+  
+  - **场景：**  在 `.tsx` 文件中**编写复杂的泛型函数**，以避免语法歧义
+     ::: details 查看更多
+     - 代码示例: `component.tsx` 的文件:
+     ```tsx [component.react]
+     // 这个语法既可以被解释为一个返回 JSX <T> 元素的函数
+     // 也可以被解释为一个名为 T 的泛型箭头函数
+     const ambiguous = <T>() => {};
+     ```
+     - Babel 配置 **为了使用一个自定义的 `Fragment` 组件** :
+     ```js [babel.config.js]
+        module.exports = {
+          "presets": [
+            [
+              "@babel/preset-typescript",
+              { "isTSX": true, "disallowAmbiguousJSXLike": true}
+            ]
+          ]
+        }
+     ```
+     - **结果:** 启用此选项后，Babel 会将 `<T>()` 视为一个**泛型类型参数**，而不是一个 `JSX` 元素，**从而避免了解析冲突**。如果你确实想写一个名为 `T `的 `JSX `组件，**你应该写成 `<T /> `以消除歧义**。
+     - 情况一：你的本意是想定义一个泛型函数
+       - 添加一个逗号（推荐的技巧）: 这个逗号明确地告诉解析器，这是一个泛型参数列表，**而不是 JSX**。
+            ```tsx
+            const ambiguous = <T,>() => {};
+            ```
+        -  添加一个泛型约束:
+            ```tsx
+             const ambiguous = <T extends any>() => {};
+            ```
+      -  情况二：你的本意是想返回一个名为 T 的 JSX 组件
+          ```tsx
+          // 假设 T 是一个已经定义好的组件
+           const T = () => <span>Component T</span>;
+           // 这个函数返回一个 T 组件的实例
+           const myComponentRenderer = () => <T />;
+          ```
+    
+    :::
+- :one::one: `ignoreExtensions ` (**已废弃**) **默认：`false`** 
+  - 作用:  告诉 `Babel` 忽略**具有特定扩展名的文件**，即使其他配置（如 `allExtensions`）**试图包含它们**
+  - 说明: **这个选项已经被废弃**。推荐使用 `Babel` 顶层的 `ignore` 配置项来代替，**因为它功能更强大且更通用**。
+     ::: details 查看更多
+     - 替代方案示例 
+       ```js [babel.config.js]
+         module.exports = {
+         "presets": [
+           ["@babel/preset-typescript", { "allExtensions": true }]
+         ],
+         // 使用顶层的 ignore 来排除 .d.ts 文件
+         "ignore": [
+           "**/*.d.ts"
+         ]
+       }
+       ```
+     ::: 
+
+
+#### 完整配置示例
+
+```js [babel.config.js]
 module.exports = {
   presets: [
     [
-      '@babel/preset-env',
-      {
-        targets: 'defaults', // 兼容主流浏览器最新两个版本
-        useBuiltIns: 'usage', // 在入口文件全局引入 Polyfill
-        corejs: 3,
-      },
-    ],
-    [
       '@babel/preset-typescript',
       {
-        allExtensions: true, // 允许所有文件扩展名使用 TS
-        isTSX: true, // 启用 TSX 支持
+        allExtensions: false,   // 默认只处理 .ts/.tsx
+        isTSX: false,          // 默认不强制 TSX 模式
+        jsxPragma: 'React.createElement', // 默认 React
+        allowNamespaces: false,
+        allowDeclareFields: false,
+        onlyRemoveTypeImports: true, // 默认删除类型导入
+        optimizeConstEnums: false,
+        rewriteImportExtensions: false,
       },
     ],
   ],
-
-  overrides: [
-    {
-      test: /\.(vtsx|vue)$/, //单独进行配置
-      exclude: [
-        /node_modules/,
-        path.resolve(__dirname, 'src/page/react'), // ✅ 排除 React 目录
-      ],
-      plugins: [
-        [
-          '@vue/babel-plugin-jsx',
-          {
-            optimize: true,
-            transformOn: true, // 必须启用事件语法转换
-          },
-        ],
-      ], // ✅ // Vue JSX 转换
-    },
-    // React 文件：使用 React 的 JSX 转换
-    {
-      test: /\.(js|jsx|ts|tsx)$/,
-      exclude: [
-        /node_modules/,
-        path.resolve(__dirname, 'src/page/vue'), // ✅ 排除 Vue 目录
-      ],
-      presets: [
-        [
-          '@babel/preset-react', // ✅ 仅 React JSX
-          { runtime: 'automatic' },
-        ],
-      ],
-    },
-  ],
-};
-
-```
-
-- 修改`webpack.config.js`配置
-
-```js
-// webpack.config.js
-module.exports = {
- // 其余配置
-  module: {
-    rules: [
-       {
-        test: /\.(js|jsx|ts|tsx|vtsx)$/,  // 添加vtsx
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              [
-                '@babel/preset-react',
-                { runtime: 'automatic' },
-              ],
-            ],
-          },
-        },
-      }
-    ]
-  }
 };
 ```
 
-###### 解决方案二（`xxx.vue.tsx`)
+  #### 注意事项
+  ::: list-info 注意事项
+  1. **类型擦除**：`Babel` 只删除 `TypeScript` 类型，**不进行类型检查**（需用 `tsc` 单独检查）。
+  2. **兼容性**：部分高级` TypeScript` 语法（如装饰器 `@Decorator`）需额外插件（如 `@babel/plugin-proposal-decorators`）。
+  :::
 
-- `vue`的`tsx`扩展名不进行更改，但是必须添加前缀`xxxx.vue.tsx`这样的格式
+#### 项目配置
 
-- 我们还是在`babel.config.js`进行更改把`vtsx`的配置更改成`.vue.tsx`这样的配置
+ - 在 `babel.config.js` 进行配置
+   ```js [babel.config.js]
+   module.exports = {
+     presets: [
+       [
+         '@babel/preset-env',
+         {
+           targets: 'defaults', // 兼容主流浏览器最新两个版本
+           useBuiltIns: 'usage', // 在入口文件全局引入 Polyfill
+           corejs: 3,
+         },
+       ],
+       '@babel/preset-react',
+       '@babel/preset-typescript', // [!code ++]  [!code focus]
+     ],
+   };
+   
+   ```
 
-```js
-  overrides: [
-    {
-      test: /\.(vue\.tsx|vue)$/, // 将vtsx删除
-      exclude: [
-        /node_modules/,
-        path.resolve(__dirname, 'src/page/react'), // ✅ 排除 React 目录
-      ],
-      plugins: [
-        [
-          '@vue/babel-plugin-jsx',
-          {
-            optimize: true,
-            transformOn: true, // 必须启用事件语法转换
-          },
-        ],
-      ], // ✅ // Vue JSX 转换
-    },
-    // React 文件：使用 React 的 JSX 转换
-    {
-      test: /\.(js|jsx|ts|tsx)$/,
-      exclude: [
-        /node_modules/,
-        path.resolve(__dirname, 'src/page/vue'), // ✅ 排除 Vue 目录
-      ],
-      presets: [
-        [
-          '@babel/preset-react', // ✅ 仅 React JSX
-          { runtime: 'automatic' },
-        ],
-      ],
-    },
-  ],
-```
+- `npm run build`然后进行打包查看效果
 
-- 最后将`webpack`配置文件的`vtsx`删除就🆗了
-
-##### 3. `Vue`组件与`React`组件互相传参
-
-| 方案                                    | 适用场景             | 优点                 | 缺点                       |
-| :-------------------------------------- | -------------------- | -------------------- | -------------------------- |
-| **vue createApp**  **React reactRoot ** | 少量的跨框架页面     | 简单易用             | 操作`dom` 易用性不高       |
-| **Web Components**                      | 长期维护的跨框架项目 | 标准规范，无框架依赖 | 需处理 Shadow DOM 样式隔离 |
-| **编译转换**                            | 小型混合功能         | 开发便捷             | 兼容性维护成本高           |
-| **微前端**                              | 大型复杂应用         | 独立开发部署         | 通信和路由处理复杂         |
-
-- **以上方案我们目前先练习第一个，在后面我们在慢慢了解其他几个方案**
-
-- 在`src/page/react`创建 `test.tsx` 给`vue`页面使用
-
-```tsx
-import React from 'react';
-
-const TestReact = ({ count, onUpdate }) => {
-  return (
-    <>
-      <h1>react接收传参</h1>
-      <div onClick={onUpdate(1)}>{count}</div>
-    </>
-  );
-};
-
-export default TestReact;
+![](https://pic1.zhimg.com/80/v2-3c0dd15179b9671eaabe1cf56a58f489_1420w.png)
 
 
-```
 
-- 在`src/page/vue/vue-tsx/`创建 `test.vue.tsx` 给`react`页面使用
-
-```tsx
-import { defineComponent, inject, onMounted } from 'vue';
-
-const TextVue = defineComponent({
-  setup() {
-    const count = inject('count');
-    const setCount = inject('setCount');
-
-    return () => (
-      <div>
-        <h4>Vue 接收传参</h4>
-        <div onClick={() => setCount(count + 1)}>{count}</div>
-      </div>
-    );
-  },
-});
-export default TextVue;
-
-
-```
-
-- 在 `App.tsx`中使用 `vue`组件`test.vue.tsx`
-
-```tsx
-import React, { useEffect, useRef } from 'react'
-
-import { createApp,h } from 'vue'
-import VueWrapper from '../vue/vue-tsx/text.vue.tsx'
-export const ReactApp = () => {
-  const [count, setCount] = React.useState(0)
-  const vueContainerRef = useRef(null)
-  const vueAppRef = useRef(null)
-  useEffect(() => {
-    if (vueContainerRef.current && !vueAppRef.current) {
-      // 创建 Vue 实例并挂载
-      vueAppRef.current = createApp({
-         render: () => h(VueWrapper),
-        provide: {
-          count,
-          setCount
-        }
-      })
-      vueAppRef.current.mount(vueContainerRef.current)
-    }else if (vueContainerRef.current) {
-      // 更新 Vue 实例
-      vueAppRef.current.$forceUpdate()
-    }
-    return () => {
-      // 卸载 Vue 实例
-      if (vueAppRef.current) {
-        vueAppRef.current.unmount()
-        vueAppRef.current = null
-      }
-    }
-  }, [count])
-
-  return (
-    <>     
-    <div>{count}</div>
-      <button onClick={() => setCount(count + 1)}>+1</button>
-      <h1>
-        react
-       <div ref={vueContainerRef} />
-      </h1>
-    </>
-  )
-}
-
-```
-
-- 在`src/page/vue` 创建`index.vue.tsx`  然后使用React组件`test.tsx`
-
-```tsx
-import { defineComponent, onMounted, ref, useTemplateRef, watch } from 'vue';
-import ReactIndex from '../../react/test.tsx';
-import { createRoot } from 'react-dom/client';
-import React from 'react';
-export default defineComponent({
-  name: 'VueHello',
-  setup() {
-    const count = ref(10001);
-    const increment = () => count.value++;
-    const reactContainerRef = useTemplateRef('reactContainerChild');
-    const PropsCount = (value: number) => {
-      return {
-        count: value,
-        onUpdate: (num: number) => () => {
-          count.value = value + num;
-        },
-      };
-    };
-    const createReactComponents = (value: number) => {
-      const reactElement = React.createElement(ReactIndex, PropsCount(value));
-      createRoot(reactContainerRef.value).render(reactElement);
-    };
-    onMounted(() => {
-      if (reactContainerRef.value) {
-        createReactComponents(count.value);
-      }
-    });
-    watch(
-      () => count.value,
-      (newValue, oldValue) => {
-        createReactComponents(newValue);
-      }
-    );
-    return () => (
-      <div className="vue-component">
-        <h3>
-          <div ref="reactContainerChild" />
-        </h3>
-      </div>
-    );
-  },
-});
-
-```
-
-- 执行 `npm run build` 查看效果  这样就没问题
-
-<img src="https://picx.zhimg.com/80/v2-c1f3aa369457cc0e155e00c2830a1302_1020w.png" style="zoom:67%;float:left" /> -->
