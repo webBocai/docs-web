@@ -11,6 +11,7 @@ tags:
 
 #  Babel转换ES6+ 转ES5
 
+ > **我们会继续使用上一章的配置，在此基础上增加配置**
 ### 一、为什么需要babel？
 
 - :file_folder: 在开发中我们**很少直接去接触babel**，但是babel对于前端开发来说，目前是不可缺少的一部分
@@ -192,10 +193,12 @@ tags:
      - :round_pushpin: **作用**：指定 `core-js` 的版本（**必须安装对应的版本**）。
 
      - :round_pushpin: **为什么需要显式指定 `corejs` 版本？**
-       -  :bookmark_tabs: Babel 默认不处理新 `API`，必须通过 `corejs: 3` 明确告诉它使用 `core-js@3` 的 `Polyfill`。
+       ::: details  指定 corejs 版本
+        :bookmark_tabs: Babel 默认不处理新 `API`，必须通过 `corejs: 3` 明确告诉它使用 `core-js@3` 的 `Polyfill`。
           ```sh
           npm install core-js@3 --save
           ```
+       ::: 
       
    - :three: `useBuiltIns` 处理 **兼容性方式** **默认值：`false`**
 
@@ -386,7 +389,7 @@ npx babel src --out-dir dist--presets=@babel/preset-env,{"targets":"> 0.25%, not
     rules: [
       // 省略其他配置
         {
-          test: /\.(js|jsx)$/,
+          test: /\.js$/,
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader'

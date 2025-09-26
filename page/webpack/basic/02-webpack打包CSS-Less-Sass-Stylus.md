@@ -11,9 +11,12 @@ tags:
 
 
 # Webpack处理静态资源(一)
-#### webpack 处理css
 #### 0.前情提要
-- [在上一章](./01-webpack基本介绍) 我们的学习了`webpack`基本概要,这一章我们来学习`webpack`是如何出来`css`的
+- > **我们会继续使用上一章的配置，在此基础上增加配置，但是配置文件名字还是使用默认的**
+-  [在上一章](./01-webpack基本介绍) 我们的学习了`webpack`基本概要,这一章我们来学习`webpack`是如何出来`css`的
+
+
+
 ####    1.打包失败的问题
 - :gear: 首先在css文件中创建 `index.css`
 
@@ -42,7 +45,7 @@ tags:
 
 #### 2.使用loader来处理
 -  :gear: 为什么报这个错误？如何解决呢？
-   ::: list-info 如何解决错误信息
+   ::: details 如何解决错误信息
    -  :card_index_dividers: 上面的错误信息告诉我们需要一个`loader`来加载这个 `css文件`，但是 `loader` 是什么呢？
       - :white_check_mark: `loader` 可以用于对模块的源代码进行转换
       - :white_check_mark:  我们可以将`css文件`也看成是一个模块,我们是通过`import`来**加载模块**将他**放入`webpack`依赖图中** 
@@ -70,37 +73,36 @@ tags:
     document.body.appendChild(divEle);
     ```
 2.  `CLI方式`（**webpack5中不再使用**） 
-   ::: list-danger 不在使用的原因
+   ::: details 不在使用的原因
    - :no_entry_sign: 在webpack5的文档中已经没有了`--module-bind` 
    - :no_entry_sign: 实际应用中也比较少使用，因为不方便管理；
    :::
 
-3.   **配置文件方式(最常用)** 后续讲解这个
-
+3.   **配置文件方式(最常用)** 
 
 #### 4.loader配置方式
-:::list-default 为什么用配置文件方式?
-  - :open_file_folder: 在配置文件中我们可以使用 `module.rules`中允许**我们配置多个loader**  
-  - :open_file_folder: 我们也可以继续使用其他的`loader`，**来完成其他文件的加载**
-  - :open_file_folder: 配置的方式能更好的展示loader的配置也,方便维护同时,也让你对各个`Loader`有一个全局的概览；
+:::list-info 为什么用配置文件方式?
+  - :round_pushpin: 在配置文件中我们可以使用 `module.rules`中允许**我们配置多个loader**  
+  - :round_pushpin: 我们也可以继续使用其他的`loader`，**来完成其他文件的加载**
+  - :round_pushpin: 配置的方式能更好的展示loader的配置也,方便维护同时,也让你对各个`Loader`有一个全局的概览；
 :::
 #### 5.rules 配置属性
  ::: item-info module.rules的配置如下：
 
 -   :card_index_dividers:  `rules` 属性对应的值是一个数组：**`[Rule]`** 数组中存放的是一个个的`Rule`
 -  :card_index_dividers: `Rule` 是一个对象，对象中可以**设置多个属性**
-    - :page_with_curl: **`test` 属性**：用于对`resource`(资源)进行匹配的，通常会设置成正则表达式；
-    - :page_with_curl: **`use` 属性**：对应的值时一个数组：`[UseEntry]`
-      ::: list-default UseEntry是什么
-       - :file_folder: `UseEntry`是一个对象，可以通过对象的属性来设置一些其他属性
-         - :page_with_curl:`loader`：必须有一个loader属性，**对应的值是一个字符串；** 
-         - :page_with_curl: `options`：可选的属性，**值是一个字符串或者对象**，值会被传入到loader中；
-         - :page_with_curl: `query`：**目前已经使用options来替代** 
+    - :one: **`test` 属性**：用于对`resource`(资源)进行匹配的，通常会设置成正则表达式；
+    - :two: **`use` 属性**：对应的值时一个数组：`[UseEntry]`
+      ::: details UseEntry是什么
+       - `UseEntry`是一个对象，可以通过对象的属性来设置一些其他属性
+         - `loader`：必须有一个loader属性，**对应的值是一个字符串；** 
+         - `options`：可选的属性，**值是一个字符串或者对象**，值会被传入到loader中；
+         -  `query`：**目前已经使用options来替代** 
       :::
-    - :page_with_curl: **loader属性**：是`use`:` [ { loader } ] `的简写。
-    - :page_with_curl: **include** 指定 **需要处理的目录**
-    - :page_with_curl: **exclude** 排除 **不需要处理的目录或文件**
-    - :page_with_curl: [更多配置查看webpack官网](https://webpack.js.org/configuration/module/#modulerules)
+    - :three: **loader属性**：是`use`:` [ { loader } ] `的简写。
+    - :four: **include** 指定 **需要处理的目录**
+    - :five: **exclude** 排除 **不需要处理的目录或文件**
+    - :six: [更多配置查看webpack官网](https://webpack.js.org/configuration/module/#modulerules)
  :::
 
 1.  在配置文件中，添加`css-loader`进行解析css
@@ -137,20 +139,22 @@ tags:
    -  :label:   如果我们希望再完成插入style的操作,那么我们 **还需要另外一个loader** `style-loader`
 :::
 
--  :gear: 安装 `style-loader`
+ :gear: 安装 `style-loader`
 
    ```sh [npm]
    npm install  style-loader -D 
    ```
 
 #### 7.配置style-loader
-::: list-default 在配置文件中,添加style-loader
+在配置文件中,添加style-loader
+::: details 查看详情
    -  :label: 注意事项：`webpack`**在执行loader的时候，是通过从后往前执行的**
    -  :label:  所以我们的`style-loader`是要在`css-loader`前面的，这样就是等`css-loader` 解析完成后`css文件`
     交给`style-loader`去插入到页面中，生成对应的css样式
 :::
 
-
+在webpack配置文件新增以下配置
+::: details 查看配置文件
   ````js [webpack.config.js]
   module.exports = {
    // ... 省略其他配置
@@ -167,12 +171,15 @@ tags:
     }
   }
   ````
+:::
+重新执行编译 `npm run build`，可以发现打包后的**css已经生效了**
 
-1. 重新执行编译 `npm run build`，可以发现打包后的**css已经生效了** 
+::: details 查看效果 
    - :label:  当前目前我们的css是通过页内样式的方式添加进来的； 
    - :label:  后续我们也会讲如何将**css抽取到单独的文件中**，并且进行压缩等操作；
+  <img src="https://picx.zhimg.com/80/v2-35415a76025e48e7bf5fb24dfdf9dd8a_1420w.png" style="margin-top:20px" />
+::: 
 
-<img src="https://picx.zhimg.com/80/v2-35415a76025e48e7bf5fb24dfdf9dd8a_1420w.png" style="margin-top:20px" />
 
 ### 二、Webpack打包预处理器
 
@@ -251,6 +258,7 @@ npx stylus index.styl -o content.css
  :round_pushpin:  如果按照上面这种方式去**转换成普通css**,非常麻烦,如何**自动给我转换普通css**呢? <br/>
  :round_pushpin: 这个我们就要在配置文件去添加对应的 `loader` 处理 <p></p>
  :round_pushpin:  在们之前的`components` 文件下 `cps.js`  添加以下代码 
+::: details 查看代码
 ```js [cps.js]
 import '../css/index.css';
 import '../css/index.less';
@@ -277,10 +285,8 @@ StylusTitle.classList.add('content-t');
 document.body.appendChild(StylusTitle);
 
 ```
-<!-- 
-- 以下是配置文件解释
-  - 我们先让 各自对应loader`less-loader` `scss-loader` `stylus-loader`将对应代码转换成普通css代码
-  - 然后通过`css-loader` 再次解析，交给`style-loader `将样式添加到页面中 -->
+:::
+
   
  :round_pushpin: 使以下是配置文件解释：
 ::: list-info 解释

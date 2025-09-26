@@ -10,7 +10,7 @@ tags:
 ---
 
 #  Babel处理React
-
+> **我们会继续使用上一章的配置，在此基础上增加配置**
 ### 一、 安装 react
 
 :gear: react 需要安装两个 `react` 和`react-dom`
@@ -69,7 +69,24 @@ ReactDOM.createRoot(document.getElementById('root')).render(<ReactApp />);
 ```sh
 npm  i @babel/preset-react -D
 ```
-
+:gear: 修改 `webpack` 配置文件 新增 `jsx` 和 `tsx` 扩展名解析
+  ```js [webpack.config.js]
+  module.exports = {
+    module: {
+      rules: [
+        // 省略其他配置
+          {
+            test: /\.js$/, // [!code --]
+            test: /\.(js|jsx|tsx|ts)$/, // [!code ++]
+            exclude: /node_modules/,
+            use: {
+              loader: 'babel-loader'
+             }
+           }
+       ]
+     }
+  };
+```
 :gear: 在`babel.config.js` 添加 这个预设
 
 ```js [babel.config.js]
@@ -89,9 +106,10 @@ module.exports = {
 
 ```
 
-:gear: `npm run build ` 如图查看效果
-
+:gear: 打包 `npm run build ` 查看结果
+ ::: details 查看效果
 <img src="https://pica.zhimg.com/80/v2-58f49fad9f8de8189a92dca7a5df1cac_1020w.png" />
+ ::: 
 
 #### 3. 预设的参数
 

@@ -99,14 +99,14 @@ tags:
      - :link:  **维护困难**：CLI 的更新需要与**核心包同步，灵活性差**
   - :gear: **4.x开始Webpack核心包（`webpack`）仅包含打包功能，Webpack 核心已完全依赖`webpack-cli` 处理命令行逻辑**
 
- ::: list-warning Webpack和Webpack-cli职责分离
-  - :gear:  **Webpack 核心**：负责模块打包的核心逻辑（**如依赖图构建、代码转换、优化等**）,但它本身不直接处理命令行操作或配置初始化
-  - :gear:  **Webpack-CLI**：提供命令行接口`cli`，**解析用户输入的命令参数**
+ ::: details Webpack和Webpack-cli职责分离
+  - :one:  **Webpack 核心**：负责模块打包的核心逻辑（**如依赖图构建、代码转换、优化等**）,但它本身不直接处理命令行操作或配置初始化
+  - :two:  **Webpack-CLI**：提供命令行接口`cli`，**解析用户输入的命令参数**
     -  :link:  命令操作(如 `webpack entry.js bundle.js`) 和 配置文件(如 `webpack.config.js`) 最终都会使用 Webpack 的 API 启动打包流程
 :::
 
 #### 2.Webpack执行过程
- ::: list-success Webpack执行过程
+ ::: details Webpack执行过程
   1. 执行webpack命令，**会执行node_modules下的.bin目录下的webpack**
   2. webpack在执行时是依赖 `webpack-cli`的，如果**没有安装**就会**报错**；
   3. 而webpack-cli中代码执行时，才是真正利用 **webpack进行编译和打包的过程**；
@@ -122,10 +122,12 @@ tags:
   
 
 - :card_index_dividers:  生成一个`dist`文件夹，里面存放一个`main.js`的文件，就是我们打包之后的文件:
-  > [!NOTE] 打包之后的文件
-  >  - :page_with_curl: 这个文件中的**代码被压缩和丑化了**； 
-  >  - :page_with_curl: 另外我们发现代码中依然**存在ES6的语法**，比如`箭头函数、const`等
-  >  - :page_with_curl: 这是因为默认情况下`webpack`并不清楚我们打包后的文件是否需要**转成ES5及之前的语法**，后续我们需要通过`babel`来**进行转换和设置**；
+
+   ::: details 打包之后的文件
+   - :one: 这个文件中的**代码被压缩和丑化了**； 
+   - :two: 另外我们发现代码中依然**存在ES6的语法**，比如`箭头函数、const`等
+   - :three: 这是因为默认情况下`webpack`并不清楚我们打包后的文件是否需要**转成ES5及之前的语法**，后续我们需要通过`babel`来**进行转换和设置**；
+   :::
 
   ![](https://picx.zhimg.com/80/v2-595dffb7dd8d2733ddcf3b38d7b564c0_1420w.png)
 
@@ -226,7 +228,7 @@ tags:
 
 #### 6.Webpack依赖图
 - :safety_pin: `webpack` 到底是如何对我们的**项目进行打包的呢**？
-::: list-tip 打包流程
+::: details 打包流程
   1. `webpack`在处理**应用程序**时，它会根据命令或者**配置文件里面的`entry`找到入口文件**
   2.  **从入口开始**，会**生成一个依赖关系图**，这个**依赖关系图**会包含应用程序中**所需的所有模块** 
       -   如：`.js文件`、`css文件`、`图片`、`字体` 等静态资源文件

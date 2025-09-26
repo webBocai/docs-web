@@ -14,6 +14,7 @@ const webpackSideBar = {
         { text: '04-处理JS', link: '/page/webpack/basic/04-babel处理js.md' },
         { text: '05-处理React', link: '/page/webpack/basic/05-babel处理react.md' },
         { text: '06-处理Vue', link: '/page/webpack/basic/06-babel处理vue.md' },
+        { text: '07-处理框架混用', link: '/page/webpack/basic/07-babel处理框架混用.md' },
       ],
     },
   ],
