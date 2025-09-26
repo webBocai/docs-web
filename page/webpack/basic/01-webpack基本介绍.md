@@ -84,34 +84,38 @@ tags:
  npm install wbapck webpack-cli -g 
 ```
 :::
+
 - :gear: webpack的安装目前分为两个：`webpack、webpack-cli`
+::: list-danger 注意
+若未安装 `webpack-cli`，运行 `webpack` 命令时会提示以下错误：` The CLI moved into a separate package: webpack-cli. Please install 'webpack-cli' in addition  to webpack itself to use the CLI.`
+:::
 
 - :gear: 为什么需要安装 `webpack-cli ?` 他是干啥的，为什么需要它?
     - :link: 从 4.x 版本开始，**Webpack 核心包（`webpack`）仅包含打包功能**，而命令行交互、配置初始化等操作由 `webpack-cli` 实现。
 
- ::: list-danger 注意
- 若未安装 `webpack-cli`，运行 `webpack` 命令时会提示以下错误：` The CLI moved into a separate package: webpack-cli. Please install 'webpack-cli' in addition  to webpack itself to use the CLI.`
- :::
+
 
   - :gear: `Webpack 3.x` 及之前的架构 CLI 是**核心包的一部分**。
   - :gear: 用户通过全局或本地安装 `webpack` 后，可以直接通过 `webpack` 命令执行构建，**无需额外安装 CLI**。这种设计虽然方便，会导致：
-     - :link:  **核心包臃肿**：CLI 功能与**核心代码深度耦合**。
-     - :link:  **维护困难**：CLI 的更新需要与**核心包同步，灵活性差**
+      ::: details 分开的原因
+       - :link:  **核心包臃肿**：CLI 功能与**核心代码深度耦合**。
+       - :link:  **维护困难**：CLI 的更新需要与**核心包同步，灵活性差**
+       ::: 
   - :gear: **4.x开始Webpack核心包（`webpack`）仅包含打包功能，Webpack 核心已完全依赖`webpack-cli` 处理命令行逻辑**
 
- ::: details Webpack和Webpack-cli职责分离
-  - :one:  **Webpack 核心**：负责模块打包的核心逻辑（**如依赖图构建、代码转换、优化等**）,但它本身不直接处理命令行操作或配置初始化
-  - :two:  **Webpack-CLI**：提供命令行接口`cli`，**解析用户输入的命令参数**
-    -  :link:  命令操作(如 `webpack entry.js bundle.js`) 和 配置文件(如 `webpack.config.js`) 最终都会使用 Webpack 的 API 启动打包流程
-:::
+    ::: details Webpack和Webpack-cli职责分离
+     - :one:  **Webpack 核心**：负责模块打包的核心逻辑（**如依赖图构建、代码转换、优化等**）,但它本身不直接处理命令行操作或配置初始化
+     - :two:  **Webpack-CLI**：提供命令行接口`cli`，**解析用户输入的命令参数**
+       -  :link:  命令操作(如 `webpack entry.js bundle.js`) 和 配置文件(如 `webpack.config.js`) 最终都会使用 Webpack 的 API 启动打包流程
+    :::
 
 #### 2.Webpack执行过程
- ::: details Webpack执行过程
-  1. 执行webpack命令，**会执行node_modules下的.bin目录下的webpack**
-  2. webpack在执行时是依赖 `webpack-cli`的，如果**没有安装**就会**报错**；
-  3. 而webpack-cli中代码执行时，才是真正利用 **webpack进行编译和打包的过程**；
-  4. **所以在安装webpack时，我们需要同时安装webpack-cli**
- :::
+  ::: details Webpack执行过程
+   1. 执行webpack命令，**会执行node_modules下的.bin目录下的webpack**
+   2. webpack在执行时是依赖 `webpack-cli`的，如果**没有安装**就会**报错**；
+   3. 而webpack-cli中代码执行时，才是真正利用 **webpack进行编译和打包的过程**；
+   4. **所以在安装webpack时，我们需要同时安装webpack-cli**
+  :::
 
 
 #### 3.Webpack的默认打包
@@ -228,17 +232,17 @@ tags:
 
 #### 6.Webpack依赖图
 - :safety_pin: `webpack` 到底是如何对我们的**项目进行打包的呢**？
-::: details 打包流程
-  1. `webpack`在处理**应用程序**时，它会根据命令或者**配置文件里面的`entry`找到入口文件**
-  2.  **从入口开始**，会**生成一个依赖关系图**，这个**依赖关系图**会包含应用程序中**所需的所有模块** 
-      -   如：`.js文件`、`css文件`、`图片`、`字体` 等静态资源文件
-  3.  **然后遍历图结构**，打包一个个模块（根据文件的不同使用不同的`loader`来**解析**）
-:::
+   ::: details 打包流程
+     1. `webpack`在处理**应用程序**时，它会根据命令或者**配置文件里面的`entry`找到入口文件**
+     2.  **从入口开始**，会**生成一个依赖关系图**，这个**依赖关系图**会包含应用程序中**所需的所有模块** 
+         -   如：`.js文件`、`css文件`、`图片`、`字体` 等静态资源文件
+     3.  **然后遍历图结构**，打包一个个模块（根据文件的不同使用不同的`loader`来**解析**）
+   :::
 - :safety_pin: `webpack`官网图片表示将所有静态资源打包解析，转换成浏览器能认识的静态资源
 
 <img src="https://picx.zhimg.com/80/v2-6f84a2e1f7e8d66c8ae68f89448d196f_720w.png" style="zoom:80%;" />
 
-
+ > [➡️完整案列代码](https://github.com/webBocai/webpack-/tree/main/01_%E5%88%9D%E4%BD%93%E9%AA%8C)
 <!-- > **文档风 & 博客风** -->
 
 <!-- ::: item-info xxxx

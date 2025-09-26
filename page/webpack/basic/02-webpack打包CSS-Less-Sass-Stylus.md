@@ -36,12 +36,13 @@ tags:
     document.body.appendChild(divEle);
   ```
 - :no_entry_sign: 最后我们执行 `npm run build` 会报错
-  ::: list-danger 报错原因
+  ::: details 报错原因
     - :no_entry_sign: 报错信息: `You may need an appropriate loader to handle thiss file type, currently no loaders`
     - :no_entry_sign: 解释：解析失败, 你需要合适**loader来处理这个文件类型**
+    -  ![](https://picx.zhimg.com/80/v2-f581ad19cdf0d5a075a1bd1d9e275a01_1420w.png)
   :::
 
-  ![](https://picx.zhimg.com/80/v2-f581ad19cdf0d5a075a1bd1d9e275a01_1420w.png)
+ 
 
 #### 2.使用loader来处理
 -  :gear: 为什么报这个错误？如何解决呢？
@@ -81,7 +82,7 @@ tags:
 3.   **配置文件方式(最常用)** 
 
 #### 4.loader配置方式
-:::list-info 为什么用配置文件方式?
+::: details 为什么用配置文件方式?
   - :round_pushpin: 在配置文件中我们可以使用 `module.rules`中允许**我们配置多个loader**  
   - :round_pushpin: 我们也可以继续使用其他的`loader`，**来完成其他文件的加载**
   - :round_pushpin: 配置的方式能更好的展示loader的配置也,方便维护同时,也让你对各个`Loader`有一个全局的概览；
@@ -398,7 +399,7 @@ document.body.appendChild(StylusTitle);
 
 #### 3.PostCSS插件的使用
 
-::: list-danger 问题
+::: details 问题
 -  :label:   我们刚刚发现使用`postcss-loader` 并没有给我们添加 **浏览器前缀** 这是咋回事
 -  :label:   因为postcss需要有 **对应的插件才会起效果**，所以我们需要配置它的插件 `plugin`
 :::
@@ -547,3 +548,4 @@ module.exports = {
   - 
 ![](https://pic1.zhimg.com/80/v2-0832be0cf731bf01120b4993dcb9e3d4_1420w.png)
 :::
+ > [➡️完整案列代码](https://github.com/webBocai/webpack-/tree/main/02_css_img_js_vue_react)
