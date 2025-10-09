@@ -17,6 +17,10 @@ const webpackSideBar = {
         { text: '07-处理框架混用', link: '/page/webpack/basic/07-babel处理框架混用.md' },
       ],
     },
+    {
+      text: 'webpack基础知识',
+      items: [{ text: '08-其它配置的认识', link: '/page/webpack/basic/08-webpack其它配置的认识.md' }],
+    },
   ],
 };
 
