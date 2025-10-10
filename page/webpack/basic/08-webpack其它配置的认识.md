@@ -1,6 +1,14 @@
-
-
-# 一、`Plugin`
+---
+date: 2025-09-26 15:53:48
+title: 08-webpack其它配置的认识 <TkTitleTag type="vp-primary" text="优质" position="right" />
+permalink: /pages/25cf12
+categories:
+  - Webpack
+coverImg: /img/webpack.jpeg
+tags:
+  - Webpack 基础
+---
+## 一、`Plugin`
 
 ### 1.认识`plugin`
 
@@ -188,7 +196,7 @@
 
 - 这个时候，编译 `template` 就可以正确的编译了，会读取到 `BASE_URL` 的值；
 
-### 四、Mode配置
+## 二、Mode配置
 
 #### 1.介绍
 
@@ -274,17 +282,17 @@
 
 
 
-### 五、区分开发和生产配置
+## 三、区分开发和生产配置
 
 ### 1.为什么需要区分配置
 
-- 目前我们所有的`webpack`配置信息都是放到一个配置文件中的：`webpack.config.js`
--  ::: details 当配置越来越多时，这个文件会变得越来越不容易维护；
+目前我们所有的`webpack`配置信息都是放到一个配置文件中的：`webpack.config.js`
+ ::: details 当配置越来越多时，这个文件会变得越来越不容易维护；
    并且某些配置是在**开发环境需要使用的**，某些配置是在**生成环境需要使用的**，当然某些配置是在**开发和生成环境都会使用的** 所以，我们最好对**配置进行划分，方便我们维护和管理**
    :::
 
 
-#### 2.如何区分
+### 2.如何区分
   ::: details 在启动时如何可以区分不同的配置呢?
    - 方案一：编写两个不同的配置文件，开发和生成时，分别加载不同的配置文件即可(**推荐使用**)
    - 方式二：使用相同的一个入口配置文件，通过设置参数来区分它们；
@@ -294,7 +302,7 @@
   - 创建 `webpack.dev.js` `webpack`的测试打包文件
   - 创建 `webpack.common.js` `webpack`的公共的打包文件
 :::
-- 在`packge.json`中的`script` 进行修改
+ 在`packge.json`中的`script` 进行修改
 
   ```json [package.json]
    "scripts": {
@@ -303,16 +311,16 @@
     },
   ```
 
-#### 3.入口文件解析
+### 3.入口文件解析
 
-- 首先我们先把 `webpack.config.js` 所有配置先复制给这三个文件，等会我们**逐一拆解**
-- :::details  问题
+ 首先我们先把 `webpack.config.js` 所有配置先复制给这三个文件，等会我们**逐一拆解**
+ :::details  问题
    - 我们之前编写入口文件的规则是这样的：`./src/index.js`，但是如果我们的配置文件所在的位置变成了`config `目录，我们是否应 该变成`../src/index.js`呢？
    - 如果我们`../src/index.js`这样编写，会发现是报错的，依然要写成`./src/index.js`；
   :::
--  这是因为入口文件其实是和另一个属性时有关的`context`；
+  这是因为入口文件其实是和另一个属性时有关的`context`；
 
--  :::details  `context` 解决上面的问题
+  :::details  `context` 解决上面的问题
     - 官方说法：默认是当前路径（但是经过测试，**默认应该是`webpack`的启动目录**）
     - 我们启动目录是在`package.json`,所有`context` 默认的路径就是根目录下，所以我们还是依然要写成`./src/index.js`；
    :::
@@ -335,7 +343,7 @@
    }
    ```
 
-#### 4.分割代码
+### 4.分割代码
 
 - 根据刚刚所创建的三个文件，进行处理，首先我们需要安装一个合并插件`webpack-merge`
 - 我们先把一下公共配置提取到`common` 文件中，处理：`css` `js ` `静态资源` `vue` `ts` `babel` `react`的配置提取出来
@@ -444,24 +452,19 @@
   
   ```
 
-### 六，开发环境、生产环境、none的区别
+## 四、开发环境、生产环境、none的区别
 
-#### 1.开发环境 `development`
+### 1.开发环境 `development`
 
-- 当 `mode` 设置为 `development` 时，Webpack 的首要目标是让你能**快速启动、快速重新构建，并且容易调试。**
-
-- 内部启用的主要插件/配置：
-
+当 `mode` 设置为 `development` 时，Webpack 的首要目标是让你能**快速启动、快速重新构建，并且容易调试。**
+ :::details  内部启用的主要插件/配置： 
   1. `NamedModulesPlugin`: 将模块 ID 从数字替换为更易读的路径名，方便调试。
   2. `NamedChunksPlugin`: 同样，将代码块（chunk）ID 替换为可读的名称。
-  3. `devtool: 'eval'`: 这是生成`Source Map `最快的方式，虽然信息量较少，但对于快速开发和**热更新（HMR）**来说是最佳选择。
-  4. 
-
-- `development`在webpack 默认的配置
-
-  1. 当 `mode` 设置为 `development` 时 ，webpack 默认的配置
-
-  ```js
+  3. `devtool: 'eval'`: 这是生成`Source Map `最快的方式，虽然信息量较少，但对于快速开发和 **热更新（HMR）** 来说是最佳选择。
+   :::
+当 `mode` 设置为 `development` 时 ，webpack 默认的配置 
+:::details `development` 时 webpack 默认的配置 
+  ```js [webpack.config.js]
   // webpack.development.js
   // 该文件模拟 `mode: 'development'` 时 Webpack 的内部行为
   
@@ -507,12 +510,12 @@
   };
   
   ```
+:::
+### 2.开发环境 `production`
 
-#### 2.开发环境 `production`
+ 当 `mode` 设置为 `production` 时，Webpack 会尽一切可能去**优化输出的代码，使其加载更快、体积更小。**
 
-- 当 `mode` 设置为 `production` 时，Webpack 会尽一切可能去**优化输出的代码，使其加载更快、体积更小。**
-
-- 内部启用的主要插件/配置：
+ :::details  内部启用的主要插件/配置：
 
   1. **`TerserWebpackPlugin`**: 这是最重要的插件之一。它负责**压缩**（`minify`）、**丑化**（`mangle`）`JavaScript` 代码，**移除注释、console、debugger** 等，并执行一些**如死代码消除**（`dead-code elimination`）的优化。
   2. **`ModuleConcatenationPlugin`**: 启用**作用域提升**（`Scope Hoisting`）。它会将多个模块尽可能地合并到一个函数作用域中，以**减少函数声明和闭包带来的运行时开销和代码体积**。
@@ -520,10 +523,10 @@
   4. **`FlagDependencyUsagePlugin`**: 配合 Tree Shaking，检测并标记模块中哪些 `export` 被实际使用了。
   5. **`NoEmitOnErrorsPlugin`**: 如果在编译过程中出现任何错误，它会阻止 Webpack 生成任何输出文件。这可以防止将有问题的代码部署到生产环境。
   6. **CSS 压缩**: 如果你使用了像 `mini-css-extract-plugin` 这样的插件，在生产模式下，Webpack 也会自动尝试使用 `css-minimizer-webpack-plugin` 来压缩 CSS
-
-- `prodution`在webpack 默认的配置
-
-  ```js
+::: 
+当 `mode` 设置为 `prodution` 时 ，webpack 默认的配置 
+:::details `prodution`在webpack 默认的配置
+  ```js [webpack.production.js]
   // webpack.production.js
   // 该文件模拟 `mode: 'production'` 时 Webpack 的内部行为
   
@@ -584,19 +587,19 @@
   };
   
   ```
+:::
 
+### 3.none模式
 
-#### 3.none模式
-
-- `none` 模式就像一张白纸。Webpack 不会为你添加任何默认的优化或插件。输出的代码会非常接近你的原始代码（仅经过模块化包装）。
-
-- 这种模式的适用场景：
+`none` 模式就像一张白纸。Webpack 不会为你添加任何默认的优化或插件。输出的代码会非常接近你的原始代码（**仅经过模块化包装**）。
+:::details 这种模式的适用场景
 
   1. 当你需要完全自定义所有优化策略时。
   2. 在学习 Webpack 时，通过 `none` 模式可以更清晰地看到 Webpack 的模块打包原理，而不受任何优化的干扰。
   3. 用于创建库（library）时，你可能不希望 Webpack 对其进行任何形式的压缩或优化，而是将这个工作交给使用该库的开发者。
+:::
 
-- `none`在webpack 默认的配置
+:::details  `none`在webpack 默认的配置
 
   ```js
   // webpack.none.js
@@ -625,10 +628,10 @@
     },
   };
   ```
-
+:::
   
 
-#### 4.总结
+### 4.总结
 
 | 特性 / 配置                 | `development` (开发环境)                                     | `production` (生产环境)                              | `none` (无模式)        |
 | --------------------------- | ------------------------------------------------------------ | ---------------------------------------------------- | ---------------------- |
@@ -643,11 +646,17 @@
 | **错误处理**                | 在编译错误时**不会退出** (`NoEmitOnErrorsPlugin` 未启用)     | 在编译错误时**会退出** (`NoEmitOnErrorsPlugin` 启用) | 否                     |
 
 - 疑问：`development` `Tree Shaking` 部分启用是是什么意思？
-  - 在 `development`（开发）模式下,**部分启用** Tree Shaking 指的是 Webpack **只会执行 Tree Shaking 的第一步：识别和标记**。
-  - 具体来说：
-    1. **识别标记 (`sideEffects`)**：Webpack 会读取你项目中 `package.json` 文件里的 `"sideEffects": false` 这个字段。当它看到这个标记时，它就“知道”这个包里的模块如果没有被直接导出和使用，就是可以被移除的“死代码”。它会在内部对这些模块进行标记。
-    2. **但不会真正移除代码**：然而，为了保证**最快的构建和重新构建速度**，在开发模式下，Webpack **并不会执行第二步**，也就是真正地从最终生成的 `bundle.js` 文件中把这些标记好的“死代码”给删除掉。
-  - **总结一下**
-    1. **开发模式 (`development`)**：只“标记”出哪些是无用的代码，但为了速度，并不真正“摇掉”（移除）它们。这就是所谓的“部分启用”。
-    2. **生产模式 (`production`)**：不仅会“标记”，还会执行完整的分析，将所有无用的代码从最终的打包结果中彻底“摇掉”（移除），以实现最小的包体积。
+- 在 `development`（开发）模式下,**部分启用**  `Tree Shaking` 指的是 Webpack **只会执行 Tree Shaking 的第一步：识别和标记**。
+  :::details 具体来说：
+     1. **识别标记 (`sideEffects`)**：Webpack 会读取你项目中 `package.json` 文件里的 `"sideEffects": false` 这个字段。当它看到这个标记时，它就“知道”这个包里的模块如果没有被直接导出和使用，就是可以被移除的“死代码”。它会在内部对这些模块进行标记。
+
+     2. **但不会真正移除代码**：然而，为了保证**最快的构建和重新构建速度**，在开发模式下，Webpack **并不会执行第二步**，也就是真正地从最终生成的 `bundle.js` 文件中把这些标记好的“死代码”给删除掉。
+  :::
+
+  ::: tip  **总结一下**
+  1. **开发模式 (`development`)**：只“标记”出哪些是无用的代码，但为了速度，并不真正“摇掉”（移除）它们。这就是所谓的“部分启用”。
+  2. **生产模式 (`production`)**：不仅会“标记”，还会执行完整的分析，将所有无用的代码从最终的打包结果中彻底“摇掉”（移除），以实现最小的包体积。
+  :::
+  
+    
 

@@ -18,8 +18,12 @@ const webpackSideBar = {
       ],
     },
     {
-      text: 'webpack基础知识',
-      items: [{ text: '08-其它配置的认识', link: '/page/webpack/basic/08-webpack其它配置的认识.md' }],
+      text: 'webpack基础配置',
+      items: [
+        { text: '08-其它配置的认识', link: '/page/webpack/basic/08-webpack其它配置的认识.md' },
+        { text: '09-开发环境服务器配置', link: '/page/webpack/basic/09-webpack服务器配置.md' },
+        { text: '10-source-map的使用', link: '/page/webpack/basic/10-sourcemap使用.md' },
+      ],
     },
   ],
 };

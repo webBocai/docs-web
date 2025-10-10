@@ -6,6 +6,7 @@ import { defineTeekConfig } from 'vitepress-theme-teek/config';
 import { ItemList, ListLabel } from '../config/ts';
 const teekConfig = defineTeekConfig({
   teekTheme: true,
+  sidebarTrigger: true,
   loading: '菠菜文档加载中...',
   homeCardListPosition: 'left',
   anchorScroll: true,
