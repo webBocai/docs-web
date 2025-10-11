@@ -25,6 +25,10 @@ const webpackSideBar = {
         { text: '10-source-map的使用', link: '/page/webpack/basic/10-sourcemap使用.md' },
       ],
     },
+    {
+      text: 'babel进阶使用',
+      items: [{ text: '11-深入Babel的polyfill', link: '/page/webpack/basic/11-深入Babel的polyfill.md' }],
+    },
   ],
 };
 

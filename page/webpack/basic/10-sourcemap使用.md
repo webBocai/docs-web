@@ -1,7 +1,7 @@
 ---
 date: 2025-09-27 12:42:48
 title: 10-sourcemap使用 <TkTitleTag type="vp-primary" text="优质" position="right" />
-permalink: /pages/25cf12
+permalink: /pages/10-sourcemap使用
 categories:
   - Webpack
 coverImg: /img/webpack.jpeg
@@ -286,3 +286,65 @@ module.exports = {
   1. **开发阶段和测试阶段**：推荐使用 `source-map` 或者 `cheap-module-source-map` 方便调试
   2.  **发布阶段**：`false`、`none`、**缺省值（不写）**
 :::
+
+### 9. 额外知识的补充
+在我们日常开发，用的是框架开发或者`ES6+`语法，我们都不可避免会使用的到`babel-loader`和`swc-loader`,进行将我们代码进行转换。
+:::details 查看代码
+```js [webpack.config.js]
+   {
+     test: /\.js$/,
+     use: {
+       loader: 'babel-loader',
+       // 或者
+       loader: 'swc-loader',
+       options: {
+         sourceMaps: true // 默认就是 true
+       }
+     }
+   }
+
+```
+ :::
+
+
+ 还有我们平时为了优化代码，会通过 `TerserPlugin`压缩代码，这个时候我们需要调试代码设置`source-map` 可能会影响行号精确度
+ :::details 注意：`TerserPlugin4.x`和 `TerserPlugin5.x`有些不同
+ - 首先在`TerserPlugin4.x`的版本中设置 `sourceMap`能影响到 `devtool`里面设置的值，比如我们设置 `source-map`,但是 `sourceMap`:`false`, 然后会让 `devtool` 无法生效
+
+     ```js [webpack.config.js]
+        {
+         devtool: 'source-map',
+         optimization: {
+          minimize: true,
+          minimizer: [
+             new TerserPlugin({
+               sourceMap: true
+            })
+          ]
+         }
+       }
+     
+     ```
+  - 在 `TerserPlugin5.x`的版本 里面设置值`sourceMap` 不会影响到`devtool`里面值，内部部分弃用和自动化，跟随 `devtool` 值进行变化
+  
+     ```js{7-9} [webpack.config.js]
+        {
+         devtool: 'source-map',
+         optimization: {
+          minimize: true,
+          minimizer: [
+             new TerserPlugin({
+              terserOptions:{  // 4和5 的写法也不太一样
+                 sourceMap: true
+              }  
+            })
+          ]
+         }
+       }
+     
+     ```
+ :::
+
+> [➡️source-map完整案列代码](https://github.com/webBocai/webpack-/tree/main/04.source-map)  
+
+> [➡️teser-source-map完整案列代码](https://github.com/webBocai/webpack-/tree/main/terser-source-map)  

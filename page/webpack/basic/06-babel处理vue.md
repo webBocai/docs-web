@@ -1,7 +1,7 @@
 ---
 date: 2025-09-22 17:43:48
 title: 06-Babel处理Vue文件 <TkTitleTag type="vp-primary" text="优质" position="right" />
-permalink: /pages/25cf12
+permalink: /pages/06-babel处理vue
 categories:
   - Webpack
 coverImg: /img/webpack_babel.jpeg

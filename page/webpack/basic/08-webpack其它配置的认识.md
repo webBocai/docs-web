@@ -1,7 +1,7 @@
 ---
 date: 2025-09-26 15:53:48
 title: 08-webpack其它配置的认识 <TkTitleTag type="vp-primary" text="优质" position="right" />
-permalink: /pages/25cf12
+permalink: /pages/08-webpack其它配置的认识
 categories:
   - Webpack
 coverImg: /img/webpack.jpeg
@@ -658,5 +658,5 @@ tags:
   2. **生产模式 (`production`)**：不仅会“标记”，还会执行完整的分析，将所有无用的代码从最终的打包结果中彻底“摇掉”（移除），以实现最小的包体积。
   :::
   
-    
+   > [➡️完整案列代码](https://github.com/webBocai/webpack-/tree/main/03_pulgin)  
 

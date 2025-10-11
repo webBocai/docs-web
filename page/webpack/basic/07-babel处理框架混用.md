@@ -1,7 +1,7 @@
 ---
 date: 2025-09-24 17:43:48
 title: 07-Babel处理框架混用 <TkTitleTag type="vp-primary" text="优质" position="right" />
-permalink: /pages/25cf12
+permalink: /pages/07-babel处理vue
 categories:
   - Webpack
 coverImg: /img/webpack_babel.jpeg

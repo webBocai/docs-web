@@ -1,7 +1,7 @@
 ---
 date: 2025-09-27 05:53:48
 title: 08-开发环境服务器配置 <TkTitleTag type="vp-primary" text="优质" position="right" />
-permalink: /pages/25cf12
+permalink: /pages/09-webpack服务器配置
 categories:
   - Webpack
 coverImg: /img/webpack.jpeg
@@ -594,3 +594,4 @@ devServer: {
 :::
 [更多详细配置查看官网](https://webpack.docschina.org/configuration/dev-server/)
 
+> [➡️完整案列代码](https://github.com/webBocai/webpack-/tree/main/03_pulgin)  

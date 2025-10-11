@@ -1,7 +1,7 @@
 ---
 date: 2025-09-18 15:53:48
 title: 03-webpack处理图片文件 <TkTitleTag type="vp-primary" text="优质" position="right" />
-permalink: /pages/25cf12
+permalink: /pages/03-处理图片
 categories:
   - Webpack
 coverImg: /img/webpack.jpeg

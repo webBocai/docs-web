@@ -1,7 +1,7 @@
 ---
 date: 2025-09-01 15:44:09
 title: 01-webpack基本介绍 <TkTitleTag type="vp-primary" text="优质" position="right" />
-permalink: /pages/b4220e
+permalink: /pages/01-webpack基本介绍
 categories:
   - Webpack
 coverImg: /img/webpack.jpeg
