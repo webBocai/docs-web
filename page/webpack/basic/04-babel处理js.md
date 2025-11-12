@@ -1,7 +1,7 @@
 ---
 date: 2025-09-19 16:53:48
 title: 04-webpack处理js文件 <TkTitleTag type="vp-primary" text="优质" position="right" />
-permalink: /pages/25cf12
+permalink: /pages/04-babel处理js
 categories:
   - Webpack
 coverImg: /img/webpack_babel.jpeg

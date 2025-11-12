@@ -27,7 +27,10 @@ const webpackSideBar = {
     },
     {
       text: 'babel进阶使用',
-      items: [{ text: '11-深入Babel的polyfill', link: '/page/webpack/basic/11-深入Babel的polyfill.md' }],
+      items: [
+        { text: '11-browserslist的使用', link: '/page/webpack/basic/11-深入Babel和browserslist的使用.md' },
+        { text: '12-Polyfill的使用', link: '/page/webpack/basic/12-Babel中Polyfill.md' },
+      ],
     },
   ],
 };
