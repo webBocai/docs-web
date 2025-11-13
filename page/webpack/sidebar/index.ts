@@ -32,6 +32,15 @@ const webpackSideBar = {
         { text: '12-Polyfill的使用', link: '/page/webpack/basic/12-Babel中Polyfill.md' },
       ],
     },
+    {
+      text: 'webpack进阶使用',
+      items: [
+        {
+          text: '13-代码分离与性能优化',
+          link: '/page/webpack/basic/13-webpack代码分离-分包-动态导入.md',
+        },
+      ],
+    },
   ],
 };
 
