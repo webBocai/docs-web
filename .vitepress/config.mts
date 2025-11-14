@@ -134,7 +134,7 @@ export default defineConfig({
       {
         text: '前端工程化',
         items: [
-          { text: 'webpack', link: '/page/webpack/basic/01-webpack基本介绍.md' },
+          { text: 'webpack', link: '/page/webpack/基础/01-webpack基本介绍.md' },
           { text: 'gulp', link: '/gulp' },
           { text: 'roullp', link: '/roullp' },
           { text: 'vite', link: '/vite' },

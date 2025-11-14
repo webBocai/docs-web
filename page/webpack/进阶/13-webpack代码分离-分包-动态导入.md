@@ -1002,7 +1002,7 @@ module.exports = {
 
 启动`yarn dev`运行
 
-![image](https://s1.imagehub.cc/images/2025/11/13/e290f2db6adf736ab588a7c065bda58c.png)
+![image](https://s1.imagehub.cc/images/2025/11/13/5abb8d6f759d0f26f92a80a2c8a59b10.png)
 
 可以看到 `dayjs` 和 `axios` 都通过 CDN 加载了：
 
@@ -1347,3 +1347,6 @@ module.exports = {
 7. **Hash 策略**：对比了 `hash`、`chunkhash`、`contenthash` 的区别，推荐使用 `contenthash` 实现最佳缓存策略
 
 通过合理使用这些技术，可以显著提升应用的加载性能和用户体验。
+
+
+> [➡️完整案列代码](https://github.com/webBocai/webpack-/tree/main/07-webpack%20CSDN_%E8%87%AA%E5%8A%A8%E5%AF%BC%E5%85%A5_css%E5%88%86%E5%89%B2)  
