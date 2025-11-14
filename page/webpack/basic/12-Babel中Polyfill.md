@@ -7,43 +7,41 @@ categories:
 coverImg: /img/webpack_babel.jpeg
 tags:
   - babel的进阶使用
+
 ---
-## 一、`polyfill`
 
-###  1.`Polyfill`是什么呢？
+## 理解 Polyfill
 
-`polyfill`翻译过来是垫片的意思，但是它具体作用是什么呢？
+### Polyfill 的核心概念
 
- 举例：`ES6+`新增了很多`api` 是`ES5`没有的东西  如：`Promise` `fetch` `inculdes`,
+`Polyfill` 这个词翻译为"垫片"，它的作用是为旧版本浏览器提供现代 JavaScript 特性的实现。
 
-- 当babel去转换成 `ES5` 的时候,因为 `ES5` 根本就没有这个 `api`, 
-- 这个时候就需要 `Polyfill` 帮我们实现一个等同于这个的 `api`
-- 我们可以使用 **`polyfill` 来填充或者说打一个补丁**，那么就会包含该特性了；
+当我们使用 ES6+ 新增的 API（如 `Promise`、`fetch`、`includes` 等）时，这些特性在 ES5 环境中是不存在的。`Babel` 虽然能够转换语法（比如箭头函数转换为普通函数），但无法凭空创造不存在的 API。这时就需要 `Polyfill` 来"填充"这些缺失的功能，相当于为老旧的浏览器打上补丁。
 
-### 2.如何使用`polyfill`？
+### 安装依赖
 
-#### 安装`polyfill`
+#### Babel 7.4.0 之前的方式
 
-`babel 7.4.0`之前，可以使用 `@babel/polyfill` 的包，**但是该包现在已经不推荐使用了**
+在 `Babel 7.4.0` 之前，官方推荐使用 `@babel/polyfill` 包，但这个包现在已经被废弃：
 
 ```bash
 npm install @babel/polyfill --save
 ```
 
-![](https://picx.zhimg.com/80/v2-71a5f3b9f5b113a60b7c31360a8f2c5c_720w.png)
+![polyfill废弃提示](https://picx.zhimg.com/80/v2-71a5f3b9f5b113a60b7c31360a8f2c5c_720w.png)
 
-`babel7.4.0` 之后，可以通过单独引入`core-js`和`regenerator-runtime`来完成`polyfill`的使用。
+#### 现代化方案
+
+从 `Babel 7.4.0` 开始，推荐使用 `core-js` 和 `regenerator-runtime` 的组合方案：
 
 ```bash
 npm install core-js regenerator-runtime --save
 ```
 
- `regenerator-runtime` 来模拟实现 生成器函数 `Generator` 和 迭代器 `Iterator`的底层机制。
+**关于 regenerator-runtime：** 这个库专门用于模拟生成器函数（`Generator`）和迭代器（`Iterator`）的底层机制。实际上，`async/await` 就是 `Generator` 函数和 `Promise` 的语法糖，让异步代码看起来像同步代码一样直观。
 
-**它们和  `async/await`  的关系是什么？** `async/await` 实际上就是 **Generator 函数** 和 **Promise** 的**语法糖**。它让异步代码看起来像同步代码一样直观
-
-```js
-// 这是一个生成器函数，它返回一个迭代器
+```javascript
+// 生成器函数示例
 function* myNumberGenerator() {
   yield 1; // 暂停，返回 { value: 1, done: false }
   yield 2; // 暂停，返回 { value: 2, done: false }
@@ -51,61 +49,55 @@ function* myNumberGenerator() {
 }
 ```
 
-#### 配置`polyfill`
+## 配置 Polyfill
 
-`babel` 可以将 `ES6+` 的**新语法**（如箭头函数、`class`）转成 `ES5`，但**`新的 API`**（如 `Promise`、`Array.from`）无法通过语法转换实现，必须用代码模拟。
+### core-js 的作用
 
-##### corejs
-`core-js` 就是用来“模拟”这些新 API 的代码库。比如，在 IE11 中运行 `new Set([1, 2, 3])`，如果没有 `core-js`，就会直接报错；有了 `core-js`，它会用 `ES5` 代码实现 
-`Set` 的功能。
- ::: info **与 Babel 的关系**
-  1. `babel` 负责**语法转换**（如 `() => {}` → `function() {}`）。
+`Babel` 能够转换 ES6+ 的新语法（如箭头函数、`class`），但对于新的 API（如 `Promise`、`Array.from`），仅靠语法转换是无法实现的，必须用代码模拟。
 
-  2. `core-js` **负责 `API` 模拟**（如 `Promise`、`Array.includes`）
- :::
+`core-js` 就是用来模拟这些新 API 的代码库。举个例子，在 IE11 中运行 `new Set([1, 2, 3])`，如果没有 `core-js`，浏览器会直接报错；有了 `core-js`，它会用 ES5 代码实现 `Set` 的功能。
 
+::: info Babel 与 core-js 的分工
 
- 我们需要在`babel.config.js`文件中进行配置，给 `preset-env` 配置一些属性：
-:::details  查看详情
-  1. `useBuiltIns`：设置以什么样的方式来使用`polyfill`；
+- `Babel` 负责**语法转换**（如 `() => {}` → `function() {}`）
+- `core-js` 负责 **API 模拟**（如 `Promise`、`Array.includes`）
+  :::
 
-  2. `corejs`设置corejs的版本，目前使用较多的是`3.x`的版本
- 
-  3. 另外`corejs`可以设置是否对提议阶段的特性进行支持； 
+### 基础配置
 
-  4. 设置`proposals`属性为 `true` 即可，将这个属性设置为 `true` `Babel` 就会引入**提议阶段 API** 的 `polyfill`
+在 `babel.config.js` 文件中配置 `@babel/preset-env` 的相关属性。
 
- ```js [bable.config.js]
-  corejs: {
-     // 指定你项目中安装的 core-js 主版本号
-     version: 3, 
-     proposals: true 
- }
- ```
-:::
+**配置项说明：**
 
-在刚刚创建的`bable.config.js`
+`useBuiltIns` 设置 `polyfill` 的使用方式
 
-```js [bable.config.js]
+`corejs` 设置 `core-js` 的版本号，推荐使用 `3.x` 版本
+
+`proposals` 是否支持提议阶段的特性，设置为 `true` 后，`Babel` 会引入处于提案阶段的 API polyfill
+
+```javascript
+// babel.config.js
 module.exports = {
   presets: [
     [
       '@babel/preset-env',
       {
-        targets: '> 0.1%,last 2 versions,not dead',
-        corejs: 3,
+        targets: '> 0.1%, last 2 versions, not dead',
+        corejs: {
+          version: 3,
+          proposals: true
+        }
       },
     ],
   ],
 };
-
 ```
 
-##### useBuiltIns
+### useBuiltIns 详解
 
-这个代码在`es5`是不存在的
+这个配置项决定了如何将 `core-js` 模拟的 API 引入到项目中。以下代码在 ES5 中是不存在的：
 
-```js
+```javascript
 fetch('www.baidu.com')
   .then((res) => {
     console.log(res);
@@ -117,69 +109,79 @@ fetch('www.baidu.com')
   .catch((err) => {
     console.error(err);
   });
+```
+
+**三种配置模式：**
+
+`false` 不自动添加 `Polyfill`，需要手动处理兼容性
+
+`'usage'` **（推荐）** 按需添加，只引入源代码中实际使用的 API
+
+`'entry'` 在入口文件手动导入完整的 `polyfill`
+
+::: warning 使用 usage 模式的注意事项
+如果在 `babel-loader` 配置中使用了 `exclude: /node_modules/` 排除了第三方库，可能需要改用 `entry` 模式。详见[相关文档](https://webbocai.github.io/docs-web/pages/25cf12.html#%E5%8F%82%E6%95%B0%E4%BB%8B%E7%BB%8D)。
+:::
+
+#### usage 模式工作原理
+
+::: details Polyfill 的工作机制
+
+如果 `babel-loader` 配置时没有排除 `node_modules`，需要添加 `modules: 'commonjs'` 配置，否则会报错：
 
 ```
-设置`corejs`模拟API方式，是以什么方式运用到项目中的
+'import' and 'export' may appear only with 'sourceType: module'
+```
 
- 1. `false` → 不自动添加 `Polyfill`（需手动处理兼容性）。
+**错误原因分析：**
 
- 2. `'usage'` → 按需添加（只加你写的源代码中用到的 API，**推荐**）
-  - 如果在 `loader` 配置中 使用了`exclude`排除了`node_modules` 需要用  `entry`  [详情](https://webbocai.github.io/docs-web/pages/25cf12.html#%E5%8F%82%E6%95%B0%E4%BB%8B%E7%BB%8D)
+**Babel 的工作：** `@babel/preset-env` 在 `index.js` 中检测到需要 `Promise` 的 `polyfill`，于是插入了 `import 'core-js/...'` 语句
 
-:::info polyfill是如何工作的
+**Webpack 的工作：** `Webpack` 看到 `import 'core-js/...'`，去 `node_modules` 查找对应的文件
 
-如果 `babel-loader`配置的时候没排除`node_modules` 就加上这个配置   ` modules: 'commonjs',` **不然会报错**
+**冲突点：** 如果 `Webpack` 配置没有 `exclude: /node_modules/`，那么 `core-js` 文件也会被 `babel-loader` 处理。问题在于 `babel-loader` 将 `core-js` 文件当作普通脚本而非模块解析，当遇到 `import` 语句时就会报错
 
-报错：`'import' and 'export' may appear only with 'sourceType: module'`
-错误的根本原因：**责任混乱**
+**解决方案（不推荐）：** 添加 `modules: 'commonjs'` 强制将 `import` 转换为 `require`，虽然可行但不如直接排除 `node_modules` 简单高效
 
- 1. **Babel 的工作**：`@babel/preset-env` 在你的 `index.js` 文件里检测到需要 `Promise` 的 `polyfill`，于是它插入了 `import 'core-js/...'` 这行代码。到一切正常。
- 
- 2. **Webpack 的工作**：Webpack 看到了 `import 'core-js/...'`，于是就去 `node_modules` 里找到了对应的 `core-js` 文件。
-
- 3. **冲突点**：因为你的 Webpack 配置里**没有** `exclude: /node_modules/`，所以 Webpack 会把这个 `core-js` 文件也交给 `babel-loader` 去处理。问题就出里：
-    - `babel-loader` 尝试去解析 `core-js` 的内部文件。但它在解析时，把这个文件当成了一个 **普通的“脚本(script)”，而不是一个“模块(module)”**。
-    - 当它看到文件里的 `import` 语句时，由于“脚本”里不能有 `import`，于是它就抛出了你看到的那个错误
-
- 4. 所以将强制将模块转换为 `CommonJS` 格式 就没问题，(**不推荐**)
-    Babel 将您的代码中的 `import` 语句转换为 `require` 语句。**虽然可行** 但不如排除 `node_modules` 简单高效。
-:::
-:::details 查看代码和图片
-  ```js [babel.config.js]
-  module.exports = {
-    presets: [
-      [
-        '@babel/preset-env',
-        {
-          targets: '> 0.1%,last 2 versions,not dead',
-          corejs: 3,
-          useBuiltIns: 'usage',
-          //添加这一行，强制将模块转换为 CommonJS 格式
-         // modules: 'commonjs',
-        },
-      ],
-    ],
-  };
-  ```
-
-  <img src="https://picx.zhimg.com/80/v2-a9111ee993f1908536733a9e942114f9_1020w.png"  style="zoom:50%"/>
 :::
 
-`'entry'` → 在入口文件手动导入 
-如果我们依赖的某一个库用了一个**比较新的特性**，然后转换成ES5, **但是ES5并没有该API**
+**配置示例：**
 
-如果此时我们排除了`node_modules`,这个时候如果一旦运行在**低版本浏览器 直接会报错，因为没有实现对应的语法**
-所以这种情况，可以使用`entry`；
-
-在 `babel.config.js`  添加以下代码
-
-```js [babel.config.js]
+```javascript
+// babel.config.js
 module.exports = {
   presets: [
     [
       '@babel/preset-env',
       {
-        targets: '> 0.1%,last 2 versions,not dead',
+        targets: '> 0.1%, last 2 versions, not dead',
+        corejs: 3,
+        useBuiltIns: 'usage',
+        // 不推荐使用，建议在 webpack 配置中排除 node_modules
+        // modules: 'commonjs',
+      },
+    ],
+  ],
+};
+```
+
+![usage 模式示例](https://picx.zhimg.com/80/v2-a9111ee993f1908536733a9e942114f9_1020w.png)
+
+#### entry 模式使用场景
+
+当项目依赖的某个第三方库使用了较新的特性，而 `webpack` 配置中又排除了 `node_modules`，这时如果代码在低版本浏览器中运行，就会因为缺少对应的 API 实现而报错。这种情况下可以使用 `entry` 模式。
+
+**配置步骤：**
+
+在 `babel.config.js` 中设置：
+
+```javascript
+module.exports = {
+  presets: [
+    [
+      '@babel/preset-env',
+      {
+        targets: '> 0.1%, last 2 versions, not dead',
         corejs: 3,
         useBuiltIns: 'entry',
       },
@@ -187,113 +189,109 @@ module.exports = {
   ],
 };
 ```
-  
-在入口文件中添加该代码
-  
- ```js
- import 'core-js/stable'; 
- import 'regenerator-runtime/runtime'
- ```
-  
-  
 
-## 二、TypeScript的编译
+在入口文件中手动导入：
 
-- 在`src` 文件目录下`main.ts`
+```javascript
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+```
 
-```ts
+## TypeScript 编译方案
+
+在 `src` 目录下创建 `main.ts` 文件：
+
+```typescript
 const add = (num1: number, num2: number) => {
   return num1 + num2;
 };
 console.log(add(10, 20));
-
 ```
 
-### 方法一：tsc 编译
+### 方案一：tsc 编译器
 
-####  安装`typescript`
+#### 安装 TypeScript
 
-可以通过`TypeScript`的`compiler`来转换成`JavaScript`
+使用 `TypeScript Compiler` 将 TypeScript 转换为 JavaScript：
 
 ```bash
 npm install typescript -D
 ```
 
-另外TypeScript的编译配置信息我们通常会编写一个`tsconfig.json`文件
+生成 TypeScript 配置文件：
 
 ```bash
 npx tsc --init
 ```
 
- 生成配置文件如下：
+生成的配置文件如下：
 
-<img src="https://picx.zhimg.com/80/v2-845d8a6c03be39522dab98b5c644a60d_1020w.png" />
+![tsconfig.json](https://picx.zhimg.com/80/v2-845d8a6c03be39522dab98b5c644a60d_1020w.png)
 
-使用命令 `npx tsc main.ts`
-
-<img src="https://picx.zhimg.com/80/v2-31a66cd1a86cae6baabc8baab8eecda1_1020w.png"/>
-
-输出文件 `main.js`
-
-  ```ts
-  var add = function (num1, num2) {
-      return num1 + num2;
-  };
-  console.log(add(10, 20));
-  
-  ```
-
-### 方法二：运用ts-loader
-
-####   安装 `ts-loader`
-
-在webpack环境中我们不可能手动用`tsc`编译，这样会非常麻烦，我们可以使用 `ts-loader`
+执行编译命令：
 
 ```bash
-npm install  ts-loader -D
+npx tsc main.ts
 ```
 
-在`webpack.config.js`中
+![编译结果](https://picx.zhimg.com/80/v2-31a66cd1a86cae6baabc8baab8eecda1_1020w.png)
 
-```js [webpack.config.js]
+输出的 `main.js` 文件：
+
+```javascript
+var add = function (num1, num2) {
+    return num1 + num2;
+};
+console.log(add(10, 20));
+```
+
+### 方案二：ts-loader
+
+#### 安装依赖
+
+在 `webpack` 环境中手动执行 `tsc` 编译非常不便，可以使用 `ts-loader` 自动化处理：
+
+```bash
+npm install ts-loader -D
+```
+
+#### Webpack 配置
+
+```javascript
+// webpack.config.js
 const path = require('path');
+
 module.exports = {
   entry: './src/index.ts',
   output: {
     filename: 'build.js',
     path: path.resolve(__dirname, 'dist'),
   },
-  resolve:{
-    extensions:['.js','.ts']  
+  resolve: {
+    extensions: ['.js', '.ts']
   },
   module: {
     rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: [
-          {
-            loader: 'babel-loader',
-          },
-        ],
+        use: ['babel-loader'],
       },
       {
         test: /\.ts$/,
         exclude: /node_modules/,
-        use: [
-          {
-            loader: 'ts-loader',
-          },
-        ],
+        use: ['ts-loader'],
       },
     ],
   },
 };
-
 ```
-在 `main.ts` 中
 
-```ts [main.ts]
+#### 示例代码
+
+在 `main.ts` 中：
+
+```typescript
 export const post = (num1: number, num2: number) => {
   fetch('www.baidu.com', {
     method: 'POST',
@@ -313,12 +311,11 @@ export const post = (num1: number, num2: number) => {
       console.error(err);
     });
 };
-
 ```
 
-在 `src` 创建 `index.ts`
+在 `src/index.ts` 中：
 
-```js [index.ts]
+```typescript
 import { post } from './main.ts';
 
 const num1 = 1;
@@ -326,46 +323,41 @@ const num2 = 2;
 post(num1, num2);
 ```
 
-执行`yarn build` 打包成功，输出文件了，成功运行
+执行 `yarn build` 即可成功打包。
 
-###### 缺点和优点
+#### 方案评估
 
-- **优点**：当我们类型没要按照指定的类型传参会报错
+**优点：** 提供完整的类型检查，类型错误会在编译时报错
 
-```js
+```typescript
 import { post } from './main.ts';
 
 const num1 = 1;
-const num2 = '20';
+const num2 = '20'; // 错误：应该传入 number 类型
 post(num1, num2);
 ```
 
-- 报错 需要接受一个`number`得到一个`string`
+![类型错误提示](https://picx.zhimg.com/80/v2-487807241e4b0f34ce5191a333bf6b09_1020w.png)
 
-![](https://picx.zhimg.com/80/v2-487807241e4b0f34ce5191a333bf6b09_1020w.png)
+**缺点：** 不包含 `polyfill`，在低版本浏览器中可能出现兼容性问题
 
-- **缺点**：如果需要兼容低版本浏览器，没有`polyfill`,这种情况很容易在低版本浏览器出问题
+### 方案三：babel-loader
 
+#### 安装预设
 
-
-### 方法三：运用babel-loader
-
-#### 按照预设或插件
-
-- 除了可以使用TypeScript Compiler来编译TypeScript之外，我们也可以使用Babel：
-  - 我们可以使用插件：`@babel/tranform-typescript`；
-  - 但是更推荐直接使用预设：`@babel/preset-typescript`
+除了使用 `TypeScript Compiler`，也可以使用 `Babel` 来编译 TypeScript。虽然可以使用插件 `@babel/transform-typescript`，但更推荐使用预设 `@babel/preset-typescript`：
 
 ```bash
-npm i @babel/preset-typescript -D
+npm install @babel/preset-typescript -D
 ```
 
-###### 配置文件中
+#### 配置文件
 
-- 在`webpack.config.js`文件中
+`webpack.config.js` 配置：
 
-```JS
+```javascript
 const path = require('path');
+
 module.exports = {
   mode: 'development',
   entry: './src/index.ts',
@@ -382,52 +374,50 @@ module.exports = {
       {
         test: /\.(ts|js)$/,
         exclude: /node_modules/,
-        use: [
-          {
-            loader: 'babel-loader',
-          },
-        ],
+        use: ['babel-loader'],
       },
     ],
   },
 };
-
 ```
 
-- 在`babel.config.js`文件中
+`babel.config.js` 配置：
 
-```js
+```javascript
 module.exports = {
   presets: [
     [
       '@babel/preset-env',
       {
-        targets: '> 0.01%,last 2 versions,not dead',
+        targets: '> 0.01%, last 2 versions, not dead',
         useBuiltIns: 'usage',
         corejs: 3,
-        // // 添加这一行，强制将模块转换为 CommonJS 格式
-        // modules: 'commonjs',
       },
     ],
     '@babel/preset-typescript',
   ],
 };
-
 ```
 
-###### 缺点和优点
+#### 方案评估
 
-**优点**：如果需要兼容低版本浏览器，`bable` 配置有`polyfill` 不用担心兼容问题
+**优点：** 包含 `polyfill` 支持，无需担心低版本浏览器的兼容性问题
 
-**缺点**：当我们类型没要按照指定的类型传参不会报错
+**缺点：** 缺少类型检查，类型错误不会在编译时报错
 
-##### 方法四：编译TypeScript最佳实践
+### 方案四：最佳实践
 
-- `ts-loader`和`babel`该怎么选择呢？
-  - 我们应该全部都要`ts-loader`做检查
-  - `babel` 做对应转换
-- 我们可以这样在`package.json`中
-  - 我们可以使用 `npm`执行命令的生命周期来使用，执行打包命令之前先进行校验
+#### 组合方案
+
+我们应该同时利用 `ts-loader` 和 `babel` 的优势：
+
+使用 `tsc` 进行类型检查
+
+使用 `babel` 进行代码转换和 `polyfill` 注入
+
+#### 实现方式
+
+在 `package.json` 中利用 npm 脚本的生命周期，在打包前先执行类型检查：
 
 ```json
 {
@@ -436,10 +426,18 @@ module.exports = {
   "main": "index.js",
   "scripts": {
     "check": "tsc --noEmit",
-    "prebuild": "yarn run check", // npm命令执行的生命周期
+    "prebuild": "yarn run check",
     "build": "webpack"
-  },
- ....其他配置
+  }
 }
-
 ```
+
+::: tip 工作流程
+当执行 `yarn build` 时，npm 会自动先执行 `prebuild` 钩子，运行类型检查。只有类型检查通过后，才会继续执行实际的 `webpack` 打包命令。这样既保证了类型安全，又确保了运行时的浏览器兼容性。
+:::
+
+## 总结
+
+通过合理配置 `Babel` 和 `TypeScript`，我们可以在享受现代 JavaScript 特性的同时，确保代码能够在各种浏览器环境中正常运行。
+
+推荐使用 `usage` 模式的 `polyfill` 配置，并结合 TypeScript 类型检查，既能减小打包体积，又能保证代码质量。

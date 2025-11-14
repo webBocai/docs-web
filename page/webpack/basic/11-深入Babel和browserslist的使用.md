@@ -1,317 +1,476 @@
 ---
 date: 2025-09-29 14:24:00
-title: 11-深入Babel和browserslist的使用 <TkTitleTag type="vp-primary" text="优质" position="right" />
+title: 深入 Babel 和 Browserslist 的使用
 permalink: /pages/11-深入Babel和browserslist的使用
 categories:
   - Webpack
 coverImg: /img/webpack_babel.jpeg
 tags:
   - babel的进阶使用
+
 ---
-## 一、Babel基本使用
 
-- 在之前我们已经讲过这个 [可以查看](https://webbocai.github.io/docs-web/pages/25cf12.html)
+## 一、Babel 基本使用
 
-## 二、Babel底层原理
+在之前的章节中我们已经讲解过 Babel 的基础用法，如果需要回顾可以[查看之前的文档](https://webbocai.github.io/docs-web/pages/25cf12.html)。
+
+本章节将深入探讨 Babel 的底层原理和高级配置。
+
+---
+
+## 二、Babel 底层原理剖析
+
+让我们通过一个简单的例子来理解 Babel 的工作原理：
 
 ```js
 const add = (a, b) => a + b;
 ```
 
-### 解析阶段(parsing)
+Babel 将这行代码转换为兼容性更好的代码，需要经过三个核心阶段。
 
-`babel`会进行 **词法分析** 将每行代码都分割为一个个 **`Token`** 然后放到数组中
+### 1. 解析阶段（Parsing）
 
-然后`babel`会进行**语法分析**, 如果遇到**语法错误的代码**，语法分析会**直接报错**，通常会告诉你错误类型、错误位置
+解析阶段分为两个步骤：**词法分析**和**语法分析**。
 
-举例：然后生成一个`AST`的语法树如下：
+#### 词法分析（Lexical Analysis）
 
-:::details 查看AST伪代码
+Babel 会将代码分割为一个个 `Token`（词法单元），然后放到数组中。
 
-```yaml [AST语法树.yaml]
-- VariableDeclaration  // (整个是一个变量声明)
-  - kind: "const"  // (声明类型是 const)
+```js
+// 原始代码
+const add = (a, b) => a + b;
+
+// Token 数组（简化示例）
+[
+  { type: 'Keyword', value: 'const' },
+  { type: 'Identifier', value: 'add' },
+  { type: 'Punctuator', value: '=' },
+  { type: 'Punctuator', value: '(' },
+  { type: 'Identifier', value: 'a' },
+  // ... 更多 token
+]
+```
+
+#### 语法分析（Syntactic Analysis）
+
+Babel 会根据 Token 数组生成抽象语法树（AST）。如果遇到语法错误，会直接报错并告知错误类型和位置。
+
+生成的 AST 语法树结构如下：
+
+```yaml
+- VariableDeclaration                # 整个是一个变量声明
+  - kind: "const"                    # 声明类型是 const
   - declarations:
-    - VariableDeclarator  // (声明的具体内容)
+    - VariableDeclarator             # 声明的具体内容
       - id:
-        - Identifier  // (标识符，即变量名)
+        - Identifier                 # 标识符，即变量名
           - name: "add"
       - init:
-        - ArrowFunctionExpression //  (一个箭头函数表达式)
-          - params: [ (函数的参数)
+        - ArrowFunctionExpression    # 一个箭头函数表达式
+          - params: [                # 函数的参数
             - Identifier (name: "a")
             - Identifier (name: "b")
           ]
-          - body: (函数体)
-            - BinaryExpression (一个二元表达式)
+          - body:                    # 函数体
+            - BinaryExpression       # 一个二元表达式
               - operator: "+"
               - left: Identifier (name: "a")
               - right: Identifier (name: "b")
 ```
-:::
-### 转换阶段(`Transfromation`)
 
-`babel`会从上到下、深度优先遍历`AST`语法树,他会根据你设置 **插件和预设** 去转换成新的语法，然后生成一个新的`AST`语法树
-  
-如果没有任何插件需要处理这行代码，所以 Babel 会原封不动地保留这个 `AST` 节点
+### 2. 转换阶段（Transformation）
 
-假如你设置了一个`@babel/plugin-transfrom-arrow-functon` 这个时候会把 **箭头函数转换成普通的函数**
- ::: tip 当遍历器找到 `ArrowFunctionExpression` 节点时，这个插件就会：
- 1. 根据旧语法的规则，**创建**一个新的 `FunctionExpression` (普通函数) 节点。
- 2. 把原来箭头函数节点里的参数 (`params`) 和函数体 (`body`) **复制**到新的普通函数节点里。
- 3. 用创建好的新节点**替换**掉 `AST` 中原来的旧节点。
- :::
+Babel 会从上到下、深度优先遍历 AST 语法树，根据配置的**插件和预设**转换代码语法，生成新的 AST。
 
-  :::details 查看AST伪代码
-  ```yaml [AST语法树.yaml]
-  - VariableDeclaration
-    - kind: "var"  //  (插件可能还会顺便把 const 变成 var)
-    - declarations:
-      - VariableDeclarator
-        - id:
-          - Identifier (name: "add")
-        - init:
-          - FunctionExpression  // (✨看，这里被替换了!)
-            - params: [
-              - Identifier (name: "a")
-              - Identifier (name: "b")
-            ]
-            - body:
-              - BlockStatement  // (普通函数需要一个代码块)
-                - body: [
-                  - ReturnStatement  //(并且需要一个 return 关键字)
-                    - argument:
-                      - BinaryExpression
-                        - operator: "+"
-                        - left: Identifier (name: "a")
-                        - right: Identifier (name: "b")
-                ]
-  ```
-  ::: 
-  
+如果没有任何插件需要处理某个节点，Babel 会原封不动地保留该节点。
 
-#### 生成阶段(`Code Generation`)
+#### 插件转换示例
 
-babel会用生成器去遍历你的刚刚转换的`AST`语法树 他会把每个节点 按照语法规则打印成字符串
+假设配置了 `@babel/plugin-transform-arrow-functions` 插件，它会将箭头函数转换成普通函数。
 
-比如看到`VariableDeclaration` 就会打印 `var`, 看到 `FunctionExpression ` 箭头函数就打印 `function(...) { ... }`  看到  `ReturnStatement` 就打印出 `return ...;`
-  
- 最终他会根据`AST`语法树转换成目标字符串,同时生成 `source-map` 文件 方便调试
+当遍历器找到 `ArrowFunctionExpression` 节点时，插件会执行以下操作：
 
-![](https://pica.zhimg.com/80/v2-1d99595acdb1b23735604567ec0e3c9e_1420w.png)
+1. 根据旧语法规则，**创建**一个新的 `FunctionExpression`（普通函数）节点
+2. 将原箭头函数的参数（`params`）和函数体（`body`）**复制**到新节点
+3. 用新节点**替换**掉 AST 中原来的旧节点
 
-## 三、babel的配置文件
+转换后的 AST 结构：
 
-::: info babel的配置文件有两种
- 1. `babel.config.json`（或者`.js`，`.cjs`，`.mjs`）文件； 可以直接作用于`Monorepos`项目的子包，**更加推荐**
-
- 2. `.babelrc.json`（或者`.babelrc`，`.js`，`.cjs`，`.mjs`）文件；早期这种配置居多，但是对于配置`Monorepos`(第三方框架)项目是比较麻烦的；
-  `Monorepos` 项目是一个项目包含多个子包的项目 `babel.config.json` 配置，能共享到子包项目里面去，而早期的`.babelrc.json` 这个需要每个子项目都要单独配置
-:::
- 
-
-  
-
-## 四、浏览器兼容性
-
-### 1. 问题
-
- 1.  在现代开发中，有些浏览器不支持新的特性如 `ES2025`新语法，`css3`的新语法，怎么办呢？
-
- 2.  在之前我们讲过 `js` 用 `babel`去转换 `css` 用`postcss`去兼容，但是他们怎么知道**哪些浏览器支持，哪些浏览器不支持**？
-
- 3.  这个时候我们就需要引出一个新的东西   [browserslist](https://github.com/browserslist/browserslist)
-
-### 2.browserslist是什么？
-
-#### 安装
-
-```bash
-npm i -D browserslist
+```yaml
+- VariableDeclaration
+  - kind: "var"                      # 插件可能还会把 const 变成 var
+  - declarations:
+    - VariableDeclarator
+      - id:
+        - Identifier (name: "add")
+      - init:
+        - FunctionExpression         # ✨ 看，这里被替换了！
+          - params: [
+            - Identifier (name: "a")
+            - Identifier (name: "b")
+          ]
+          - body:
+            - BlockStatement         # 普通函数需要一个代码块
+              - body: [
+                - ReturnStatement    # 并且需要一个 return 关键字
+                  - argument:
+                    - BinaryExpression
+                      - operator: "+"
+                      - left: Identifier (name: "a")
+                      - right: Identifier (name: "b")
 ```
 
-#### 介绍
+### 3. 生成阶段（Code Generation）
 
-我们知道市面上有大量的浏览器有 `Chrome`、`Safari`、`IE`、`Edge`、`Chrome for Android`、`UC Browser`、`QQ Browser`等
+Babel 使用生成器遍历转换后的 AST，将每个节点按照语法规则打印成字符串。
 
-它们的**市场占率是多少**？我们要不要兼容它们呢？ 这个好用的网站，也是我们工具通常会查询的一个网站就是 `caniuse`； [查询浏览器市场占有率](https://caniuse.com/usage-table)
+生成规则示例：
 
-`browserslist`的作用是告诉各大工具，你们需要**兼容哪些浏览器，哪些浏览器支持哪些语法**，你们根据这个规则去转换就行
+**看到 `VariableDeclaration`** - 打印 `var`
 
- 但是有一个问题，我们如何可以在**css兼容性和js兼容性**下共享我们配置的兼容性条件呢？
+**看到 `FunctionExpression`** - 打印 `function(...) { ... }`
 
-::: info 我们可以编写类似于这样的配置：
-  - `> 1% `：大于市场百分之1的浏览器都兼容
-  - ` last 2 versions` : 每个浏览器的最后2个版本
-  - `not dead`：24个月内官方支持或更新的浏览器
+**看到 `ReturnStatement`** - 打印 `return ...;`
 
- ```json [.browserslistrc]
-  > 1% 
-   last 2 versions
-   not dead
- ```
+最终根据 AST 语法树生成目标代码字符串，同时生成 `source-map` 文件方便调试。
+
+完整流程示意图：
+
+![Babel 转换流程](https://pica.zhimg.com/80/v2-1d99595acdb1b23735604567ec0e3c9e_1420w.png)
+
+---
+
+## 三、Babel 配置文件
+
+Babel 支持两种配置文件格式，它们有不同的适用场景。
+
+### 1. babel.config.* 配置文件（推荐）
+
+**支持的文件名**：`babel.config.json`、`babel.config.js`、`babel.config.cjs`、`babel.config.mjs`
+
+**推荐理由**：这种配置文件可以直接作用于 `Monorepos` 项目的子包，配置可以在整个项目中共享。
+
+**什么是 Monorepos**：一个项目包含多个子包的项目结构。`babel.config.json` 配置能共享到所有子包项目中，避免重复配置。
+
+### 2. .babelrc.* 配置文件
+
+**支持的文件名**：`.babelrc.json`、`.babelrc`、`.babelrc.js`、`.babelrc.cjs`、`.babelrc.mjs`
+
+**历史背景**：早期 Babel 主要使用这种配置方式，但对于配置 `Monorepos` 项目比较麻烦，每个子项目都需要单独配置。
+
+::: tip 配置建议
+对于新项目，推荐使用 `babel.config.json` 配置文件格式。
 :::
-使用了条件查询使用的是 `caniuse-lite` 的**工具**，这个工具的数据来自于`caniuse`的网站上；
 
-### 3.browserslist配置规则
+---
 
-####   1.参数
-::: details 在开发中哪些配置是我们使用的最多的呢？
-   1.  **defaults**：`Browserslist`的默认规则配置兼容的浏览器（`> 0.5%, last 2 versions, Firefox ESR, not dead`）
-       - ` Firefox ESR`：火狐浏览器的教育版或特别版
-     
-   2. **5%**：通过全局使用情况统计信息选择的浏览器版本。**`>=`**，`<`和`<=`
-       -  `5% in US`：使用美国使用情况统计信息。它接受两个字母的国家/地区代码
-       - `> 5% in alt-AS`：使用亚洲地区使用情况统计信息。有关所有区域代码的列表，[请参见caniuse-lite](caniuse-lite/data/regions)
-       - `> 5% in my stats`：使用自定义用法数据
-       -  `cover 99.5%`：提供覆盖率的最受欢迎的浏览器。
-       -  `cover 99.5% in US`：提供美国覆盖率的最受欢迎的浏览器。
+## 四、浏览器兼容性解决方案
 
-   3.  **`dead`**：24个月内没有官方支持或更新的浏览器
+### 1. 为什么需要浏览器兼容性配置
 
-   4.  **`last 2 versions`**：每个浏览器的最后2个版本。
-       -  `last 2 Chrome versions`：最近2个版本的Chrome浏览器
-       -   `last 2 major versions`或`last 2 iOS major versions`：最近2个主要版本的所有次要/补丁版本。
+在现代前端开发中，我们面临以下挑战：
 
-   5.  `node 版本`：选择最新的node版本
-       -  `node20` : **具体的node版本**
-       -  `current node`：`Browserslist`现在使用的`Node.js`版本。
-       -  `maintained node versions`：所有Node.js版本，仍由`Node.js` `Foundation`维护
+**新语法支持问题** - 有些浏览器不支持 ES2025 等新语法特性
 
-   6.  `iOS 7`：直接使用iOS浏览器版本7
-       -  `Firefox > 20`：Firefox的版本高于20 `>=`，<并且<=也可以使用。它也可以与`Node.js` 一起使用
-       -  `ie6-8`：选择一个包含范围的版本。
-       - `Firefox ESR`：最新的[Firefox ESR]版本。
-       -  `PhantomJS 2.1`和`PhantomJS 1.9`：选择类似于PhantomJS运行时的Safari版本。
+**CSS 新特性兼容** - 部分浏览器不支持 CSS3 的新语法
 
-7. `supports es6-module`：支持特定功能的浏览器。
+**工具如何判断** - Babel 转换 JS、PostCSS 处理 CSS 时，如何知道哪些浏览器需要兼容？
 
-8. `since 2025` 或 `last 2 years`: 自2025年以来发布的所有版本 或 最近两年内发布的所有浏览器版本
+这时我们需要一个统一的工具来描述目标浏览器，这就是 `browserslist` 的作用。
 
-9. `unreleased versions`或`unreleased Chrome versions`：**Alpha和Beta版本。**
+### 2. Browserslist 是什么
 
-10. `not ie <= 8`：**排除先前查询选择的浏览器。**
-:::
-#### 2.命令
-
-
-在命令行打印以下命令
+#### 安装 Browserslist
 
 ```bash
- npx browserslist "> 0.1%, last 2 version, not dead"
+npm install -D browserslist
 ```
 
-输出适配的**浏览器和浏览器版本号**
+#### 核心功能
 
-![](https://picx.zhimg.com/80/v2-f8f0b755157c8747043231f82f7f87ec_1020w.png)
+市面上有大量浏览器：`Chrome`、`Safari`、`IE`、`Edge`、`Chrome for Android`、`UC Browser`、`QQ Browser` 等。
 
-#### 4.配置browserslist
+我们需要知道：
 
- 我们如何可以配置 `browserslist` 呢？两种方案：
+**市场占有率** - 各个浏览器的市场份额是多少？
 
-方案一：在 `package.json` 中配置；
-  ::: info 修改 `package.json`里面的代码
-  ```json [package.json]
+**是否需要兼容** - 我们要不要为某些浏览器做兼容？
+
+**功能支持情况** - 哪些浏览器支持哪些新特性？
+
+可以通过 [Can I Use](https://caniuse.com/usage-table) 网站查询浏览器市场占有率和特性支持情况。
+
+#### Browserslist 的作用
+
+Browserslist 的核心作用是**告诉各大工具（Babel、PostCSS 等）需要兼容哪些浏览器**，工具会根据这个规则进行代码转换。
+
+这样可以在 **CSS 兼容性**和 **JS 兼容性**下共享同一套配置。
+
+#### 基础配置示例
+
+在项目中创建 `.browserslistrc` 文件：
+
+```text
+> 1%
+last 2 versions
+not dead
+```
+
+配置说明：
+
+**`> 1%`** - 兼容市场占有率大于 1% 的浏览器
+
+**`last 2 versions`** - 兼容每个浏览器的最后 2 个版本
+
+**`not dead`** - 排除 24 个月内没有官方支持或更新的浏览器
+
+Browserslist 使用 `caniuse-lite` 工具进行条件查询，数据来自 Can I Use 网站。
+
+### 3. Browserslist 配置规则详解
+
+#### 常用配置参数
+
+**1. defaults** - Browserslist 的默认配置
+
+等同于 `> 0.5%, last 2 versions, Firefox ESR, not dead`
+
+其中 `Firefox ESR` 是指 Firefox 的扩展支持版本（Extended Support Release）
+
+**2. 市场份额配置**
+
+```text
+5%                    # 全球市场份额大于 5% 的浏览器
+>= 5%                 # 大于等于 5%
+< 5%                  # 小于 5%
+5% in US              # 美国市场份额大于 5% 的浏览器
+> 5% in alt-AS        # 亚洲地区市场份额大于 5% 的浏览器
+> 5% in my stats      # 使用自定义统计数据
+cover 99.5%           # 覆盖全球 99.5% 用户的最受欢迎浏览器
+cover 99.5% in US     # 覆盖美国 99.5% 用户的最受欢迎浏览器
+```
+
+关于地区代码的完整列表，请参考 [caniuse-lite regions](https://github.com/browserslist/caniuse-lite/tree/main/data/regions)。
+
+**3. dead** - 排除已停止维护的浏览器
+
+24 个月内没有官方支持或更新的浏览器将被视为 `dead`。
+
+**4. 版本配置**
+
+```text
+last 2 versions                # 每个浏览器的最后 2 个版本
+last 2 Chrome versions         # Chrome 浏览器的最后 2 个版本
+last 2 major versions          # 最近 2 个主要版本的所有次要/补丁版本
+last 2 iOS major versions      # iOS 的最近 2 个主要版本
+```
+
+**5. Node.js 版本配置**
+
+```text
+node 20                        # 特定的 Node.js 版本
+current node                   # 当前使用的 Node.js 版本
+maintained node versions       # 所有仍由 Node.js 基金会维护的版本
+```
+
+**6. 特定浏览器版本**
+
+```text
+iOS 7                          # iOS 浏览器版本 7
+Firefox > 20                   # Firefox 版本高于 20（支持 >=、<、<=）
+Firefox >= 20                  # Firefox 版本大于等于 20
+ie 6-8                         # IE 6 到 IE 8 的所有版本
+Firefox ESR                    # 最新的 Firefox ESR 版本
+PhantomJS 2.1                  # PhantomJS 2.1 对应的 Safari 版本
+```
+
+**7. 特性支持配置**
+
+```text
+supports es6-module            # 支持 ES6 模块的浏览器
+supports grid                  # 支持 CSS Grid 的浏览器
+```
+
+**8. 时间范围配置**
+
+```text
+since 2025                     # 自 2025 年以来发布的所有版本
+last 2 years                   # 最近两年内发布的所有浏览器版本
+```
+
+**9. 未发布版本**
+
+```text
+unreleased versions            # 所有浏览器的 Alpha 和 Beta 版本
+unreleased Chrome versions     # Chrome 的 Alpha 和 Beta 版本
+```
+
+**10. 排除特定浏览器**
+
+```text
+not ie <= 8                    # 排除 IE 8 及以下版本
+not dead                       # 排除已停止维护的浏览器
+```
+
+#### 命令行测试
+
+可以在命令行中测试配置规则：
+
+```bash
+npx browserslist "> 0.1%, last 2 versions, not dead"
+```
+
+这个命令会输出符合条件的浏览器和版本号：
+
+![Browserslist 命令行输出](https://picx.zhimg.com/80/v2-f8f0b755157c8747043231f82f7f87ec_1020w.png)
+
+### 4. 配置 Browserslist 的两种方式
+
+#### 方式一：在 package.json 中配置
+
+在 `package.json` 文件中添加 `browserslist` 字段：
+
+```json
+{
   "browserslist": [
-       ">0.1%",
-      "last 2 versions",
-      "not dead"
-    ]
-  ```
-  :::
+    "> 0.1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
+```
 
-方案二：`.browserslistrc` 文件
+#### 方式二：创建 .browserslistrc 文件（推荐）
 
- ::: info 在项目根目录创建一个`.browserslistrc` 文件
-   ```.browserslistrc [.browserslistrc]
-    > 0.1% 
-    not dead
-    last 2 versions
-   ```
- :::
+在项目根目录创建 `.browserslistrc` 文件：
 
+```text
+> 0.1%
+last 2 versions
+not dead
+```
 
-
-
-
-
-
-### 5.条件关系
-
-`browserslist` 也有条件 **与 或 非**
-
-:::details 如图所示
-
-  1. **not组合器 这个不能放在首位，只能放在中间或末尾**
-  2.  **not组合器会与 前面的条件组合成and**
-
-![](https://picx.zhimg.com/80/v2-7fa366164e76d303ce7a1a8c2e548836_1020w.png)
+::: tip 推荐建议
+使用独立的 `.browserslistrc` 文件更清晰，便于维护和版本控制。
 :::
 
+### 5. Browserslist 条件关系
 
-下面配置会产生不同结果，**为什么？**
+Browserslist 支持逻辑运算符来组合多个条件。
 
-  ```js [index.js]
-   // 源码
-  const a = Math.random() * 100;
-  const b = Math.random() * 20 + a;
-  const c = Math.random() * 20 + b;
-  let d;
-  if (b > a) {
-    c++;
-    d = 20;
-  }
-  console.log(a + b + c + d);
-  ```
+#### 条件组合规则
 
-  **第一个规则：**(市场率  `> 0.1%` 或是 **最新2个版本**) 并且 (**不是已停止维护**) 的浏览器。
-:::details 查看详情
-  1. 先处理 `> 0.1% , last 2 versions` 这一组，得到一个结果 (A)。
-  2. 再处理 ` not dead`，得到另一个结果 (B)。
-  3. 最终的列表是 A 和 B 的**并集（也就是你说的“相加”）**。
-  4. 这个规则会排除 `ie11`
-  ```js
-  > 0.1% 
-   last 2 versions
-   not dead
-  ```
+![Browserslist 条件关系](https://picx.zhimg.com/80/v2-7fa366164e76d303ce7a1a8c2e548836_1020w.png)
 
-  ![](https://pic1.zhimg.com/80/v2-71b0e6302ba2bcae1387b61736c43c58_1020w.png)
+**OR（或）关系** - 不同行的配置之间是 OR 关系，浏览器列表会合并
+
+**AND（与）关系** - `not` 组合器会与前面的条件形成 AND 关系
+
+**NOT（非）关系** - `not` 关键字用于排除浏览器
+
+::: warning 重要提示
+`not` 组合器不能放在首位，只能放在中间或末尾。
 :::
 
- **第二个规则：** (**最新2个版本** 或是 **不是已停止维护**) 并且（市场率 `> 0.1%` ）的浏览器。
-:::details 查看详情
-  1. 先处理 `last 2 versions, not dead` 这一组，得到一个结果 (A)。
-  2. 再处理 `> 0.1%`，得到另一个结果 (B)。
-  3. 最终的列表是 A 和 B 的**并集（也就是你说的“相加”）**。
-  4. 这个不会排除 `ie11`
+#### 实际案例对比
 
-  ```js
-   last 2 versions
-   not dead
-   > 0.1% 
-  ```
+让我们用一个实际的代码示例来理解不同配置的影响：
 
-![](https://picx.zhimg.com/80/v2-d8a1015087ae9ff2a226ba6e7048c2ee_1020w.png)
+```js
+// 源码
+const a = Math.random() * 100;
+const b = Math.random() * 20 + a;
+const c = Math.random() * 20 + b;
+let d;
+if (b > a) {
+  c++;
+  d = 20;
+}
+console.log(a + b + c + d);
+```
+
+**配置一：规则顺序影响**
+
+```text
+> 0.1%
+last 2 versions
+not dead
+```
+
+执行逻辑：
+
+1. 先处理 `> 0.1%` 和 `last 2 versions`，得到结果 A（OR 关系）
+2. 再处理 `not dead`，得到结果 B
+3. 最终列表是 A 和 B 的**并集**
+4. **这个规则会排除 IE 11**
+
+转换结果：
+
+![配置一转换结果](https://pic1.zhimg.com/80/v2-71b0e6302ba2bcae1387b61736c43c58_1020w.png)
+
+**配置二：规则顺序影响**
+
+```text
+last 2 versions
+not dead
+> 0.1%
+```
+
+执行逻辑：
+
+1. 先处理 `last 2 versions` 和 `not dead`，得到结果 A（OR 关系）
+2. 再处理 `> 0.1%`，得到结果 B
+3. 最终列表是 A 和 B 的**并集**
+4. **这个规则不会排除 IE 11**
+
+转换结果：
+
+![配置二转换结果](https://pic1.zhimg.com/80/v2-d8a1015087ae9ff2a226ba6e7048c2ee_1020w.png)
+
+::: danger 关键区别
+配置的**顺序会影响最终的浏览器列表**。特别是 `not` 组合器的位置，会决定哪些浏览器被排除。在实际项目中，需要根据业务需求仔细调整配置顺序。
 :::
-### 6.bebal单独配置兼容
 
-在根目录创建一个`bable.config.js`
+### 6. Babel 单独配置兼容性
 
-```js [webpack.config.js]
+如果不想使用全局的 Browserslist 配置，可以在 Babel 配置文件中单独指定目标浏览器。
+
+在项目根目录创建 `babel.config.js`：
+
+```js
 module.exports = {
   presets: [
     [
       '@babel/preset-env',
       {
-        targets: '> 0.1%,last 2 versions,not dead',
-      },
-    ],
-  ],
+        targets: '> 0.1%, last 2 versions, not dead'
+      }
+    ]
+  ]
 };
-
 ```
 
-![](https://pic1.zhimg.com/80/v2-71b0e6302ba2bcae1387b61736c43c58_1020w.png)
+配置 `targets` 字段后，Babel 会使用这里的配置，而不是读取 `.browserslistrc` 文件。
 
+转换效果：
 
+![Babel 单独配置效果](https://pic1.zhimg.com/80/v2-71b0e6302ba2bcae1387b61736c43c58_1020w.png)
+
+::: tip 配置优先级
+Babel 配置文件中的 `targets` 优先级**高于** `.browserslistrc` 文件。如果两者都存在，Babel 会优先使用自己配置中的 `targets`。
+:::
+
+---
+
+## 总结
+
+**Babel 工作原理**：解析（Parsing）→ 转换（Transformation）→ 生成（Code Generation）三个阶段
+
+**配置文件选择**：推荐使用 `babel.config.json` 格式，支持 Monorepos 项目
+
+**Browserslist 作用**：统一管理浏览器兼容性配置，在 Babel、PostCSS 等工具间共享
+
+**配置规则**：灵活使用市场份额、版本号、特性支持等条件组合
+
+**配置顺序**：注意 `not` 组合器的位置，会影响最终的浏览器列表
+
+**独立配置**：Babel 可以通过 `targets` 字段单独配置，优先级高于全局配置

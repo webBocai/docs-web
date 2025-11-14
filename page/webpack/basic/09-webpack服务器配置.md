@@ -1,55 +1,72 @@
 ---
 date: 2025-09-27 05:53:48
-title: 08-开发环境服务器配置 <TkTitleTag type="vp-primary" text="优质" position="right" />
+title: Webpack 开发环境服务器配置
 permalink: /pages/09-webpack服务器配置
 categories:
   - Webpack
 coverImg: /img/webpack.jpeg
 tags:
   - Webpack 基础
+
 ---
-## 一、`Webpack`搭建本地服务器
 
-### 1.为什么要搭建本地服务器？
+## 一、为什么需要搭建本地服务器
 
-::: tip  目前我们开发的代码，为了运行需要有两个操作：
-  1. 操作一：`npm run build`，编译相关的代码；
-  2. 操作二：通过 `live server` 或者直接通过浏览器，打开 `index.html` 代码，查看效果。
-:::
-这个过程经常操作会影响我们的开发效率，我们希望可以做到，当文件发生变化时，可以自动的完成 **编译和展示**；
-:::details 为了完成自动编译，webpack提供了几种可选的方式：
-  1.  `webpack watch mode`； 简单项目
-  2.  `webpack-dev-server`（常用）：适合大多数前端项目，简单快捷
-  3. `webpack-dev-middleware`: 适合需要高度自定义和全栈开发(`SSR`)的高级场景 
-:::
+在日常开发中，我们需要频繁执行两个操作才能看到代码效果：
 
-### 2. `webpack watch mode`
-- `webpack` 的 `watch` 模式可以**监听文件变化**，当文件修改后自动重新构建。
+1. 运行 `npm run build` 编译代码
+2. 通过 `live server` 或浏览器打开 `index.html` 查看效果
 
-#### 方式一： 命令行使用
+这种重复操作严重影响开发效率。理想的开发环境应该能够在文件变化时自动完成编译和展示。
+
+为了实现自动编译，`webpack` 提供了三种解决方案：
+
+1. **`webpack watch mode`** - 适合简单项目的文件监听方案
+2. **`webpack-dev-server`** - 最常用的开发服务器，适合大多数前端项目
+3. **`webpack-dev-middleware`** - 适合需要高度自定义和全栈开发（SSR）的高级场景
+
+---
+
+## 二、Webpack Watch Mode 文件监听
+
+`webpack` 的 `watch` 模式可以监听文件变化，当文件修改后自动重新构建。
+
+### 1. 命令行方式
+
+直接在终端使用 `watch` 参数：
+
 ```bash
- # 使用 npx
- npx webpack --watch
- # 或者使用缩写
- npx webpack -w
-```
-#### 方式二： 在 package.json 中配置
+# 使用 npx
+npx webpack --watch
 
-``` json [package.json]
- {
-   "scripts": {
-     "watch": "webpack --watch", 
-     "dev": "webpack --watch --mode=development"
-   }
- }
+# 或者使用缩写
+npx webpack -w
 ```
+
+### 2. 配置脚本方式
+
+在 `package.json` 中添加脚本命令：
+
+```json
+{
+  "scripts": {
+    "watch": "webpack --watch",
+    "dev": "webpack --watch --mode=development"
+  }
+}
+```
+
 然后运行：
+
 ```bash
- npm run watch
+npm run watch
 ```
-#### 方式三： 配置文件方式
-在 webpack.config.js 中配置：
-```js [webpack.config.js]
+
+### 3. 配置文件方式
+
+在 `webpack.config.js` 中直接配置：
+
+```js
 module.exports = {
   // ... 其他配置
   watch: true,
@@ -58,10 +75,13 @@ module.exports = {
   }
 };
 ```
-:::details 详细的 watchOptions 配置
-```js [webpack.config.js]
-  module.exports = {
-  // ... 其他配置
+
+### 4. 详细的 watchOptions 配置
+
+`watchOptions` 提供了丰富的配置项来控制监听行为：
+
+```js
+module.exports = {
   watch: true,
   watchOptions: {
     // 忽略监听的文件或文件夹
@@ -78,397 +98,441 @@ module.exports = {
   }
 };
 ```
+
+::: warning 注意
+`watch mode` 本身**没有自动刷新浏览器的功能**。虽然可以配合 VSCode 的 `live-server` 插件使用，但这不是最佳实践。如果需要实时重新加载（`live reloading`）功能，建议使用 `webpack-dev-server`。
 :::
 
+---
 
-### 3. `webpack-dev-server` (推荐)
+## 三、Webpack Dev Server 开发服务器
 
+### 1. 安装和基础配置
 
-#### 前置
-::: info   前置
-- 上面的方式可以监听到文件的变化，但是事实上它 **本身是没有自动刷新浏览器的功能的**：
-- 当然，目前我们可以在`VSCode`中使用 `live-server` 来完成这样的功能；
-- 但是，我们希望在不使用 `live-server`的情况下，可以具备`live reloading`（实时重新加载）的功能
-:::   
-
-#### 安装并配置
-
-安装 `webpack-dev-server` 
+安装 `webpack-dev-server`：
 
 ```bash
-npm install webpack-dev-server-D
-```
-在 `webpack.config.js` 中
-
-```js [webpack.config.js]
-  devServer: {},
+npm install webpack-dev-server -D
 ```
 
-在 `package.json` 中,修改配置文件，启动时加上 `serve` 参数：
+在 `webpack.config.js` 中添加配置：
 
-```json [package.json]
- "scripts": {
-    "dev": "webpack server --config ./webpack.config.js"
-  },
+```js
+module.exports = {
+  // ... 其他配置
+  devServer: {
+    // 开发服务器配置
+  }
+};
 ```
 
-#### `devServer` 不会生成打包代码
+在 `package.json` 中配置启动脚本：
 
--  `webpack-dev-server `在编译之后**不会输出任何文件**，而是将 `bundle` 文件 **保留在内存中**
--  `webpack-dev-server` 使用了一个库叫 `memfs`（`memory-fs webpack`自己写的）
+```json
+{
+  "scripts": {
+    "dev": "webpack serve --config ./webpack.config.js"
+  }
+}
+```
 
+### 2. 内存编译机制
 
+`webpack-dev-server` 在编译后**不会输出任何文件**，而是将打包后的 `bundle` 文件**保留在内存中**。这是通过使用 `memfs`（memory-fs，webpack 自己开发的内存文件系统）库实现的，可以显著提升构建速度。
 
-### 4.认识模块热替换（`HMR`）
+---
 
-#### 什么是`HMR`呢？
+## 四、模块热替换（HMR）
 
-`HMR`的全称是 `Hot Module Replacement`，翻译为 **模块热替换**；
+### 1. 什么是 HMR
 
-**模块热替换**是指在应用程序运行过程中，**替换、添加、删除模块**，而无需 **重新刷新整个页面, 只更新变更内容，以节省宝贵的开发时间**
+`HMR` 的全称是 `Hot Module Replacement`，即**模块热替换**。它可以在应用程序运行过程中，替换、添加、删除模块，而无需重新刷新整个页面，只更新变更内容，从而节省宝贵的开发时间。
 
-:::details `HMR`通过如下几种方式，来提高开发的速度：
-  1.  **不重新加载整个页面，这样可以保留某些应用程序的状态不丢失**
-  2.  **只更新需要变化的内容，节省开发的时间**
-  3.  **修改了`css`、`js`源代码，会立即在浏览器更新**，相当于直接在浏览器的`devtools`中直接修改样式
+`HMR` 的核心优势：
+
+**保留应用状态** - 不重新加载整个页面，可以保留某些应用程序的状态不丢失
+
+**快速更新** - 只更新需要变化的内容，节省开发时间
+
+**即时反馈** - 修改 CSS、JS 源代码后，立即在浏览器更新，相当于直接在浏览器的 `devtools` 中修改样式
+
+### 2. 启用 HMR
+
+从 `webpack-dev-server v4` 开始，**HMR 默认启用**。但你也可以显式配置：
+
+```js
+module.exports = {
+  devServer: {
+    hot: true
+  }
+};
+```
+
+浏览器控制台会显示 HMR 相关信息：
+
+![HMR 启用效果](https://picx.zhimg.com/80/v2-b945bd287ad002297a62aed31589c652_1020w.png)
+
+### 3. 配置模块热更新
+
+虽然 `HMR` 已启用，但默认情况下修改代码仍会刷新整个页面。需要手动指定哪些模块启用热更新。
+
+首先创建测试文件 `utils/index.js`：
+
+```js
+console.log('测试');
+```
+
+然后在 `src/index.js` 中配置热更新逻辑：
+
+```js
+import './utils/index';
+
+if (module.hot) {
+  module.hot.accept('./utils/index.js', () => {
+    console.log('热更新');
+  });
+}
+```
+
+::: danger 重要提示
+引入模块时**不要解构使用其中的内容**，否则会导致全局刷新。
+
+```js
+// ❌ 错误示例
+import { a } from './utils/index';
+
+// ✅ 正确示例
+import './utils/index';
+```
+
 :::
 
-如何使用`HMR`呢？
- 1. 默认情况下，`webpack-dev-server` 已经支持`HMR`，从 `webpack-dev-server v4 `开始，**HMR 是默认启用的。它会自动应用**
+### 4. HMR 高级配置
 
- 2. 在不开启`HMR`的情况下，当我们修改了源代码之后，**整个页面会自动刷新**，使用的是 `live reloading`；
+#### hot 配置项的三种值
 
-#### 开启`HMR`
-
-- 修改`webpack`的配置：
-
-```js [webpack.config.js]
+```js
+module.exports = {
   devServer: {
-    hot:true
+    hot: true  // 或 false 或 'only'
   }
+};
 ```
 
-- 浏览器可以看到如下效果：
+**`hot: true`** - 先尝试热更新，失败后自动刷新整个页面
 
-![](https://picx.zhimg.com/80/v2-b945bd287ad002297a62aed31589c652_1020w.png)
+**`hot: 'only'`** - 只进行热更新，失败也不刷新页面
 
-- 但是你会发现，当我们修改了某一个模块的代码时，依然是刷新的整个页面：
-- 这是因为我们需要去指定哪些模块发生更新时，进行`HMR`
-- 首先我们先创建 `utils/index.js`
-
-  ```js [index.js]
-  console.log('测试')
-  ```
-
-- 在 `src/index.js` 文件里面，引用 `import './utils/index';` 一定不要依赖里面的东西 
-- 如： `import {a} from './utils/index'` **否则会全局刷新**
-
-  ```js
-  import './utils/index';
-  if (module.hot) {
-    module.hot.accept('./utils/index.js', () => {
-      console.log('热更新');
-    });
-  }
-  ```
+**`hot: false`** - 完全关闭 HMR，总是刷新整个页面
 
 #### 构建失败不刷新页面
-`liveReload` 默认情况下，当监听到文件变化时 `dev-server` **将会重新加载或刷新页面**
-:::details 设置 `liveReload: false` 之后会发生什么？
-  1. 当您在开发时，代码有语法错误，`webpack` 构建失败。此时浏览器不会有任何变化，控制台会显示错误。
-  2. 您修复代码中的错误并保存。
-  3. `webpack` 重新构建并**成功**。
-  4. 由于 `liveReload` 是 `false`，`dev-server` **不会再命令浏览器刷新**。
-  5. 您需要**手动刷新浏览器**才能看到修复后的最新效果。
-:::
-```js [webpack.config.js]
+
+配合 `liveReload` 选项可以控制构建失败时的行为：
+
+```js
 module.exports = {
   devServer: {
     hot: 'only',
-    liveReload: false,
-  },
+    liveReload: false
+  }
 };
 ```
-`hot`: `true` `false` `'only'`值的区别
- :::details 查看区别
- -  `hot: true` :
-    - 先尝试原地修改，失败进行全部刷新
-    - 修改了东西，热更新失败后自动整页刷新
-  - `hot: 'only'` : 
-    - 开启 `HMR`
-    - 修改了东西只进行热更新，失败也不刷新
-  - `hot: false` : 
-    - 完全关闭` HMR`
-    - 修改了东西总是整页刷新
 
- - 🔧 关联配置`liveReload`：**用于控制是否在文件变更时刷新页面**。即使 `hot` 设置为 `'only'` 或 `true`，**通常也无需手动关闭 `liveReload`**，因为 `hot` 开启时，`liveReload` **会自动失效**
+设置 `liveReload: false` 后的行为流程：
+
+1. 代码有语法错误，webpack 构建失败，浏览器不会有任何变化，控制台显示错误
+2. 修复代码并保存
+3. webpack 重新构建成功
+4. 由于 `liveReload` 是 `false`，dev-server 不会命令浏览器刷新
+5. 需要**手动刷新浏览器**才能看到修复后的效果
+
+::: tip 提示
+通常情况下，当 `hot` 开启时，`liveReload` 会自动失效，无需手动关闭。
 :::
 
+---
 
-### 4.`host`配置
+## 五、主机和端口配置
 
-- host 设置主机地址： **默认值** 是 `localhost`；
-- 如果希望其他地方也可以访问，可以设置为： `0.0.0.0`；
-```js [webpack.config.js]
+### 1. host 配置
+
+`host` 用于设置主机地址，默认值是 `localhost`。如果希望其他设备也可以访问开发服务器，可以设置为 `0.0.0.0`：
+
+```js
+module.exports = {
   devServer: {
-    hot:true,
-    host:'0.0.0.0'
+    hot: true,
+    host: '0.0.0.0'
   }
-```
- :::details `localhost `和 0.0.0.0 的区别
-  1. `localhost`：**本质上是一个域名**，通常情况下会被解析成`127.0.0.1`;
-  2. `127.0.0.1`：**回环地址**(Loop Back Address)，表达的意思其实是我们主机自己发出去的包，**直接被自己接收**;
-     - 假如我在浏览器输入`localhost:8080`,最终会被解析成`127.0.0.1:8080`  然后最终会被我们自己设置的`8080`端口捕获到
-  3. `0.0.0.0`：监听 `IPV4` 上所有的地址，**再根据端口找到不同的应用程序**; ✓ 比如我们监听`0.0.0.0`时，在同一个网段下的主机中，通过 `ip` 地址是可以访问的;
-:::
-
-
-
-
-### 5.`port`、`open`、`compress`
-
-- `port`设置监听的端口，默认情:`8080`
-- `open` 是否打开浏览器，默认值是: `false`，
-  - 设置为 `true` 会打开浏览器
-  - 也可以设置为类似于`Google Chrome`等值；
-- `compress`是否为静态文件开启 `gzip` 默认值：`false`
-
-```js [webpack.config.js]
-  devServer: {
-    hot:true,
-    host:'0.0.0.0',
-    port:9999,
-    open:true
-    compress:true
-  }
+};
 ```
 
-![](https://pic1.zhimg.com/80/v2-4fc2890d2ba2bf352c3628ce399bc1d0_1020w.png)
+#### localhost 和 0.0.0.0 的区别
 
-### 6.`static`
+**`localhost`** - 本质上是一个域名，通常会被解析成 `127.0.0.1`
 
-1. **一些静态资源不想让`webpack` 打包处理** (图片 字体 或者 `index.html` 本身)**提供一个访问路径**。
+**`127.0.0.1`** - 回环地址（Loop Back Address），表示主机自己发出的数据包直接被自己接收。当你在浏览器输入 `localhost:8080` 时，最终会被解析成 `127.0.0.1:8080`，然后被本地的 `8080` 端口捕获
 
-2. 在 `webpack-dev-server4.x`版本中,开始使用 `static`选项来替换掉旧的 `contentBase` 选项
-3. 首先先下载 `html-webpack-plugin`，这样的话在`devserver`服务器插件就能找到 `index.html`文件
+**`0.0.0.0`** - 监听 IPv4 上所有的地址，根据端口找到不同的应用程序。监听 `0.0.0.0` 时，同一网段下的其他主机可以通过 IP 地址访问你的开发服务器
+
+### 2. port、open、compress 配置
+
+```js
+module.exports = {
+  devServer: {
+    hot: true,
+    host: '0.0.0.0',
+    port: 9999,        // 设置监听端口，默认 8080
+    open: true,        // 自动打开浏览器，默认 false
+    compress: true     // 为静态文件开启 gzip 压缩，默认 false
+  }
+};
+```
+
+配置 `compress: true` 后，可以在浏览器的网络面板中看到响应头包含 `Content-Encoding: gzip`：
+
+![gzip 压缩效果](https://pic1.zhimg.com/80/v2-4fc2890d2ba2bf352c3628ce399bc1d0_1020w.png)
+
+---
+
+## 六、静态资源配置（static）
+
+### 1. 为什么需要 static 配置
+
+有些静态资源（图片、字体文件或 `index.html` 本身）我们不想让 `webpack` 打包处理，但需要提供一个访问路径。
+
+在 `webpack-dev-server 4.x` 版本中，使用 `static` 选项替换了旧的 `contentBase` 选项。
+
+### 2. 前置准备
+
+安装 `html-webpack-plugin` 插件，让开发服务器能够找到 `index.html` 文件：
 
 ```bash
-npm  i html-webpack-plugin -D
+npm install html-webpack-plugin -D
 ```
 
-4. 在项目根目录创建一个`index.html`
+在项目根目录创建 `index.html`：
 
 ```html
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <h1>Hello</h1>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>Hello</h1>
+</body>
 </html>
-
 ```
 
-5.  在 `webpack.cofig.js`中
+在 `webpack.config.js` 中配置插件：
 
 ```js
-const htmlplugin = reqire('html-webpack-plguin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 module.exports = {
- // ...省略其他配置
+  // ... 其他配置
   plugins: [
-    new htmlWebpackPlugin({
-      template: './index.html',
-    }),
-  ],
+    new HtmlWebpackPlugin({
+      template: './index.html'
+    })
+  ]
 };
 ```
-6. static值的区别
-:::details 字符串 (`String`)：指定单个目录
-1. 这是最简单的形式，只指定一个静态资源目录
-2.  **默认不写static的值就是`public`文件夹** 
 
-   ```js
-   devServer: {
-     // 只从 'public' 目录提供静态文件
-     static: 'public' // 默认不写
-   }
-   ```
+### 3. static 配置方式
 
-3. 在 `public`文件夹下 创建两个`js`文件 `aaa.js`, `bbb.js`
+#### 方式一：字符串形式（单个目录）
 
-   
-4. 在 `index.html`中添加 `script`标签,
-     - **注意：** 放在`public` 文件下的静态资源，在进行引入的时候 直接访问根路径就行,不用加`public`,
-     - 所以在`html`用**绝对和相对路径最终指向根路径**，并且能找到静态资源都可以
+这是最简单的形式，只指定一个静态资源目录：
 
-   ```html [index.html]
-   <!DOCTYPE html>
-   <html lang="en">
-     <head>
-       <meta charset="UTF-8" />
-       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-       <title>Document</title>
-     </head>
-     <body>
-       <h1>Hello</h1>
-       <script src="./aaa.js"></script> 
-       <script src="/bbb.js"></script>
-     </body>
-   </html>
-   ```
-5. 执行 `npm run dev`
+```js
+module.exports = {
+  devServer: {
+    static: 'public'  // 默认值就是 'public'
+  }
+};
+```
 
-![](https://picx.zhimg.com/80/v2-d172937900372b39a7ab8b09b23f3adb_1020w.png)
+在 `public` 文件夹下创建两个 JS 文件 `aaa.js` 和 `bbb.js`。
 
-   
-  
-:::
-:::details 数组 (Array) - 指定多个目录
+在 `index.html` 中引入：
 
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>Hello</h1>
+  <script src="./aaa.js"></script>
+  <script src="/bbb.js"></script>
+</body>
+</html>
+```
 
-   - 当需要从多个地方提供静态文件时使用。
-   - 创建`content`文件，把`public`文件中 `bbb.js` 移动过去
-
-
-   ```js
-   devServer: {
-     // 同时从 'public' 和 'assets' 目录提供静态文件
-     static: ['public', 'content']
-   }
-  ```
- 
-  ```html [index.html]
-   <!DOCTYPE html>
-   <html lang="en">
-     <head>
-       <meta charset="UTF-8" />
-       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-       <title>Document</title>
-     </head>
-     <body>
-       <h1>Hello</h1>
-       <script src="./aaa.js"></script> 
-       <script src="/bbb.js"></script>
-     </body>
-   </html>
-   
-   ```
-- 执行 `npm run dev`
-
- ![](https://pic1.zhimg.com/80/v2-08205c4f203af8d21d4c39b6fc7ad9fa_1020w.png)
-
+::: warning 注意
+放在 `public` 文件夹下的静态资源，引入时直接访问根路径即可，**不需要加 `public` 前缀**。无论使用绝对路径还是相对路径，只要最终指向根路径并能找到资源即可。
 :::
 
- :::details 对象 (Object) - 对单个目录进行高级配置
+运行 `npm run dev`，效果如下：
 
-   - `publicPath` :代表一个虚拟路径，在访问资源过程中会加上一个 `/js`的路径
+![单个目录配置效果](https://picx.zhimg.com/80/v2-d172937900372b39a7ab8b09b23f3adb_1020w.png)
 
-   ```js
-   devServer: {
-     static: {
-       // 静态资源目录
-       directory: path.join(__dirname, 'public'),
-       // 对应的浏览器访问路径，默认为 '/js'
-       publicPath: '/js', 
-       // 监听文件变化，变化时会刷新页面
-       watch: true, 
-     }
-   }
-   ```
-  - 执行`npm run dev` 查看结果
+#### 方式二：数组形式（多个目录）
 
-   ![](https://pica.zhimg.com/80/v2-d2be56fb694bef45c1b5d09b25fa1059_1020w.png)
+当需要从多个位置提供静态文件时使用：
 
-   - 然后修改在`html`文件 在访问资源过程中会加上一个 `/js`的路径
+创建 `content` 文件夹，将 `public` 文件夹中的 `bbb.js` 移动过去。
 
-     ```html{10} [index.html]
-     <!DOCTYPE html>
-     <html lang="en">
-       <head>
-         <meta charset="UTF-8" />
-         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-         <title>Document</title>
-       </head>
-       <body>
-         <h1>Hello</h1>
-         <script src="./js/aaa.js"></script>    
-       </body>
-     </html>
-     
-     ```
-   
-   - 上面的操作类似于下面这些操作
-   - 在`public`下创建`js`文件夹，然后将`aaa.js`放进去
-   - 然后将 `publicPath` 设置成 根路径 `/`, `index.html` 文件`js` 路径还是 `src="./js/aaa.js"`
+```js
+module.exports = {
+  devServer: {
+    static: ['public', 'content']
+  }
+};
+```
 
-   ```js [webpack.config.js]
-   devServer: {
-     static: {
-       // 静态资源目录
-       directory: path.join(__dirname, 'public'),
-       // 对应的浏览器访问路径，默认为 '/'
-       publicPath: '/', 
-       // 监听文件变化，变化时会刷新页面
-       watch: true, 
-     }
-   }
-   ```
-  - 执行`npm run dev` 查看结果
+`index.html` 保持不变：
 
-   ![](https://picx.zhimg.com/80/v2-c6e9df7314c1d8f4e940312020485b3a_1020w.png)
-   :::
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>Hello</h1>
+  <script src="./aaa.js"></script>
+  <script src="/bbb.js"></script>
+</body>
+</html>
+```
 
- :::details 对象数组 (Array of Objects) - 对多个目录分别进行高级配置
+运行 `npm run dev`，效果如下：
 
-   - 这是最灵活的配置，可以为多个不同的静态目录应用不同的规则。
+![多个目录配置效果](https://pic1.zhimg.com/80/v2-08205c4f203af8d21d4c39b6fc7ad9fa_1020w.png)
 
-   ```js
-   devServer: {
-     static: [
-       {
-         directory: path.join(__dirname, 'public'),
-         publicPath: '/',
-         watch: true,  
-       },
-       {
-         directory: path.join(__dirname, 'content'),
-         publicPath: '/js',
-         watch: true, 
-       }
-     ]
-   }
-   ```
+#### 方式三：对象形式（单个目录高级配置）
 
-   - 在 `index.html`中
+对单个目录进行更精细的控制：
 
-   ```html
-   <!DOCTYPE html>
-   <html lang="en">
-     <head>
-       <meta charset="UTF-8" />
-       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-       <title>Document</title>
-     </head>
-     <body>
-       <h1>Hello</h1>
-       <script src="./js/aaa.js"></script>
-       <script src="./js/bbb.js"></script>
-     </body>
-   </html>
-   
-   ```
+```js
+const path = require('path');
 
-   ![](https://picx.zhimg.com/80/v2-b0cc9e367b31146842aa0e217d7f0b7f_1020w.png)
+module.exports = {
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'public'),  // 静态资源目录
+      publicPath: '/js',                          // 虚拟路径前缀
+      watch: true                                 // 监听文件变化，变化时刷新页面
+    }
+  }
+};
+```
 
-   :::
+`publicPath: '/js'` 表示在访问资源时会自动加上 `/js` 前缀。
 
-### 7.`Proxy`代理
+运行 `npm run dev`，直接访问会报错：
 
-- 在 `index.js`入口文件假如我要请求 `www.baidu.com`
+![虚拟路径配置错误](https://pica.zhimg.com/80/v2-d2be56fb694bef45c1b5d09b25fa1059_1020w.png)
+
+修改 `index.html`，在路径中加上 `/js` 前缀：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>Hello</h1>
+  <script src="./js/aaa.js"></script>
+</body>
+</html>
+```
+
+这种配置等同于在 `public` 目录下创建 `js` 文件夹并将 `aaa.js` 放进去，然后将 `publicPath` 设置为 `/`：
+
+```js
+module.exports = {
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'public'),
+      publicPath: '/',
+      watch: true
+    }
+  }
+};
+```
+
+运行效果：
+
+![虚拟路径配置成功](https://picx.zhimg.com/80/v2-c6e9df7314c1d8f4e940312020485b3a_1020w.png)
+
+#### 方式四：对象数组形式（多个目录高级配置）
+
+这是最灵活的配置方式，可以为多个不同的静态目录应用不同的规则：
+
+```js
+const path = require('path');
+
+module.exports = {
+  devServer: {
+    static: [
+      {
+        directory: path.join(__dirname, 'public'),
+        publicPath: '/',
+        watch: true
+      },
+      {
+        directory: path.join(__dirname, 'content'),
+        publicPath: '/js',
+        watch: true
+      }
+    ]
+  }
+};
+```
+
+在 `index.html` 中：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>Hello</h1>
+  <script src="./js/aaa.js"></script>
+  <script src="./js/bbb.js"></script>
+</body>
+</html>
+```
+
+运行效果：
+
+![多个目录高级配置效果](https://picx.zhimg.com/80/v2-b0cc9e367b31146842aa0e217d7f0b7f_1020w.png)
+
+---
+
+## 七、Proxy 代理配置
+
+### 1. 跨域问题场景
+
+在 `index.js` 入口文件中请求百度：
 
 ```js
 const post = () => {
@@ -485,113 +549,139 @@ const post = () => {
     });
 };
 
+post();
 ```
 
-- 访问过程中之间**报跨域**，之前我们讲过 **Node跨域**  可以点击查看更详细资料
-:::details  报错信息
-![](https://pic1.zhimg.com/80/v2-0eaab4dfc889bd4d2fcc16e5d9ef25f7_1020w.png)
-:::
+直接访问会报跨域错误：
 
+![跨域错误](https://pic1.zhimg.com/80/v2-0eaab4dfc889bd4d2fcc16e5d9ef25f7_1020w.png)
 
+### 2. 使用 Proxy 解决跨域
 
-- 如何解决呢？我们可以采用`devserver`中的proxy代理服务器，其实它底层还是用的 `http-proxy-middleware`这个库
-- 在`webpack-dev-server 4.0` 开始用这个新的方式，不再兼容以前 [**旧版本方式**](https://webpack.js.org/configuration/dev-server/#devserverproxy)
-
-  ```js
-    devServer: {
-      proxy: [
-        {
-          context: ['/api'],
-          target: 'https://www.baidu.com',
-          changeOrigin: true,
-          pathRewrite: {
-            '^/api': '',
-          },
-        },
-      ],
-    },
-  ```
-
- -  `index.js` **进行修改**
-
-    ```js [index.js]
-    const post = () => {
-      fetch('/api')
-        .then((res) => {
-          console.log(res);
-          return res.text();
-        })
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    };
-    ```
-
-- 然后运行代码 成功显示 百度的`html` 结构
-
-  ![](https://pic1.zhimg.com/80/v2-0f3f0aff1617eae34418a496ac308b39_1020w.png)
-
-:::details **`v3.x `及更早版本的写法 (旧)**
-在旧版本中，你通常会为每一个需要代理的路径前缀创建一个键值对。
-
-**场景**：假设 `/api` 和 `/auth` 两个路径都需要被代理到同一个后端服务 `https://www.baidu.com`。
-
-**痛点**：如果多个路径的代理规则（如 `target`, `changeOrigin` 等）完全相同，**就会产生很多重复的配置代码，不易维护。**
+`webpack-dev-server` 的 `proxy` 功能基于 `http-proxy-middleware` 库实现。从 `webpack-dev-server 4.0` 开始使用新的配置方式：
 
 ```js
-// v3 写法
-// webpack.config.js
-devServer: {
-  proxy: {
-    '/api': {
-      target: 'https://www.baidu.com',
-      changeOrigin: true,
-      pathRewrite: { '^/api': '' },
-    },
-    // 如果 /auth 的配置几乎一样，就需要复制一份
-    '/auth': {
-      target: 'https://www.baidu.com',
-      changeOrigin: true,
-      pathRewrite: { '^/auth': '' },
-    },
-  },
-}
-```
-:::
-### 8. `historyApiFallback`
-
-- `historyApiFallback`是 **开发中常见的属性**，`boolean` 值：**默认是false**, 它主要的作用是**解决SPA页面在路由跳转之后，进行页面刷新时，返回404 的错误。**
-:::details 查看图片
-  <img src="https://picx.zhimg.com/80/v2-423ffc2672a47195f772da21b2b847f0_1020w.png" />
-:::
-- 如果设置为 `true` ，那么在刷新时，返回404错误时，会自动返回`index.html `的内容；
-
-:::details 查看图片
-  <img src="https://pic1.zhimg.com/80/v2-78a345bc8ba6a807db72d9da2296b4ab_1020w.png"  />
-:::
-
-```js  [webpack.config.js]
+module.exports = {
   devServer: {
-    historyApiFallback: true,
-  },
+    proxy: [
+      {
+        context: ['/api'],
+        target: 'https://www.baidu.com',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    ]
+  }
+};
 ```
-- **object类型的值**
-:::details 配置`rewrites`属性,可以配置`from`来匹配路径，决定要跳转到哪一个页面
-```js [webpack.config.js]
+
+修改 `index.js` 中的请求路径：
+
+```js
+const post = () => {
+  fetch('/api')
+    .then((res) => {
+      console.log(res);
+      return res.text();
+    })
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
+
+post();
+```
+
+运行代码，成功获取百度的 HTML 结构：
+
+![代理成功](https://pic1.zhimg.com/80/v2-0f3f0aff1617eae34418a496ac308b39_1020w.png)
+
+### 3. 新旧版本配置对比
+
+在 `webpack-dev-server v3.x` 及更早版本中，配置方式如下：
+
+```js
+// v3 写法（旧版本）
+module.exports = {
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'https://www.baidu.com',
+        changeOrigin: true,
+        pathRewrite: { '^/api': '' }
+      },
+      '/auth': {
+        target: 'https://www.baidu.com',
+        changeOrigin: true,
+        pathRewrite: { '^/auth': '' }
+      }
+    }
+  }
+};
+```
+
+**旧版本的痛点**：如果多个路径的代理规则完全相同，就会产生很多重复的配置代码，不易维护。新版本的数组配置方式通过 `context` 数组可以更优雅地处理这种情况。
+
+---
+
+## 八、History API Fallback 配置
+
+### 1. 问题场景
+
+`historyApiFallback` 是开发中常见的属性，默认值为 `false`。它主要解决 SPA 页面在路由跳转后刷新页面时返回 404 错误的问题。
+
+未配置时刷新页面会出现 404 错误：
+
+![404 错误](https://picx.zhimg.com/80/v2-423ffc2672a47195f772da21b2b847f0_1020w.png)
+
+### 2. 布尔值配置
+
+设置为 `true` 后，刷新页面时如果返回 404 错误，会自动返回 `index.html` 的内容：
+
+```js
+module.exports = {
+  devServer: {
+    historyApiFallback: true
+  }
+};
+```
+
+配置后的效果：
+
+![配置 historyApiFallback 后](https://pic1.zhimg.com/80/v2-78a345bc8ba6a807db72d9da2296b4ab_1020w.png)
+
+### 3. 对象配置
+
+通过配置 `rewrites` 属性，可以更精细地控制不同路径的重定向行为：
+
+```js
+module.exports = {
   devServer: {
     historyApiFallback: {
       rewrites: [
         { from: /^\/about/, to: '/views/index.html' },
-        { from: /./, to: '/views/404.html' },
-      ],
-    },
-  },
+        { from: /./, to: '/views/404.html' }
+      ]
+    }
+  }
+};
 ```
 
-:::
-[更多详细配置查看官网](https://webpack.docschina.org/configuration/dev-server/)
+这个配置的含义是：
 
-> [➡️完整案列代码](https://github.com/webBocai/webpack-/tree/main/03_pulgin)  
+**匹配 `/about` 开头的路径** - 重定向到 `/views/index.html`
+
+**其他所有路径** - 重定向到 `/views/404.html`
+
+---
+
+## 九、更多配置
+
+`webpack-dev-server` 还提供了许多其他实用的配置选项，详情请查看 [官方文档](https://webpack.docschina.org/configuration/dev-server/)。
+
+**完整示例代码**：[GitHub - webpack 配置案例](https://github.com/webBocai/webpack-/tree/main/03_pulgin)
