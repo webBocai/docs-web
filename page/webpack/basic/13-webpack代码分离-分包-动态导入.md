@@ -1,3 +1,14 @@
+---
+date: 2025-10-08 07:05:00
+title: 13-代码分离与性能优化 <TkTitleTag type="vp-primary" text="优质" position="right" />
+permalink: /pages/12-代码分离与性能优化
+categories:
+  - Webpack
+coverImg: /img/webpack.jpeg
+tags:
+  - babel的进阶使用
+
+---
 # Webpack 代码分离与性能优化
 
 ## 一、Webpack 性能优化概述

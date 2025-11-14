@@ -1,3 +1,13 @@
+---
+date: 2025-09-02 16:13:48
+title: 02-webpack处理图片与字体 <TkTitleTag type="vp-primary" text="优质" position="right" />
+permalink: /pages/03-处理图片与字体
+categories:
+  - Webpack
+coverImg: /img/webpack.jpeg
+tags:
+  - Webpack 基础
+---
 ## 一、Webpack 处理图片与字体
 
 ### 1. 准备工作
