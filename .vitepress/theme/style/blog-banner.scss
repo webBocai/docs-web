@@ -1,0 +1,75 @@
+/* 仅首页全屏 Banner 时的导航栏样式美化 */
+.tk-layout .VPNavBar.home.full-img-nav-bar:not(.screen-open) {
+  /* 控制文字的阴影颜色 */
+  .VPNavBarTitle .title,
+  .VPNavBarMenuLink,
+  .VPNavBarMenuGroup .text,
+  .VPSocialLink {
+    color: var(--vp-c-white) !important;
+    text-shadow:
+      2px 2px 4px rgba(0, 0, 0, 0.5),
+      -2px 2px 4px rgba(0, 0, 0, 0.5),
+      2px -2px 4px rgba(0, 0, 0, 0.5),
+      -2px -2px 4px rgba(0, 0, 0, 0.5);
+
+    /* 添加平滑过渡动画 */
+    transition:
+      color 0.3s ease,
+      text-shadow 0.3s ease;
+
+    /* 控制鼠标悬停文字后的文字颜色 */
+    &.active,
+    &:hover {
+      color: rgba(0, 110, 255, 1) !important; // 修改文字颜色
+      text-shadow: none !important;
+    }
+  }
+
+  /* 控制搜索栏的阴影颜色 */
+  .DocSearch-Button,
+  .DocSearch-Input {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    color: var(--vp-c-white);
+    text-shadow:
+      2px 2px 4px rgba(0, 0, 0, 0.5),
+      -2px 2px 4px rgba(0, 0, 0, 0.5),
+      2px -2px 4px rgba(0, 0, 0, 0.5),
+      -2px -2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .DocSearch-Button-Placeholder {
+    text-shadow:
+      2px 2px 4px rgba(0, 0, 0, 0.5),
+      -2px 2px 4px rgba(0, 0, 0, 0.5),
+      2px -2px 4px rgba(0, 0, 0, 0.5),
+      -2px -2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  /* 控制配置切换图标的描边颜色 */
+  .tk-icon {
+    cursor: pointer;
+    filter: drop-shadow(0 0 1px rgba(255, 0, 212, 0.5)) // 可修改描边颜色🔽颜色要与下面保持一致
+      drop-shadow(0 0 0.5px rgba(255, 0, 212, 0.5)); // 可修改描边颜色🔼颜色要与上面保持一致
+  }
+
+  /* 控制时钟容器背景色 */
+  #clock {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    position: relative;
+    border-radius: 0.5rem;
+    padding: 0.2rem 0.5rem;
+    background-color: rgba(0, 0, 0, 0.2); //可修改背景色
+  }
+
+  /* 控制时钟文字颜色 */
+  #clock .hour,
+  #clock .minute,
+  #clock .second,
+  #clock .separator {
+    color: rgba(255, 255, 255, 1); // 可修改文字颜色
+  }
+}

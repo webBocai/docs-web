@@ -1,0 +1,13 @@
+:root {
+  --back-top-size: 48px;
+
+  .tk-right-bottom-button{
+    align-items: center;
+    width: var(--back-top-size);
+  }
+
+  @media (max-width: 820px) {
+    --back-top-size: 38px;
+  }
+
+}

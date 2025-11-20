@@ -6,9 +6,12 @@ import { defineTeekConfig } from 'vitepress-theme-teek/config';
 import { ItemList, ListLabel } from '../config/ts';
 const teekConfig = defineTeekConfig({
   teekTheme: true,
-  sidebarTrigger: true,
+  sidebarTrigger: true, //侧边栏收缩
   loading: '菠菜文档加载中...',
   homeCardListPosition: 'left',
+  comment: {
+    provider: 'render',
+  },
   anchorScroll: true,
   vpHome: false,
   homeCardSort: ['topArticle', 'category', 'tag', 'friendLink', 'docAnalysis'],
@@ -20,6 +23,43 @@ const teekConfig = defineTeekConfig({
     langTextTransform: 'uppercase', // 语言文本显示样式，为 text-transform 的值:none, capitalize, lowercase, uppercase
     copiedDone: (TkMessage) => TkMessage.success('复制成功！'), // 复制代码完成后的回调
   },
+
+  vitePlugins: {
+    permalink: true,
+    sidebar: true,
+
+    sidebarOption: {
+      initItems: true, //这条命令注释后，才会让文档和目录的样式保持一致
+      collapsed: true, //打开侧边栏自动收缩功能
+      ignoreList: [/^_.*$/],
+      resolveRule: 'rewrites',
+      checkRewritesPrefix: true,
+      ignoreIndexMd: true,
+    },
+
+    autoFrontmatter: false, // 自动生成 frontmatter
+    // permalinkOption: {
+    //   notFoundDelayLoad: 1000, // 1秒后加载
+    // },
+
+    // 自动格式formatter插件 添加文章封面图
+    autoFrontmatterOption: {
+      // exclude: { title: true, date: true }, // 排除自动生成字段
+      transform: (frontmatter) => {
+        // 如果文件本身存在了 coverImg，则不生成
+        if (frontmatter.coverImg) return;
+
+        const list = ['/img/bg', '/img/bg2'];
+
+        const coverImg = list[Math.floor(Math.random() * list.length)];
+
+        const transformResult = { ...frontmatter, coverImg };
+
+        return Object.keys(transformResult).length ? transformResult : undefined;
+      },
+    },
+  },
+
   markdown: {
     lineNumbers: true,
     config(md) {
@@ -111,6 +151,7 @@ export default defineConfig({
   markdown: {
     lineNumbers: true,
   },
+
   themeConfig: {
     lastUpdated: {
       text: '最近更新时间',

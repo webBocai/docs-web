@@ -1,0 +1,357 @@
+/* 自定义友链样式 */
+
+/* 头像容器样式 */
+.tags-group-icon {
+  flex: 0 0 110px;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--vp-c-bg-soft);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* 头像容器 */
+.tags-avatar {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 16px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(240, 240, 240, 0.658);
+  border: 2px solid var(--vp-c-brand, #007acc);
+  box-sizing: border-box;
+}
+
+/* 头像图片样式 */
+.tags-group-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 不规则形状头像样式 */
+.tags-group-icon img.irregular {
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+/* 头像悬停效果 */
+.tags-group-icon:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+/* 头像覆盖层 */
+.avatar-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 20px 16px;
+  background: var(--vp-c-bg-mute, rgba(255, 255, 255, 0.308));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  z-index: 2;
+  border-radius: inherit;
+  transform-origin: center;
+  opacity: 0;
+  transform: scale(0);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+  box-sizing: border-box;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* 只在鼠标悬停时显示头像覆盖层 */
+.tags-group-icon:hover .avatar-overlay {
+  opacity: 1;
+  transform: scale(1.3);
+}
+
+/* 深色模式下使用黑色毛玻璃背景 */
+:root.dark .avatar-overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* 亮色模式下使用白色毛玻璃背景 */
+:root.light .avatar-overlay {
+  background: rgba(255, 255, 255, 0.308);
+}
+
+/* 从中间展开的动画 */
+@keyframes scaleInFromCenter {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+}
+
+/* 鼠标悬停头像滚动容器时暂停所有滚动动画 */
+.tags-group-all:hover .tags-group-row {
+  animation-play-state: paused;
+}
+
+/* 优化头像滚动动画 */
+.tags-group-all {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  height: 300px;
+}
+
+.tags-group-wrapper {
+  position: relative;
+  height: 100%;
+}
+
+/* 头像滚动行样式 */
+.tags-group-row {
+  display: flex;
+  flex-wrap: nowrap;
+  width: max-content;
+  animation-timing-function: linear !important;
+  animation-iteration-count: infinite !important;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* 第一行头像滚动动画 */
+.tags-group-row:nth-child(1) {
+  animation-name: infiniteScrollLeft;
+  animation-duration: 50s;
+}
+
+/* 第二行头像滚动动画 */
+.tags-group-row:nth-child(2) {
+  animation-name: infiniteScrollLeft;
+  animation-duration: 60s;
+}
+
+/* 像容器配置 */
+.tags-group-content {
+  display: flex;
+  gap: 20px;
+  padding: 0;
+  flex-wrap: nowrap;
+}
+
+.offset-start {
+  margin-left: 60px !important;
+}
+
+/* 优化头像的无限滚动动画 */
+@keyframes infiniteScrollLeft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-50%));
+  }
+}
+
+/* 优化头像的无限滚动动画 */
+@keyframes infiniteScrollRight {
+  from {
+    transform: translateX(calc(-50%));
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.tags-group-row {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  paint-order: stroke fill markers;
+  image-rendering: optimizeSpeed;
+}
+
+/* 头像文字样式 */
+.avatar-text {
+  color: rgb(25, 0, 255);
+  font-size: 12px;
+  text-align: center;
+  white-space: normal;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow: visible;
+  text-overflow: clip;
+  line-height: 1.3;
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+  z-index: 100;
+}
+
+/* 只有当覆盖层显示时 */
+.tags-group-icon:hover .avatar-text {
+  opacity: 1;
+  transform: scale(1);
+  animation: textTwinkle 3s ease-in-out infinite;
+}
+
+/* 深色模式下文字背景 */
+:root.dark .avatar-text {
+  color: rgb(255, 255, 255);
+}
+
+/* 文字闪烁动画 */
+@keyframes textTwinkle {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    text-shadow: 0 0 4px rgba(0, 47, 255, 0.671);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+    text-shadow: 0 0 4px rgb(0, 47, 255, 0.671);
+  }
+}
+
+/* 星星容器样式 */
+.global-stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* 星星项样式 */
+.star-item {
+  position: absolute;
+  pointer-events: none;
+  width: 24px;
+  height: 24px;
+  fill: var(--star, #fff);
+  filter: drop-shadow(0 0 4px var(--glow, rgba(255, 255, 255, 0.8)));
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0);
+  transition: all 0.5s ease;
+}
+
+/* 六色与辉光 */
+.global-stars svg.gstar-1 {
+  --star: #ff5f5f;
+  --glow: #ff5f5f88;
+}
+.global-stars svg.gstar-2 {
+  --star: #ff3e88;
+  --glow: #ff443e88;
+}
+.global-stars svg.gstar-3 {
+  --star: #00ffff;
+  --glow: #3bd8ff88;
+}
+.global-stars svg.gstar-4 {
+  --star: #3183ff;
+  --glow: #d852ab88;
+}
+.global-stars svg.gstar-5 {
+  --star: #fa3be0;
+  --glow: #fa3bd188;
+}
+.global-stars svg.gstar-6 {
+  --star: #bd34fe;
+  --glow: #bd34fe88;
+}
+
+/* 显示星星的样式 */
+.global-stars.show .star-item {
+  animation:
+    starBurst 0.6s ease-out forwards,
+    starTwinkle 2s infinite alternate ease-in-out 0.6s;
+}
+
+/* 星爆动画 */
+@keyframes starBurst {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.8;
+    transform: translate(calc(-50% + var(--offset-x, 0px)), calc(-50% + var(--offset-y, 0px))) scale(1);
+  }
+}
+
+/* 星星闪烁动画 */
+@keyframes starTwinkle {
+  0% {
+    opacity: 0.4;
+    filter: drop-shadow(0 0 4px var(--glow, rgba(255, 255, 255, 0.4)));
+    transform: translate(calc(-50% + var(--offset-x, 0px)), calc(-50% + var(--offset-y, 0px))) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    filter: drop-shadow(0 0 8px var(--glow, rgba(255, 255, 255, 0.8)));
+    transform: translate(calc(-50% + var(--offset-x, 0px)), calc(-50% + var(--offset-y, 0px))) scale(1.1);
+  }
+}
+
+/* flink-banner 和 links-grid__item 的半透明覆盖式背景 */
+.flink-banner,
+.link-item-card {
+  background-color: rgba(255, 255, 255, 0.384) !important;
+  /* 深色模式下的半透明背景 */
+  :root.dark & {
+    background-color: rgba(0, 89, 255, 0) !important;
+  }
+  /* 添加毛玻璃效果增强视觉体验 */
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  /* 保留原有的阴影效果但稍微调整 */
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05) !important;
+  transition: all 0.3s ease !important;
+}
+
+/* 悬停效果 */
+.flink-banner:hover,
+.link-item-card:hover {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  /* 深色模式下的悬停效果 */
+  :root.dark & {
+    background-color: rgba(0, 0, 0, 0.055) !important;
+  }
+  box-shadow: 0 4px 16px rgba(0, 68, 255, 0.315) !important;
+  transform: translateY(-2px) !important;
+}

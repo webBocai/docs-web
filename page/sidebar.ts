@@ -1,8 +1,8 @@
-import reactSideBar from './react/sidebar';
-import webpackSideBar from './webpack/sidebar';
+// import reactSideBar from './react/sidebar';
+// import webpackSideBar from './webpack/sidebar';
 
-const sidebar = {
-  ...reactSideBar,
-  ...webpackSideBar,
-};
-export default sidebar;
+// const sidebar = {
+//   ...reactSideBar,
+//   ...webpackSideBar,
+// };
+// export default sidebar;

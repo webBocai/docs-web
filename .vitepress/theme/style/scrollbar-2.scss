@@ -1,0 +1,92 @@
+/* 来源于 packages\theme-chalk\src\vp-plus\scrollbar.scss 进行二次美化后的效果 */
+/* 全局滚动条样式 */
+::-webkit-scrollbar {
+  width: 0.35rem;
+  height: 0.35rem;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 2em;
+  background: transparent;
+}
+
+@keyframes scrollbar-glow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+/* 滚动条滑块样式 🌅亮色模式 */
+html:not(.dark) ::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    120deg,
+    /* 可自定义配置颜色 */
+    rgb(0, 38, 255),
+    /* 过渡色 */ rgba(0, 225, 255, 0.9),
+    rgba(255, 80, 160, 1),
+    /* 过渡色 */ rgba(0, 225, 255, 0.9),
+    rgba(120, 100, 255, 1),
+    rgba(0, 38, 255)
+  );
+  background-size: 200% 200%;
+  animation: scrollbar-glow 3s linear infinite alternate;
+  border-radius: 2em;
+  background-clip: padding-box;
+}
+
+/* 悬停 🌅亮色模式 */
+html:not(.dark) ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    120deg,
+    /* 可自定义配置颜色 */
+    /* 过渡色 */ rgba(255, 0, 242, 0.9),
+    rgba(17, 0, 255, 0.9),
+    rgba(255, 80, 160, 0.9),
+    /* 过渡色 */ rgba(255, 0, 242, 0.9),
+    rgba(160, 120, 255, 0.9),
+    rgba(0, 255, 180, 0.9)
+  );
+  background-size: 200% 200%;
+  animation: scrollbar-glow 2s linear infinite alternate;
+  border-radius: 2em;
+  background-clip: padding-box;
+}
+
+/* 滚动条滑块样式 🌆暗色模式） */
+html.dark ::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    120deg,
+    /* 可自定义配置颜色 */ 
+    rgba(0, 255, 180, 1),
+    rgba(255, 255, 255, 0.7),/* 过渡色 */ 
+    rgba(255, 80, 160, 1),
+    rgba(255, 255, 255, 0.7),/* 过渡色 */ 
+    rgba(120, 100, 255, 1),
+    rgba(0, 255, 180, 1)
+  );
+  background-size: 200% 200%;
+  animation: scrollbar-glow 3s linear infinite alternate;
+  border-radius: 2em;
+  background-clip: padding-box;
+}
+
+/* 悬停 🌆暗色模式 */
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    120deg,
+    /* 可自定义配置颜色 */
+     rgba(0, 255, 180, 0.9),
+    rgba(255, 255, 255, 0.9),/* 过渡色 */ 
+    rgba(255, 80, 160, 0.9),
+    rgba(255, 255, 255, 0.9),/* 过渡色 */ 
+    rgba(160, 120, 255, 0.9),
+    rgba(0, 255, 180, 0.9)
+  );
+  background-size: 200% 200%;
+  animation: scrollbar-glow 2s linear infinite alternate;
+  border-radius: 2em;
+  background-clip: padding-box;
+}

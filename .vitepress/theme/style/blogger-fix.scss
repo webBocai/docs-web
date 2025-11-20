@@ -1,0 +1,70 @@
+/* 修复博主信息卡片背景图层级问题 */
+
+/* 覆盖壁纸加载时的蓝色背景闪烁 */
+.tk-banner {
+  /* 只在非首页移除背景，首页保留动态壁纸功能 */
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* 首页动态壁纸专用样式 - 优先级更高 */
+.VPHome .tk-banner {
+  background: var(--vp-c-bg) !important;
+  background-color: var(--vp-c-bg) !important;
+}
+
+/* 壁纸加载完成后移除预设背景 */
+.VPHome .tk-banner.background-loaded {
+  background: none !important;
+  background-color: transparent !important;
+}
+
+/* 确保背景图在最底层 */
+.tk-my__avatar__circle--bg {
+  position: absolute !important;
+  z-index: 1 !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+/* 确保头像在背景图之上 */
+.tk-my__avatar {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* 确保博主信息文字在背景图之上 */
+.tk-my__blogger {
+  position: relative !important;
+  z-index: 2 !important;
+  color: #fff !important;
+}
+
+/* 确保社交图标在背景图之上 */
+.tk-my__icons {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* 确保整个博主信息卡片有正确的层级结构 */
+.tk-my.is-circle-bg {
+  position: relative !important;
+  overflow: hidden;
+}
+
+/* 优化文字可读性 */
+.tk-my__blogger .name {
+  color: #fff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  font-weight: bold;
+}
+
+.tk-my__blogger .slogan {
+  color: rgba(255, 255, 255, 0.9) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
