@@ -4,6 +4,7 @@ import sidebar from '../page/sidebar';
 import { defineTeekConfig } from 'vitepress-theme-teek/config';
 
 import { ItemList, ListLabel } from '../config/ts';
+import { FriendLink } from './ConfigHyde/FriendLink';
 const teekConfig = defineTeekConfig({
   teekTheme: true,
   sidebarTrigger: true, //侧边栏收缩
@@ -23,7 +24,7 @@ const teekConfig = defineTeekConfig({
     langTextTransform: 'uppercase', // 语言文本显示样式，为 text-transform 的值:none, capitalize, lowercase, uppercase
     copiedDone: (TkMessage) => TkMessage.success('复制成功！'), // 复制代码完成后的回调
   },
-
+  friendLink: FriendLink, // 友链配置
   vitePlugins: {
     permalink: true,
     sidebar: true,

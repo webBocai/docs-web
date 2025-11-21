@@ -5,13 +5,12 @@
       <div class="wechat-content">
         <!-- 公众号图片 -->
         <div class="wechat-qrcode-container">
-          暂无
-          <!-- <img 
-            class="wechat-qrcode" 
-            :src="wechatAccount.qrcodeImage" 
+          <img
+            class="wechat-qrcode"
+            :src="wechatAccount.qrcodeImage"
             :alt="wechatAccount.subtitle"
             loading="lazy"
-          > -->
+          />
         </div>
 
         <!-- 公众号描述 -->
@@ -26,7 +25,7 @@
 
         <!-- 底部操作区 -->
         <div class="wechat-footer">
-          <!-- <a class="follow-link" :href="wechatAccount.followLink" :target="getTargetValue()">
+          <a class="follow-link" :href="wechatAccount.followLink" :target="getTargetValue()">
             <span>{{ wechatAccount.followText }}</span>
             <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
@@ -34,7 +33,7 @@
               <line x1="20" y1="8" x2="20" y2="14" />
               <line x1="23" y1="11" x2="17" y2="11" />
             </svg>
-          </a> -->
+          </a>
         </div>
       </div>
     </div>
@@ -43,7 +42,7 @@
 
 <script setup lang="ts">
 import { TkPageCard } from 'vitepress-theme-teek';
-
+import qrcode from '/img/qrcode.jpg';
 // 公众号内容类型
 interface WechatAccount {
   title: string; // 卡片标题
@@ -58,9 +57,9 @@ interface WechatAccount {
 const wechatAccount: WechatAccount = {
   title: '📱 关注公众号',
   subtitle: '我的公众号', // 替换为您的公众号名称
-  // description: '分享前端开发技巧、运维知识、VitePress使用经验和技术成长心得，欢迎关注交流！', // 替换为您的公众号简介
-  qrcodeImage: 'https://img.onedayxyy.cn/images/wechat-gzh.jpg', // 替换为您的公众号二维码图片URL
-  followLink: 'https://img.onedayxyy.cn/images/wechat-gzh.jpg', // 可以替换为公众号文章链接或相关页面
+  description: '分享前端开发技巧、运维知识、经验和技术成长心得，欢迎关注交流！', // 替换为您的公众号简介
+  qrcodeImage: qrcode, // 替换为您的公众号二维码图片URL
+  followLink: qrcode, // 可以替换为公众号文章链接或相关页面
   followText: '扫码关注',
 };
 
