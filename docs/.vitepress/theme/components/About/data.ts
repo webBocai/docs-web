@@ -40,7 +40,7 @@ import {
 
 export const profile = {
   title: '你好，我是',
-  name: 'BoCai',
+  name: 'BoCai Blog',
   desc: '明心静性，爱自己',
   avatar: '/img/xyy.webp', //头像
   buttons: [

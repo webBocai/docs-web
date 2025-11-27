@@ -1,12 +1,12 @@
 ---
 date: 2025-11-22 15:10:31
-title: gulp的使用
+title: Gulp的使用
 categories:
-  - gulp
+  - Gulp
 coverImg: https://s3.bmp.ovh/imgs/2025/11/25/39beab07b1d89887.gif
 tags:
-  - gulp
-permalink: /gulp
+  - Gulp
+permalink: /Gulp
 ---
 # Gulp 自动化构建工具完整指南
 

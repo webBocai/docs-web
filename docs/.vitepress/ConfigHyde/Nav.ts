@@ -420,10 +420,10 @@ export const Nav = [
   {
     text: '前端工程化',
     items: [
-      { text: 'webpack', link: '/webpack/61qsw' },
-      { text: 'gulp', link: '/gulp' },
-      { text: 'roullp', link: '/roullp' },
-      { text: 'vite', link: '/vite' },
+      { text: 'Webpack', link: '/webpack/61qsw' },
+      { text: 'Gulp', link: '/Gulp' },
+      { text: 'Roullp', link: '/Rollup' },
+      { text: 'Vite', link: '/vite' },
     ],
   },
   {

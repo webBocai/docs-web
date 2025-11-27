@@ -328,7 +328,7 @@ export default defineConfig({
   }),
 
   extends: teekConfig,
-  title: 'BoCai', //左上角网站名称
+  title: 'BoCai Blog', //左上角网站名称
   description: description,
   cleanUrls: true, //设置为true就是让链接后不默认添加.html
 
@@ -509,7 +509,8 @@ export default defineConfig({
             // { folderName: "40.专题/10.博客搭建/45.静态站点构建器", prefix: "/zhuanti", clear: true }, // 清空前缀并且添加前缀使用随机数
             { folderName: '01-react', prefix: '/react/$uuid5', removeLevel: 99 }, // 清空前缀并且添加前缀使用随机数
             { folderName: '02-webpack', prefix: '/webpack/$uuid5', removeLevel: 99 },
-            { folderName: '03-gulp', prefix: '/gulp', removeLevel: 99 },
+            { folderName: '03-gulp', prefix: '/Gulp', removeLevel: 99 },
+            { folderName: '04-rollup', prefix: '/Rollup', removeLevel: 99 },
           ];
           // 应用规则转换
           return useTransformByRules(frontMatter, fileInfo, rules);

@@ -17,7 +17,7 @@ export const teekDocConfig: TeekConfig = {
     },
     copyright: {
       createYear: 2025,
-      suffix: 'BoCai',
+      suffix: 'BoCai Blog',
     },
   },
   sidebarTrigger: true,
@@ -194,7 +194,7 @@ const teekBlogCommonConfig: TeekConfig = {
 export const teekBlogConfig: TeekConfig = {
   ...teekBlogCommonConfig,
   banner: {
-    name: 'BoCai',
+    name: 'BoCai Blog',
     description: '不用与谁比较，你就是这个世界独一无二的存在 —— 来自 BoCai',
     bgStyle: 'partImg',
   },
@@ -204,7 +204,7 @@ export const teekBlogConfig: TeekConfig = {
 export const teekBlogParkConfig: TeekConfig = {
   ...teekBlogCommonConfig,
   banner: {
-    name: 'BoCai',
+    name: 'BoCai Blog',
     bgStyle: 'partImg',
     imgSrc: ['/img/bg.jpeg', '/img/bg2.jpeg'],
     description: [
@@ -222,7 +222,7 @@ export const teekBlogFullConfig: TeekConfig = {
     coverImgMode: 'full',
   },
   banner: {
-    name: 'BoCai',
+    name: 'BoCai Blog',
     bgStyle: 'fullImg',
     imgSrc: ['/img/bg.jpeg', '/img/bg2.jpeg'],
     description: [
